@@ -8,6 +8,7 @@
                     <div class="card-body">
                         I'm an example component.
                     </div>
+                    <v-btn text small>Normal</v-btn>
                 </div>
             </div>
         </div>
