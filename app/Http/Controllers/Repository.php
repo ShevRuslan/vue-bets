@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Match;
-use App\Models\Player; 
+use App\Models\Player;
+use Carbon\Carbon; 
 class Repository extends Controller
 {
     protected $match;
@@ -64,7 +65,7 @@ class Repository extends Controller
                   $object["opp2Country" ] =$match["opp2Country"]??null;
                   $object["dopScore"] =$match["dopScore"]??null;
                   $object["IdSubGame"] =$match["IdSubGame"];
-                  $object["date"] =$match["date"];
+                  $object["date"] = Carbon::createFromFormat('d.m H:i', $match["date"]);;
                   $object["add_info"] =$match["add_info"];
                   $object["scores"] =$match["scores"][0];
                   $object->save();
@@ -89,7 +90,7 @@ class Repository extends Controller
                         $sub_object["opp2Country" ] =$sub_game["opp2Country"]??null;
                         $sub_object["dopScore"] =$sub_game["dopScore"]??null;
                         $sub_object["IdSubGame"] =$match["IdSubGame"]??null;
-                        $sub_object["date"] =$object["date"]??null;
+                        $sub_object["date"] =Carbon::createFromFormat('d.m H:i', $match["date"])??null;
                         $sub_object["add_info"] =$match["add_info"]??null;
                         $sub_object["scores"] =$sub_game["Trslt_result"];
                         $sub_object->save();
@@ -101,14 +102,21 @@ class Repository extends Controller
 
     public function searchGame(Request $request)
     {
-        $player1= $this->player->where('name', $request['player1'])->first();
-        $player2= $this->player->where('name', $request['player2'])->first();
-        
-        $game1[0] = $this->match->where('opp1', $player1->id)->take(10)->get();
-        $game1[1] = $this->match->where('opp2', $player1->id)->take(10)->get();
-        $game2[0] = $this->match->where('opp1',$player2->id)->take(10)->get();
-        $game2[1] = $this->match->where('opp2',$player2->id)->take(10)->get();
-        $array =[$game1,$game2];
-        return $array;
+        $i=0;
+        while ($i != 7){
+            echo Carbon::now()->subDays($i)->format('Y-m-d');
+            echo "<br>";
+            $i++;
+        }
+        // $player1= $this->player->where('name', $request['player1'])->first();
+        // $player2= $this->player->where('name', $request['player2'])->first();
+
+        // $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2', $player1->id)->orderBy('date', 'desc')->take(10)->get();
+
+        // $game2 = $this->match->where('opp1',$player2->id)->orWhere('opp2', $player1->id)->orderBy('date', 'desc')->take(10)->get();
+
+        // $array[0] =$game1;
+        // $array[1] =$game2;
+        // return $array;
     }
 }
