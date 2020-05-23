@@ -69,6 +69,32 @@ class Repository extends Controller
                   $object["add_info"] =$match["add_info"];
                   $object["scores"] =$match["scores"][0];
                   $object->save();
+                  if(isset($object['sub_games'])){
+                        $sub_game = $object['sub_games'];
+                        $sub_object = new Match();
+                        $sub_object["idgame"] = $sub_game["idgame"]; 
+                        $sub_object["sportId"] =$sub_game["sportId"];
+                        $sub_object["sportName"] =$sub_game["sportName"];
+                        $sub_object["champId"] =$sub_game["champId"];
+                        $sub_object["champName"] =$sub_game["champName"];
+                        $sub_object["nameGame"] =$sub_game["nameGame"];
+                        $sub_object["gameTyp"] =$match["gameTyp"];
+                        $sub_object["opp1"] =$player1->id;
+                        $sub_object["opp2"] =$player2->id;
+                        $sub_object["ResultPriority"] =$sub_game["ResultPriority"];
+                        $sub_object["clid_opp1"] =$sub_game["clid_opp1"]??null;
+                        $sub_object["clid_opp2"] =$sub_game["clid_opp2"]??null;
+                        $sub_object["country"] =$sub_game["country"];
+                        $sub_object["idbetgames_main"] =$object["idgame"];
+                        $sub_object["opp1Country"] =$sub_game["opp1Country"]??null;
+                        $sub_object["opp2Country" ] =$sub_game["opp2Country"]??null;
+                        $sub_object["dopScore"] =$sub_game["dopScore"]??null;
+                        $sub_object["IdSubGame"] =$match["IdSubGame"]??null;
+                        $sub_object["date"] =$object["date"]??null;
+                        $sub_object["add_info"] =$match["add_info"]??null;
+                        $sub_object["scores"] =$sub_game["Trslt_result"];
+                        $sub_object->save();
+                  }
             }
         }
         return 'готово';

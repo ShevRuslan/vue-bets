@@ -32,7 +32,7 @@ class CreateMatchsTable extends Migration
             $table->integer("opp1Country")->nullable();
             $table->integer("opp2Country")->nullable();
             $table->integer("dopScore")->nullable();
-            $table->integer("IdSubGame");
+            $table->integer("IdSubGame")->nullable();
             $table->string("date");
             $table->string("add_info");
             $table->string("scores");
