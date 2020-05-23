@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Match;
-use App\Models\Player;
-
+use App\Models\Player; 
 class Repository extends Controller
 {
     protected $match;
@@ -100,5 +99,16 @@ class Repository extends Controller
         return 'готово';
     }
 
-
+    public function searchGame(Request $request)
+    {
+        $player1= $this->player->where('name', $request['player1'])->first();
+        $player2= $this->player->where('name', $request['player2'])->first();
+        
+        $game1[0] = $this->match->where('opp1', $player1->id)->take(10)->get();
+        $game1[1] = $this->match->where('opp2', $player1->id)->take(10)->get();
+        $game2[0] = $this->match->where('opp1',$player2->id)->take(10)->get();
+        $game2[1] = $this->match->where('opp2',$player2->id)->take(10)->get();
+        $array =[$game1,$game2];
+        return $array;
+    }
 }

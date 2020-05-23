@@ -19,4 +19,10 @@ class MatchController extends Controller
         $obj = $this->rep->getCreateList();
         return response()->json($obj, 200);
     }
+
+    public function search(Request $request)
+    {
+        $obj= $this->rep->searchGame($request);
+        return response()->json($obj, 200);
+    }
 }

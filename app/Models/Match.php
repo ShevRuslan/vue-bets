@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Player;
 
 class Match extends Model
 {
@@ -32,5 +33,12 @@ class Match extends Model
     ];
 
     protected $table ='matchs';
-
+    public function players1()
+    {
+        return $this->hasMany(Player::class, 'id','opp1');
+    }
+    public function players2()
+    {
+        return $this->hasMany(Player::class, 'id','oop2');
+    }
 }

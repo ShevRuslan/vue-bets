@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/create', 'MatchController@createList');
+Route::get('/search','MatchController@search');
