@@ -25,12 +25,12 @@ class CreateMatchsTable extends Migration
             $table->integer("opp1");
             $table->integer("opp2");
             $table->integer("ResultPriority");
-            $table->integer("clid_opp1");
+            $table->integer("clid_opp1")->nullable();
             $table->integer("clid_opp2")->nullable();
             $table->integer("country");
             $table->integer("idbetgames_main");
-            $table->integer("opp1Country");
-            $table->integer("opp2Country")->nullable();;
+            $table->integer("opp1Country")->nullable();
+            $table->integer("opp2Country")->nullable();
             $table->integer("dopScore")->nullable();
             $table->integer("IdSubGame");
             $table->string("date");

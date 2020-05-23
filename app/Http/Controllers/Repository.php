@@ -57,13 +57,13 @@ class Repository extends Controller
                   $object["opp1"] =$player1->id;
                   $object["opp2"] =$player2->id;
                   $object["ResultPriority"] =$match["ResultPriority"];
-                  $object["clid_opp1"] =$match["clid_opp1"];
+                  $object["clid_opp1"] =$match["clid_opp1"]??null;
                   $object["clid_opp2"] =$match["clid_opp2"]??null;
                   $object["country"] =$match["country"];
                   $object["idbetgames_main"] =$match["idbetgames_main"];
-                  $object["opp1Country"] =$match["opp1Country"];
-                  $object["opp2Country" ] =$match["opp2Country"];
-                  $object["dopScore"] =$match["dopScore"];
+                  $object["opp1Country"] =$match["opp1Country"]??null;
+                  $object["opp2Country" ] =$match["opp2Country"]??null;
+                  $object["dopScore"] =$match["dopScore"]??null;
                   $object["IdSubGame"] =$match["IdSubGame"];
                   $object["date"] =$match["date"];
                   $object["add_info"] =$match["add_info"];
