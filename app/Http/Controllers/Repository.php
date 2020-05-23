@@ -25,64 +25,52 @@ class Repository extends Controller
           $context = stream_context_create($opts);
           $url= json_decode(file_get_contents('https://1xstavka.ru/results/getMain?ID=10&date=2020-05-20', false, $context), true);
           $url = $url['results'];
-          $array= array();
-          foreach($url as $a){
-            foreach($a as $b){
-                $array[] = $b;
-            }
+          $tennis = array();
+          foreach($url as $sport){
+            if($sport['Name'] == "Настольный теннис") {
+                $tennis = $sport;
+                break;
+            } 
           }
-          $max = count($array);
-          for ($i = 0; $i <=$max; $i++){
-              $mx =count($array[$i]);
-              for($k=0; $mx<= $mx; $k++){
-                  $a = count($array[$i][$k]["Elems"]);
-                  for($l=0; $l<=$a; $l++){
-                    if($array[$i][$k]['Elems'][$l]['sportName'] == 'Настольный теннис'){
-                        $ready[] = $array[$i][$k]['Elems'][$l];
-                    }
-                  }
-                }
-             }
-             return $ready;
-          foreach($url as $obj){
-              if($obj =='Настольный теннис'){
-                  $player1 = $this->player->where('name', $obj['opp1'])->first();
+          foreach($tennis['Elems'] as $match) {
+            foreach($match['Elems'] as $match) {
+                $player1 = $this->player->where('name', $match['opp1'])->first();
                   if(!$player1){
                       $player1 = new Player();
-                      $player1['name'] = $obj['opp1'];
+                      $player1['name'] = $match['opp1'];
                       $player1->save();
                   }
-                  $player2 = $this->player->where('name', $obj['opp2'])->first();
+                  $player2 = $this->player->where('name', $match['opp2'])->first();
                   if(!$player2){
                       $player2 = new Player();
-                      $player2['name'] = $obj['opp2'];
+                      $player2['name'] = $match['opp2'];
                       $player2->save();
                   }
-                  $match = new Match();
-                  $match["idgame"] = $obj["idgame"]; 
-                  $match["sportId"] =$obj["sportId"];
-                  $match["sportName"] =$obj["sportName"];
-                  $match["champId"] =$obj["champId"];
-                  $match["champName"] =$obj["champName"];
-                  $match["nameGame"] =$obj["nameGame"];
-                  $match["gameTyp"] =$obj["gameTyp"];
-                  $match["opp1"] =$player1->id;
-                  $match["opp2"] =$player2->id;
-                  $match["ResultPriority"] =$obj["ResultPriority"];
-                  $match["clid_opp1"] =$obj["clid_opp1"];
-                  $match["clid_opp2"] =$obj["clid_opp2"];
-                  $match["country"] =$obj["country"];
-                  $match["idbetgames_main"] =$obj["idbetgames_main"];
-                  $match["opp1Country"] =$obj["opp1Country"];
-                  $match["opp2Country" ] =$obj["opp2Country"];
-                  $match["dopScore"] =$obj["dopScore"];
-                  $match["IdSubGame"] =$obj["IdSubGame"];
-                  $match["date"] =$obj["date"];
-                  $match["add_info"] =$obj["add_info"];
-                  $match["scores"] =$obj["scores"][0];
-                  $match->save();
-              }
-          }
+                  $object = new Match();
+                  $object["idgame"] = $match["idgame"]; 
+                  $object["sportId"] =$match["sportId"];
+                  $object["sportName"] =$match["sportName"];
+                  $object["champId"] =$match["champId"];
+                  $object["champName"] =$match["champName"];
+                  $object["nameGame"] =$match["nameGame"];
+                  $object["gameTyp"] =$match["gameTyp"];
+                  $object["opp1"] =$player1->id;
+                  $object["opp2"] =$player2->id;
+                  $object["ResultPriority"] =$match["ResultPriority"];
+                  $object["clid_opp1"] =$match["clid_opp1"];
+                  $object["clid_opp2"] =$match["clid_opp2"]??null;
+                  $object["country"] =$match["country"];
+                  $object["idbetgames_main"] =$match["idbetgames_main"];
+                  $object["opp1Country"] =$match["opp1Country"];
+                  $object["opp2Country" ] =$match["opp2Country"];
+                  $object["dopScore"] =$match["dopScore"];
+                  $object["IdSubGame"] =$match["IdSubGame"];
+                  $object["date"] =$match["date"];
+                  $object["add_info"] =$match["add_info"];
+                  $object["scores"] =$match["scores"][0];
+                  $object->save();
+            }
+        }
         return 'готово';
     }
 
