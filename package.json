@@ -13,6 +13,7 @@
         "vuetify": "^2.2.29"
     },
     "devDependencies": {
+        "@mdi/font": "^5.2.45",
         "axios": "^0.19",
         "bootstrap": "^4.0.0",
         "jquery": "^3.2",
