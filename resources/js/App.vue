@@ -19,7 +19,7 @@
         <Header @close="changeHeader"/>
 
         <v-content>
-            <v-containeсr
+            <v-container
                 class="fill-height pa-6"
                 max-width="600px"
             >
@@ -41,18 +41,29 @@
                                         ref="form"
                                     >
                                         <div class="d-flex flex-row">
-                                            <v-text-field
-                                                label="Первый игрок"
+                                            <v-autocomplete
+                                                v-model="player1"
+                                                :items="entries1"
+                                                :loading="isLoading1"
+                                                :search-input.sync="searchSportsmen1"
+                                                item-text="name"
+                                                return-object
                                                 required
                                                 outlined
                                                 class="picker-player"
-                                            ></v-text-field>
-
-                                            <v-text-field
-                                                label="Второй игрок"
+                                                >
+                                           </v-autocomplete>
+                                             <v-autocomplete
+                                                v-model="player2"
+                                                :items="entries2"
+                                                :loading="isLoading2"
+                                                :search-input.sync="searchSportsmen2"
+                                                item-text="name"
+                                                return-object
                                                 required
                                                 outlined
-                                            ></v-text-field>
+                                                >
+                                           </v-autocomplete>
                                         </div>
 
                                         <v-select
@@ -62,17 +73,22 @@
                                             outlined
                                         ></v-select>
 
-                                        <v-btn color="success" dense width="100%">
-                                            Поиск
-                                        </v-btn>
+                                       <div class="d-flex">
+                                            <v-btn color="success" dense width="50%" @click="search" class="mr-5">
+                                            Получить информацию
+                                            </v-btn>
 
+                                            <v-btn color="primary" dense width="50%" >
+                                                Обновить данные
+                                            </v-btn>
+                                       </div>
 
                                     </v-form>
                                 </div>
                             </v-card>
                         </div>
                         <div class="d-flex flex-row mt-12">
-                            <v-card
+                            <!-- <v-card
                                 class="mx-auto pa-6 mr-6"
                                 width="100%"
                             >
@@ -119,11 +135,11 @@
                                         </v-list-item-group>
                                     </v-list>
                                 </v-card-text>
-                            </v-card>
+                            </v-card> -->
                         </div>
                     </v-col>
                 </v-row>
-            </v-containeсr>
+            </v-container>
         </v-content>
         <v-footer
             color="indigo"
@@ -136,6 +152,7 @@
 
 <script>
     import Header from './components/Header';
+    import API from './service/api';
     export default {
         name: "App",
         components:{
@@ -144,20 +161,57 @@
         data: function() {
             return {
                 drawer: true,
+                isLoading1: false,
+                isLoading2: false,
+                player1: null,
+                player2: null,
                 items:[
                     'Чемпионат 1',
                     'Чемпионат 2',
                     'Чемпионат 3',
                     'Чемпионат 4'
-                ]
+                ],
+                entries1:[],
+                entries2:[],
+                searchSportsmen1: null,
+                searchSportsmen2: null
             }
         },
         methods: {
             changeHeader: function() {
                 this.drawer = !this.drawer;
+            },
+            search: async function() {
+                const response = await API.searchBySportsmen({
+                    player1: this.player1.name,
+                    player2: this.player2.name,
+                })
+                console.log(response);
             }
-        }
-    }
+        },
+        watch: {
+            async searchSportsmen1 (val) {
+                if (this.isLoading1) return
+                this.isLoading1 = true
+                // Lazily load input items
+                this.entries1 = await API.searchSportsmen({
+                    name: this.searchSportsmen1,
+                })
+                this.isLoading1 = false;
+                
+            },
+            async searchSportsmen2 (val) {
+                if (this.isLoading2) return
+                this.isLoading2 = true
+                // Lazily load input items
+                this.entries2 = await API.searchSportsmen({
+                    name: this.searchSportsmen2,
+                })
+                this.isLoading2 = false;
+                
+            },
+        },
+}
 </script>
 
 <style scoped>
