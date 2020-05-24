@@ -22,3 +22,4 @@ Route::get('/create', 'API\MatchController@createList');
 Route::get('/search','API\MatchController@search');
 Route::get('/sportsmen','API\MatchController@getSporstsmen');
 Route::get('/commonMatch','API\MatchController@commonMatch');
+route::get('/searchTourney','API\MatchController@searchTourney');

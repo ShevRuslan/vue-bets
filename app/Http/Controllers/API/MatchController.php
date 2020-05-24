@@ -158,17 +158,14 @@ class MatchController extends Controller
     }
 
     public function commonMatch(Request $request)
-    {dd(1);
-           return $request->champGame;
-
-        return $this->match->where('champGame',$request->champGame)->take(2)->get();
+    {
 
         $player1 = $this->player->where('name', $request->player1)->first();
 
         $player2 = $this->player->where('name', $request->player2)->first();
 
-        $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2',$player2->id)->orWhere('champGame',$request->champGame)->get();
-        $game2 = $this->match->where('opp2',$player1->id)->orWhere('opp1',$player2->id)->orWhere('champGame',$request->champGame)->get();
+        $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2',$player2->id)->orWhere('champName',$request->champGame)->get();
+        $game2 = $this->match->where('opp2',$player1->id)->orWhere('opp1',$player2->id)->orWhere('champName',$request->champGame)->get();
         
 
         return response()->json(array_merge($game1,$game2), 200);
@@ -176,6 +173,6 @@ class MatchController extends Controller
 
     public function searchTourney()
     {
-       return response()->json($this->match->get()->unique('champGame'), 200, $headers); 
+       return response()->json($this->match->get()->unique('champName'), 200, $headers); 
     }
 }
