@@ -21,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/create', 'API\MatchController@createList');
 Route::get('/search','API\MatchController@search');
 Route::get('/sportsmen','API\MatchController@getSporstsmen');
+Route::get('/commonMatch','API\MatchController@commonMatch');
