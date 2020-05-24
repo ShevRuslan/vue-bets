@@ -163,12 +163,31 @@ class MatchController extends Controller
         $player1 = $this->player->where('name', $request->player1)->first();
 
         $player2 = $this->player->where('name', $request->player2)->first();
+      
+        $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2',$player2->id)->where('champName',$request->champGame)->get();
 
-        $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2',$player2->id)->orWhere('champName',$request->champGame)->get();
-        $game2 = $this->match->where('opp2',$player1->id)->orWhere('opp1',$player2->id)->orWhere('champName',$request->champGame)->get();
+        $game2 = $this->match->where('opp2',$player1->id)->orWhere('opp1',$player2->id)->where('champName',$request->champGame)->get();
+        
+        $last1  = $this->match->where('opp1', $player1->id)->orWhere('opp2', $player1->id)->where('champName',$request->champGame)->orderBy('date', 'desc')->take(10)->get();
+        
+        $last2  = $this->match->where('opp1', $player2->id)->where('opp2', $player2->id)->where('champName',$request->champGame)->orderBy('date', 'desc')->take(10)->get();
         
 
-        return response()->json(array_merge($game1,$game2), 200);
+        $array = array(
+            array(
+                'id' => $player1->id,
+                'name' => $player1->name,
+                'matches' => $last1,
+            ),
+            array(
+                'id' => $player2->id,
+                'name' => $player2->name,
+                'matches' => $last2,
+            ),
+            array('общие игры'=> array_merge($game1,$game2))
+        );
+
+        return response()->json($array, 200);
     }
 
     public function searchTourney()
