@@ -2008,7 +2008,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Header */ "./resources/js/components/Header.vue");
-/* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
+/* harmony import */ var _components_CardMatches__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/CardMatches */ "./resources/js/components/CardMatches.vue");
+/* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2126,53 +2127,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
   components: {
-    Header: _components_Header__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Header: _components_Header__WEBPACK_IMPORTED_MODULE_1__["default"],
+    CardMatches: _components_CardMatches__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -2181,11 +2143,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isLoading2: false,
       player1: null,
       player2: null,
-      items: ['Чемпионат 1', 'Чемпионат 2', 'Чемпионат 3', 'Чемпионат 4'],
       entries1: [],
       entries2: [],
       searchSportsmen1: null,
-      searchSportsmen2: null
+      searchSportsmen2: null,
+      matches: []
     };
   },
   methods: {
@@ -2194,22 +2156,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     search: function () {
       var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response;
+        var _yield$API$searchBySp, original;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _service_api__WEBPACK_IMPORTED_MODULE_2__["default"].searchBySportsmen({
+                return _service_api__WEBPACK_IMPORTED_MODULE_3__["default"].searchBySportsmen({
                   player1: this.player1.name,
                   player2: this.player2.name
                 });
 
               case 2:
-                response = _context.sent;
-                console.log(response);
+                _yield$API$searchBySp = _context.sent;
+                original = _yield$API$searchBySp.original;
+                this.matches = original;
 
-              case 4:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -2244,7 +2208,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.isLoading1 = true; // Lazily load input items
 
                 _context2.next = 5;
-                return _service_api__WEBPACK_IMPORTED_MODULE_2__["default"].searchSportsmen({
+                return _service_api__WEBPACK_IMPORTED_MODULE_3__["default"].searchSportsmen({
                   name: _this.searchSportsmen1
                 });
 
@@ -2279,7 +2243,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.isLoading2 = true; // Lazily load input items
 
                 _context3.next = 5;
-                return _service_api__WEBPACK_IMPORTED_MODULE_2__["default"].searchSportsmen({
+                return _service_api__WEBPACK_IMPORTED_MODULE_3__["default"].searchSportsmen({
                   name: _this2.searchSportsmen2
                 });
 
@@ -2295,6 +2259,98 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardMatches.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CardMatches.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    name: String,
+    matches: Array
+  },
+  data: function data() {
+    return {};
   }
 });
 
@@ -6817,7 +6873,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.picker-player[data-v-f348271a]{\n    padding-right: 30px;\n}\n", ""]);
+exports.push([module.i, "\n.wrapper-card[data-v-f348271a] {\n    width: 50%;\n}\n.button[data-v-f348271a] {\n    width: 50%;\n}\n", ""]);
 
 // exports
 
@@ -39377,7 +39433,7 @@ var render = function() {
                                       { staticClass: "d-flex flex-row" },
                                       [
                                         _c("v-autocomplete", {
-                                          staticClass: "picker-player",
+                                          staticClass: "picker-player mr-5",
                                           attrs: {
                                             items: _vm.entries1,
                                             loading: _vm.isLoading1,
@@ -39386,7 +39442,8 @@ var render = function() {
                                             "item-text": "name",
                                             "return-object": "",
                                             required: "",
-                                            outlined: ""
+                                            outlined: "",
+                                            width: "50%"
                                           },
                                           on: {
                                             "update:searchInput": function(
@@ -39455,43 +39512,55 @@ var render = function() {
                                     _vm._v(" "),
                                     _c(
                                       "div",
-                                      { staticClass: "d-flex" },
+                                      { staticClass: "d-flex flex-row" },
                                       [
                                         _c(
-                                          "v-btn",
-                                          {
-                                            staticClass: "mr-5",
-                                            attrs: {
-                                              color: "success",
-                                              dense: "",
-                                              width: "50%"
-                                            },
-                                            on: { click: _vm.search }
-                                          },
+                                          "div",
+                                          { staticClass: "button mr-5" },
                                           [
-                                            _vm._v(
-                                              "\n                                            Получить информацию\n                                            "
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  color: "success",
+                                                  dense: "",
+                                                  width: "100%"
+                                                },
+                                                on: { click: _vm.search }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                    Получить информацию\n                                                "
+                                                )
+                                              ]
                                             )
-                                          ]
+                                          ],
+                                          1
                                         ),
                                         _vm._v(" "),
                                         _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              color: "primary",
-                                              dense: "",
-                                              width: "50%"
-                                            }
-                                          },
+                                          "div",
+                                          { staticClass: "button" },
                                           [
-                                            _vm._v(
-                                              "\n                                                Обновить данные\n                                            "
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  color: "primary",
+                                                  dense: "",
+                                                  width: "100%"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                    Обновить данные\n                                                "
+                                                )
+                                              ]
                                             )
-                                          ]
+                                          ],
+                                          1
                                         )
-                                      ],
-                                      1
+                                      ]
                                     )
                                   ],
                                   1
@@ -39505,7 +39574,32 @@ var render = function() {
                       1
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "d-flex flex-row mt-12" })
+                    _vm.matches.length
+                      ? _c(
+                          "div",
+                          { staticClass: "d-flex mt-12" },
+                          [
+                            _c("CardMatches", {
+                              staticClass: "wrapper-card mr-5",
+                              attrs: {
+                                name: _vm.matches[0].name,
+                                matches: _vm.matches[0].matches,
+                                width: "50%"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("CardMatches", {
+                              staticClass: "wrapper-card",
+                              attrs: {
+                                name: _vm.matches[1].name,
+                                matches: _vm.matches[1].matches,
+                                width: "50%"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _vm._e()
                   ])
                 ],
                 1
@@ -39520,6 +39614,219 @@ var render = function() {
       _c("v-footer", { attrs: { color: "indigo", app: "" } }, [
         _c("span", { staticClass: "white--text" }, [_vm._v("© 2020")])
       ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "v-card",
+        { staticClass: "pa-10" },
+        [
+          _c(
+            "v-card-text",
+            [
+              _c("p", { staticClass: "display-1 text--primary" }, [
+                _vm._v(
+                  "\n                " + _vm._s(_vm.name) + "\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [_vm._v("Последние 10 матчей:")]),
+              _vm._v(" "),
+              _c(
+                "v-list",
+                _vm._l(_vm.matches, function(match) {
+                  return _c(
+                    "v-list-group",
+                    {
+                      key: match.id,
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "activator",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", {
+                                      domProps: {
+                                        textContent: _vm._s(match.nameGame)
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        true
+                      )
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", width: "100%" } },
+                            [
+                              _c(
+                                "v-list",
+                                [
+                                  _c(
+                                    "v-list-item",
+                                    [
+                                      _c("v-list-item-action", [
+                                        _c("p", { staticClass: "title ma-0" }, [
+                                          _vm._v("Счёт:")
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-item-content",
+                                        [
+                                          _c("v-list-item-title", [
+                                            _vm._v(_vm._s(match.scores))
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider", {
+                                    attrs: { inset: _vm.inset }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item",
+                                    [
+                                      _c("v-list-item-action", [
+                                        _c("p", { staticClass: "title ma-0" }, [
+                                          _vm._v("Турнир:")
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-item-content",
+                                        [
+                                          _c("v-list-item-title", [
+                                            _vm._v(_vm._s(match.champName))
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider", {
+                                    attrs: { inset: _vm.inset }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item",
+                                    [
+                                      _c("v-list-item-action", [
+                                        _c("p", { staticClass: "title ma-0" }, [
+                                          _vm._v("Дата:")
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-item-content",
+                                        [
+                                          _c("v-list-item-title", [
+                                            _vm._v(_vm._s(match.date))
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider", {
+                                    attrs: { inset: _vm.inset }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item",
+                                    [
+                                      _c("v-list-item-action", [
+                                        _c("p", { staticClass: "title ma-0" }, [
+                                          _vm._v("Стадия:")
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-item-content",
+                                        [
+                                          _c("v-list-item-title", [
+                                            _vm._v(_vm._s(match.add_info))
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider", {
+                                    attrs: { inset: _vm.inset }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                }),
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -93678,6 +93985,75 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/CardMatches.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/CardMatches.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CardMatches_vue_vue_type_template_id_5b4e5568_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true& */ "./resources/js/components/CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true&");
+/* harmony import */ var _CardMatches_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardMatches.vue?vue&type=script&lang=js& */ "./resources/js/components/CardMatches.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CardMatches_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CardMatches_vue_vue_type_template_id_5b4e5568_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CardMatches_vue_vue_type_template_id_5b4e5568_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "5b4e5568",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/CardMatches.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/CardMatches.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/CardMatches.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CardMatches_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CardMatches.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardMatches.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CardMatches_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardMatches_vue_vue_type_template_id_5b4e5568_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardMatches.vue?vue&type=template&id=5b4e5568&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardMatches_vue_vue_type_template_id_5b4e5568_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CardMatches_vue_vue_type_template_id_5b4e5568_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

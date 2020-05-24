@@ -50,7 +50,8 @@
                                                 return-object
                                                 required
                                                 outlined
-                                                class="picker-player"
+                                                class="picker-player mr-5"
+                                                width="50%" 
                                                 >
                                            </v-autocomplete>
                                              <v-autocomplete
@@ -73,69 +74,27 @@
                                             outlined
                                         ></v-select>
 
-                                       <div class="d-flex">
-                                            <v-btn color="success" dense width="50%" @click="search" class="mr-5">
-                                            Получить информацию
-                                            </v-btn>
+                                       <div class="d-flex flex-row">
+                                            <div class="button mr-5" >
+                                                <v-btn color="success" dense width="100%" @click="search">
+                                                    Получить информацию
+                                                </v-btn>
+                                            </div>
 
-                                            <v-btn color="primary" dense width="50%" >
-                                                Обновить данные
-                                            </v-btn>
+                                            <div class="button">
+                                                <v-btn color="primary" dense width="100%" >
+                                                    Обновить данные
+                                                </v-btn>
+                                            </div>
                                        </div>
 
                                     </v-form>
                                 </div>
                             </v-card>
                         </div>
-                        <div class="d-flex flex-row mt-12">
-                            <!-- <v-card
-                                class="mx-auto pa-6 mr-6"
-                                width="100%"
-                            >
-                                <v-card-text>
-                                    <p class="display-1 text--primary">
-                                        Сергей Сарычев
-                                    </p>
-                                    <p>игрок настольного тенниса</p>
-                                    <v-list>
-                                        <v-subheader>Последние 10 матчей</v-subheader>
-                                        <v-list-item-group v-model="item" color="primary">
-                                            <v-list-item
-                                                v-for="(item, i) in items"
-                                                :key="i"
-                                            >
-                                                <v-list-item-content>
-                                                    <v-list-item-title v-text="item"></v-list-item-title>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </v-list-item-group>
-                                    </v-list>
-                                </v-card-text>
-                            </v-card>
-                            <v-card
-                                class="mx-auto pa-6"
-                                width="100%"
-                            >
-                                <v-card-text>
-                                    <p class="display-1 text--primary">
-                                        Сергей Сарычев
-                                    </p>
-                                    <p>игрок настольного тенниса</p>
-                                    <v-list>
-                                        <v-subheader>Последние 10 матчей</v-subheader>
-                                        <v-list-item-group v-model="item" color="primary">
-                                            <v-list-item
-                                                v-for="(item, i) in items"
-                                                :key="i"
-                                            >
-                                                <v-list-item-content>
-                                                    <v-list-item-title v-text="item"></v-list-item-title>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </v-list-item-group>
-                                    </v-list>
-                                </v-card-text>
-                            </v-card> -->
+                        <div class="d-flex mt-12" v-if="matches.length">
+                           <CardMatches :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" width="50%"></CardMatches>
+                           <CardMatches :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" width="50%"></CardMatches>
                         </div>
                     </v-col>
                 </v-row>
@@ -152,11 +111,13 @@
 
 <script>
     import Header from './components/Header';
+    import CardMatches from './components/CardMatches';
     import API from './service/api';
     export default {
         name: "App",
         components:{
             Header,
+            CardMatches
         },
         data: function() {
             return {
@@ -165,16 +126,11 @@
                 isLoading2: false,
                 player1: null,
                 player2: null,
-                items:[
-                    'Чемпионат 1',
-                    'Чемпионат 2',
-                    'Чемпионат 3',
-                    'Чемпионат 4'
-                ],
                 entries1:[],
                 entries2:[],
                 searchSportsmen1: null,
-                searchSportsmen2: null
+                searchSportsmen2: null,
+                matches: []
             }
         },
         methods: {
@@ -182,11 +138,11 @@
                 this.drawer = !this.drawer;
             },
             search: async function() {
-                const response = await API.searchBySportsmen({
+                const {original} = await API.searchBySportsmen({
                     player1: this.player1.name,
                     player2: this.player2.name,
                 })
-                console.log(response);
+                this.matches = original;
             }
         },
         watch: {
@@ -215,7 +171,10 @@
 </script>
 
 <style scoped>
-    .picker-player{
-        padding-right: 30px;
+    .wrapper-card {
+        width: 50%;
+    }
+    .button {
+        width: 50%;
     }
 </style>

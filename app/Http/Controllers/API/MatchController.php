@@ -131,7 +131,7 @@ class MatchController extends Controller
         //TODO:Делать провеку - если какой-то спортсмен не найден - выкидать ошибку
         $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2', $player1->id)->orderBy('date', 'desc')->take(10)->get();
 
-        $game2 = $this->match->where('opp1', $player2->id)->orWhere('opp2', $player1->id)->orderBy('date', 'desc')->take(10)->get();
+        $game2 = $this->match->where('opp1', $player2->id)->orWhere('opp2', $player2->id)->orderBy('date', 'desc')->take(10)->get();
 
         $array = array(
             array(
@@ -145,7 +145,7 @@ class MatchController extends Controller
                 'matches' => $game2,
             ),
         );
-        
+
         return response()->json($array, 200);
     }
     //Поиск спортсмена
