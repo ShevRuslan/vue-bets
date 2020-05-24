@@ -192,6 +192,7 @@ class MatchController extends Controller
 
     public function searchTourney(Request $request)
     {
-       return response()->json($this->match->get()->unique('champName')->where('name', 'like', '%' . $request->champName . '%')->get(), 200, $headers); 
+
+       return response()->json($this->match->where('champName', 'like', '%' . $request->champName . '%')->get()->unique('champName')->pluck('champName'), 200); 
     }
 }
