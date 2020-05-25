@@ -38,8 +38,8 @@ class MatchController extends Controller
     }
     public function getCreateList()
     {
-        $i = 0;
-        while ($i != 7) {
+        $i = 150;
+        while ($i != 186) {
             $tennis = array();
             $dateMatch = Carbon::now()->subDays($i)->format('Y-m-d');
             $context = stream_context_create($this->opts);
@@ -154,7 +154,7 @@ class MatchController extends Controller
         //TODO: Проверка на пустоту
         $name = $request->name;
         $player = $this->player->where('name', 'like', '%' . $name . '%')->get();
-        return $player;
+        return response()->json($player, 200);
     }
 
     public function commonMatch(Request $request)
@@ -164,27 +164,33 @@ class MatchController extends Controller
 
         $player2 = $this->player->where('name', $request->player2)->first();
       
-        $game1 = $this->match->where('opp1', $player1->id)->orWhere('opp2',$player2->id)->where('champName',$request->champGame)->get();
+        $game1 = $this->match->where('opp1', $player1->id)->where('opp2',$player2->id)->where('champName',$request->champName)->get();
 
-        $game2 = $this->match->where('opp2',$player1->id)->orWhere('opp1',$player2->id)->where('champName',$request->champGame)->get();
+        $game2 = $this->match->where('opp1',$player2->id)->where('opp2',$player1->id)->where('champName',$request->champName)->get();
         
-        $last1  = $this->match->where('opp1', $player1->id)->orWhere('opp2', $player1->id)->where('champName',$request->champGame)->orderBy('date', 'desc')->take(10)->get();
+        $last1  = $this->match->where('champName', $request->champName)->where(function($query) use($player1) {
+            $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+        })->orderBy('date', 'desc')->take(10)->get();
         
-        $last2  = $this->match->where('opp1', $player2->id)->where('opp2', $player2->id)->where('champName',$request->champGame)->orderBy('date', 'desc')->take(10)->get();
+        $last2  = $this->match->where('champName', $request->champName)->where(function($query) use($player2) {
+            $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+        })->orderBy('date', 'desc')->take(10)->get();
         
+        $mergeArray = collect($game1)->merge($game2);
 
         $array = array(
             array(
                 'id' => $player1->id,
                 'name' => $player1->name,
-                'matches' => $last1,
+                'matches' => $last1, 
             ),
             array(
                 'id' => $player2->id,
                 'name' => $player2->name,
                 'matches' => $last2,
             ),
-            array('общие игры'=> array_merge($game1,$game2))
+            array('games'=> array($game1, $game2) ),
+            array('mergeGames'=> $mergeArray)
         );
 
         return response()->json($array, 200);

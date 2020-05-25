@@ -33,6 +33,7 @@ class Match extends Model
     ];
 
     protected $table ='matchs';
+    
     public function players1()
     {
         return $this->hasMany(Player::class, 'id','opp1');

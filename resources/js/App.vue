@@ -67,12 +67,17 @@
                                            </v-autocomplete>
                                         </div>
 
-                                        <v-select
-                                            :items="items"
-                                            label="Чемпионат"
+                                        <v-autocomplete
+                                            v-model="tourney"
+                                            :items="tournes"
+                                            :loading="isLoading3"
+                                            :search-input.sync="searchTourney"
+                                            item-text="name"
+                                            return-object
                                             required
                                             outlined
-                                        ></v-select>
+                                            >
+                                        </v-autocomplete>
 
                                        <div class="d-flex flex-row">
                                             <div class="button mr-5" >
@@ -130,7 +135,12 @@
                 entries2:[],
                 searchSportsmen1: null,
                 searchSportsmen2: null,
-                matches: []
+                matches: [],
+
+                searchTourney: null,
+                tourney: null,
+                tournes: [],
+                isLoading3: false,
             }
         },
         methods: {
@@ -138,11 +148,11 @@
                 this.drawer = !this.drawer;
             },
             search: async function() {
-                const {original} = await API.searchBySportsmen({
+                this.matches = await API.searchBySportsmen({
                     player1: this.player1.name,
                     player2: this.player2.name,
+                    champName: this.tourney,
                 })
-                this.matches = original;
             }
         },
         watch: {
@@ -166,6 +176,15 @@
                 this.isLoading2 = false;
                 
             },
+            async searchTourney (vall) {
+                if(this.isLoading3) return
+                this.isLoading3 = true;
+
+                this.tournes = await API.searchChamp({
+                    champName: this.searchTourney
+                })
+                this.isLoading3 = false;
+            }
         },
 }
 </script>

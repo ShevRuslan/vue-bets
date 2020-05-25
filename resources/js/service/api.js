@@ -24,12 +24,17 @@ class Api {
     return params;
   }
   searchBySportsmen = async (data) => {
-    let url = 'search?' + this.createGetParams(data);
+    let url = 'commonMatch?' + this.createGetParams(data);
     const response = await this.getResource(url, null, 'GET');
     return response;
   }
   searchSportsmen = async (data) => {
     let url = 'sportsmen?' + this.createGetParams(data)
+    const response = await this.getResource(url, null, 'GET');
+    return response;
+  }
+  searchChamp = async (data) =>{
+    let url = 'searchTourney?' + this.createGetParams(data);
     const response = await this.getResource(url, null, 'GET');
     return response;
   }

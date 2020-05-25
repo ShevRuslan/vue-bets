@@ -59,6 +59,14 @@
                                 </v-list-item-content>
                               </v-list-item>
                             <v-divider :inset="inset"></v-divider>
+                            <v-list-item>
+                                  <v-list-item-action>
+                                <p class="title ma-0">Тотал:</p>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                  <v-list-item-title>{{ match.add_info }}</v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
                           </v-list>  
                       </v-col>
                   </v-row>

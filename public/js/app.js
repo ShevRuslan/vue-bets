@@ -2127,6 +2127,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -2147,7 +2152,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       entries2: [],
       searchSportsmen1: null,
       searchSportsmen2: null,
-      matches: []
+      matches: [],
+      searchTourney: null,
+      tourney: null,
+      tournes: [],
+      isLoading3: false
     };
   },
   methods: {
@@ -2156,8 +2165,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     search: function () {
       var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _yield$API$searchBySp, original;
-
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2165,15 +2172,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 2;
                 return _service_api__WEBPACK_IMPORTED_MODULE_3__["default"].searchBySportsmen({
                   player1: this.player1.name,
-                  player2: this.player2.name
+                  player2: this.player2.name,
+                  champName: this.tourney
                 });
 
               case 2:
-                _yield$API$searchBySp = _context.sent;
-                original = _yield$API$searchBySp.original;
-                this.matches = original;
+                this.matches = _context.sent;
 
-              case 5:
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -2258,6 +2264,40 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    searchTourney: function searchTourney(vall) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (!_this3.isLoading3) {
+                  _context4.next = 2;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 2:
+                _this3.isLoading3 = true;
+                _context4.next = 5;
+                return _service_api__WEBPACK_IMPORTED_MODULE_3__["default"].searchChamp({
+                  champName: _this3.searchTourney
+                });
+
+              case 5:
+                _this3.tournes = _context4.sent;
+                _this3.isLoading3 = false;
+
+              case 7:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
   }
 });
@@ -2273,6 +2313,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39501,12 +39549,32 @@ var render = function() {
                                       1
                                     ),
                                     _vm._v(" "),
-                                    _c("v-select", {
+                                    _c("v-autocomplete", {
                                       attrs: {
-                                        items: _vm.items,
-                                        label: "Чемпионат",
+                                        items: _vm.tournes,
+                                        loading: _vm.isLoading3,
+                                        "search-input": _vm.searchTourney,
+                                        "item-text": "name",
+                                        "return-object": "",
                                         required: "",
                                         outlined: ""
+                                      },
+                                      on: {
+                                        "update:searchInput": function($event) {
+                                          _vm.searchTourney = $event
+                                        },
+                                        "update:search-input": function(
+                                          $event
+                                        ) {
+                                          _vm.searchTourney = $event
+                                        }
+                                      },
+                                      model: {
+                                        value: _vm.tourney,
+                                        callback: function($$v) {
+                                          _vm.tourney = $$v
+                                        },
+                                        expression: "tourney"
                                       }
                                     }),
                                     _vm._v(" "),
@@ -39805,7 +39873,29 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("v-divider", {
                                     attrs: { inset: _vm.inset }
-                                  })
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item",
+                                    [
+                                      _c("v-list-item-action", [
+                                        _c("p", { staticClass: "title ma-0" }, [
+                                          _vm._v("Тотал:")
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-item-content",
+                                        [
+                                          _c("v-list-item-title", [
+                                            _vm._v(_vm._s(match.add_info))
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               )
@@ -94216,7 +94306,7 @@ var Api = function Api() {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              url = 'search?' + _this.createGetParams(data);
+              url = 'commonMatch?' + _this.createGetParams(data);
               _context2.next = 3;
               return _this.getResource(url, null, 'GET');
 
@@ -94262,6 +94352,34 @@ var Api = function Api() {
 
     return function (_x5) {
       return _ref3.apply(this, arguments);
+    };
+  }());
+
+  _defineProperty(this, "searchChamp", /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(data) {
+      var url, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              url = 'searchTourney?' + _this.createGetParams(data);
+              _context4.next = 3;
+              return _this.getResource(url, null, 'GET');
+
+            case 3:
+              response = _context4.sent;
+              return _context4.abrupt("return", response);
+
+            case 5:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function (_x6) {
+      return _ref4.apply(this, arguments);
     };
   }());
 };
