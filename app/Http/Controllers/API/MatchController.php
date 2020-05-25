@@ -41,27 +41,19 @@ class MatchController extends Controller
     }
     public function getCreateList()
     {
-        $lastDate = $this->date->first();
+        $lastDate = $this->date->first()->date;
         $dateArray = array();
-
         if(!$lastDate) {
             $lastDate = new Date();
             $lastDate['date'] = Carbon::now()->subDays(0)->format('Y-m-d');
             $lastDate->save();
         }
-
-        $i = 121;
-        while ($i != 181 ) {
+        $today = Carbon::now()->format('Y-m-d');
+        return $today;
+        $i =0;
+        while ($today != $lastDate) {
             $tennis = array();
             $dateMatch = Carbon::now()->subDays($i)->format('Y-m-d');
-
-            $lastDateSecond = strtotime($lastDate->date) * 1000;
-            $dateMatchSecond = strtotime($dateMatch) * 1000;
-
-            if($lastDateSecond < $dateMatchSecond) {
-                $lastDate['date'] = $dateMatch;
-                $lastDate->save();
-            }
 
             $context = stream_context_create($this->opts);
             $url = json_decode(file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context), true);
@@ -139,8 +131,8 @@ class MatchController extends Controller
                     }
                 }
             }
-            $dateArray['day - ' . $i] = $dateMatch;
             $i++;
+            $today = Carbon::now()->subDays($i)->format('Y-m-d');
         }
         return response()->json($dateArray, 200);
     }
@@ -181,15 +173,35 @@ class MatchController extends Controller
 
     public function commonMatch(Request $request)
     {
-
+    
         $player1 = $this->player->where('name', $request->player1)->first();
 
         $player2 = $this->player->where('name', $request->player2)->first();
-      
+        
         $game1 = $this->match->where('opp1', $player1->id)->where('opp2',$player2->id)->where('champName',$request->champName)->get();
 
         $game2 = $this->match->where('opp1',$player2->id)->where('opp2',$player1->id)->where('champName',$request->champName)->get();
-        
+        $win1 =0;
+        $win2 =0;
+        foreach($game1 as $obj){
+            $scores1 = mb_strimwidth($obj->scores,0,1);
+            $scores2 = mb_strimwidth($obj->scores,2,1);
+            if($scores1 > $scores2){
+                $win1++;
+            }else{
+                $win2++;
+            }
+        }
+        foreach($game2 as $obj){
+            $scores1 = mb_strimwidth($obj->scores,0,1);
+            $scores2 = mb_strimwidth($obj->scores,2,1);
+            if($scores1 > $scores2){
+                $win1++;
+            }else{
+                $win2++;
+            }
+        }
+
         $last1  = $this->match->where('champName', $request->champName)->where(function($query) use($player1) {
             $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
         })->orderBy('date', 'desc')->take(10)->get();
@@ -199,6 +211,7 @@ class MatchController extends Controller
         })->orderBy('date', 'desc')->take(10)->get();
         
         $mergeArray = collect($game1)->merge($game2);
+
 
         $array = array(
             array(
@@ -212,7 +225,10 @@ class MatchController extends Controller
                 'matches' => $last2,
             ),
             array('games'=> array($game1, $game2) ),
-            array('mergeGames'=> $mergeArray)
+            array('mergeGames'=> $mergeArray),
+            array('win1'=>$win1,
+                  'win2'=>$win2    
+            )
         );
 
         return response()->json($array, 200);
