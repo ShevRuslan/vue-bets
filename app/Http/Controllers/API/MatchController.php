@@ -44,16 +44,16 @@ class MatchController extends Controller
         $lastDate = $this->date->first();
         $dateArray = array();
 
-        $i = 0;
-        while ($i != 1) {
+        if(!$lastDate) {
+            $lastDate = new Date();
+            $lastDate['date'] = Carbon::now()->subDays(0)->format('Y-m-d');
+            $lastDate->save();
+        }
+
+        $i = 121;
+        while ($i != 181 ) {
             $tennis = array();
             $dateMatch = Carbon::now()->subDays($i)->format('Y-m-d');
-
-            if(!$lastDate) {
-                $lastDate = new Date();
-                $lastDate['date'] = $dateMatch;
-                $lastDate->save();
-            }
 
             $lastDateSecond = strtotime($lastDate->date) * 1000;
             $dateMatchSecond = strtotime($dateMatch) * 1000;
