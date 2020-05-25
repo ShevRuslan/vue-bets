@@ -2132,6 +2132,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -39663,6 +39669,25 @@ var render = function() {
                                 matches: _vm.matches[1].matches,
                                 width: "50%"
                               }
+                            })
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.matches.length
+                      ? _c(
+                          "div",
+                          { staticClass: "d-flex mt-12" },
+                          [
+                            _c("div", { staticClass: "display-1 pb-12 " }, [
+                              _vm._v(
+                                "\n                                Совместные матчи\n                            "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("CardMatches", {
+                              attrs: { matches: _vm.matches[3].mergeGames }
                             })
                           ],
                           1

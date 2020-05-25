@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Match;
 use App\Models\Player;
+use App\Models\Date;
 use Carbon\Carbon;
 
 class MatchController extends Controller
 {
     protected $rep;
     protected $match;
+    protected $date;
     protected $player;
     private $opts = array(
         'http' => array(
@@ -19,9 +21,10 @@ class MatchController extends Controller
             'header' => "X-Requested-With: XMLHttpRequest"
         )
     );
-    public function __construct(Match $match, Player $player){
+    public function __construct(Match $match, Player $player, Date $date){
         $this->player = $player;
         $this->match = $match;
+        $this->date = $date;
     }
 
 
@@ -38,10 +41,28 @@ class MatchController extends Controller
     }
     public function getCreateList()
     {
-        $i = 150;
-        while ($i != 186) {
+        $lastDate = $this->date->first();
+        $dateArray = array();
+
+        $i = 0;
+        while ($i != 1) {
             $tennis = array();
             $dateMatch = Carbon::now()->subDays($i)->format('Y-m-d');
+
+            if(!$lastDate) {
+                $lastDate = new Date();
+                $lastDate['date'] = $dateMatch;
+                $lastDate->save();
+            }
+
+            $lastDateSecond = strtotime($lastDate->date) * 1000;
+            $dateMatchSecond = strtotime($dateMatch) * 1000;
+
+            if($lastDateSecond < $dateMatchSecond) {
+                $lastDate['date'] = $dateMatch;
+                $lastDate->save();
+            }
+
             $context = stream_context_create($this->opts);
             $url = json_decode(file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context), true);
             $url = $url['results'];
@@ -118,9 +139,10 @@ class MatchController extends Controller
                     }
                 }
             }
+            $dateArray['day - ' . $i] = $dateMatch;
             $i++;
         }
-        return 'готово';
+        return response()->json($dateArray, 200);
     }
     // Функция, которая возвращает последние 10 игр для каждого из игрока
     public function searchGame(Request $request)

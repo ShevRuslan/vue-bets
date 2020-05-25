@@ -101,6 +101,12 @@
                            <CardMatches :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" width="50%"></CardMatches>
                            <CardMatches :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" width="50%"></CardMatches>
                         </div>
+                        <div class="d-flex mt-12" v-if="matches.length">
+                            <div class="display-1 pb-12 ">
+                                Совместные матчи
+                            </div>
+                            <CardMatches :matches="matches[3].mergeGames"></CardMatches>
+                        </div>
                     </v-col>
                 </v-row>
             </v-container>
