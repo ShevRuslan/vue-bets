@@ -1,23 +1,6 @@
 <template>
     <v-app id="inspire">
-<!--        <v-navigation-drawer-->
-<!--            v-model="drawer"-->
-<!--            app-->
-<!--        >-->
-<!--            <v-list dense>-->
-<!--                <v-list-item link>-->
-<!--                    <v-list-item-action>-->
-<!--                        <v-icon>mdi-home</v-icon>-->
-<!--                    </v-list-item-action>-->
-<!--                    <v-list-item-content>-->
-<!--                        <v-list-item-title>Главная</v-list-item-title>-->
-<!--                    </v-list-item-content>-->
-<!--                </v-list-item>-->
-<!--            </v-list>-->
-<!--        </v-navigation-drawer>-->
-
-        <Header @close="changeHeader"/>
-
+        <Header/>
         <v-content>
             <v-container
                 class="fill-height pa-6"
@@ -40,7 +23,7 @@
                                     <v-form
                                         ref="form"
                                     >
-                                        <div class="d-flex flex-row">
+                                        <div class="d-flex wrapper-selects">
                                             <v-autocomplete
                                                 v-model="player1"
                                                 :items="entries1"
@@ -50,8 +33,10 @@
                                                 return-object
                                                 required
                                                 outlined
-                                                class="picker-player mr-5"
+                                                class="picker-player mr-5 select-player"
                                                 width="50%" 
+                                                label="Первый игрок"
+                                                hide-no-data
                                                 >
                                            </v-autocomplete>
                                              <v-autocomplete
@@ -61,8 +46,11 @@
                                                 :search-input.sync="searchSportsmen2"
                                                 item-text="name"
                                                 return-object
+                                                class="select-player"
                                                 required
                                                 outlined
+                                                label="Второй игрок"
+                                                hide-no-data
                                                 >
                                            </v-autocomplete>
                                         </div>
@@ -76,10 +64,12 @@
                                             return-object
                                             required
                                             outlined
+                                            label="Чемпионат"
+                                            hide-no-data
                                             >
                                         </v-autocomplete>
 
-                                       <div class="d-flex flex-row">
+                                       <div class="d-flex wrapper-buttons" >
                                             <div class="button mr-5" >
                                                 <v-btn color="success" dense width="100%" @click="search">
                                                     Получить информацию
@@ -87,9 +77,14 @@
                                             </div>
 
                                             <div class="button">
-                                                <v-btn color="primary" dense width="100%" >
-                                                    Обновить данные
-                                                </v-btn>
+                                                  <v-tooltip top>
+                                                    <template v-slot:activator="{ on: tooltip }">
+                                                        <v-btn  v-on="{ ...tooltip}" color="primary" dense width="100%"  >
+                                                        Обновить данные
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Обновление базы данных расчитывается с последнего обновления (последней даты матча) и может занять несколько минут (зависит сколько дней не обновлялясь база).</span>
+                                                </v-tooltip>
                                             </div>
                                        </div>
 
@@ -97,38 +92,40 @@
                                 </div>
                             </v-card>
                         </div>
-                        <div class="d-flex mt-12" v-if="matches.length">
+                        <div class="d-flex mt-12 wrapper-cards" v-if="matches.length">
                            <CardMatches :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" width="50%"></CardMatches>
                            <CardMatches :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" width="50%"></CardMatches>
                         </div>
-                        <div class="d-flex mt-12" v-if="matches.length">
-                            <div class="display-1 pb-12 ">
+                        <div class="d-flex flex-column mt-12" v-if="matches.length">
+                            <div class="display-1 pb-6 pt-10 ">
                                 Совместные матчи
                             </div>
-                            <CardMatches :matches="matches[3].mergeGames"></CardMatches>
+                            <CooperativeMatch 
+                                :matches="matches[3].mergeGames"
+                                :firstPlayer="matches[3].player1"
+                                :secondPlayer="matches[3].player2"
+                                :winFirst="matches[3].win1"
+                                :winSecond="matches[3].win2"
+                            ></CooperativeMatch>
                         </div>
                     </v-col>
                 </v-row>
             </v-container>
         </v-content>
-        <v-footer
-            color="indigo"
-            app
-        >
-            <span class="white--text">&copy; 2020</span>
-        </v-footer>
     </v-app>
 </template>
 
 <script>
     import Header from './components/Header';
     import CardMatches from './components/CardMatches';
+    import CooperativeMatch from './components/CooperativeMatch';
     import API from './service/api';
     export default {
         name: "App",
         components:{
             Header,
-            CardMatches
+            CardMatches,
+            CooperativeMatch
         },
         data: function() {
             return {
@@ -182,7 +179,7 @@
                 this.isLoading2 = false;
                 
             },
-            async searchTourney (vall) {
+            async searchTourney (val) {
                 if(this.isLoading3) return
                 this.isLoading3 = true;
 
@@ -190,16 +187,41 @@
                     champName: this.searchTourney
                 })
                 this.isLoading3 = false;
-            }
+            },
         },
 }
 </script>
 
-<style scoped>
+<style scoped >
     .wrapper-card {
         width: 50%;
     }
     .button {
         width: 50%;
+    }
+    @media screen and (max-width:1400px) {
+        .wrapper-cards {
+            flex-direction: column;
+        }
+        .wrapper-cards .wrapper-card {
+            width: 100%;
+            margin-right: 0px;
+            margin-top: 20px;
+        }
+    }
+    @media screen and (max-width: 600px) {
+        .wrapper-buttons {
+            flex-direction: column;
+        }
+        .wrapper-buttons .button {
+            width: 100%;
+            margin-top: 15px;
+        }
+        .wrapper-selects {
+            flex-direction: column;
+        }
+        .wrapper-selects .select-player {
+            width: 100%;
+        }
     }
 </style>

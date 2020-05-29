@@ -1,13 +1,15 @@
 <template>
     <div>
-        <v-card 
-            class="pa-10 card-match" 
+        <v-card
+            class="pa-10 card-match"
         >
             <v-card-text>
                 <p class="display-1 text--primary name-player">
-                    {{  name  }}
+                    {{  firstPlayer  }} - {{secondPlayer}}
                 </p>
-                <p>Последние 10 матчей:</p>
+                <p>
+                  {{winFirst}} - {{winSecond}}
+                </p>
                 <Match 
                   v-for="match in matches"
                   :key="match.id"
@@ -22,7 +24,10 @@
 import Match from './Match';
   export default {
     props: {
-      name: String,
+      firstPlayer: String,
+      secondPlayer: String,
+      winFirst: Number,
+      winSecond: Number,
       matches: Array,
     },
     data () {
@@ -42,7 +47,7 @@ import Match from './Match';
          font-size: 24px !important;
        }
        .card-match {
-         padding: 0px !important;
+         padding: 10px !important;
        }
     }
 </style>
