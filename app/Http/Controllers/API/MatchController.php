@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\API;
+;
 
+use App\Models\Champ;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Match;
@@ -15,16 +17,18 @@ class MatchController extends Controller
     protected $match;
     protected $date;
     protected $player;
+    protected $champ;
     private $opts = array(
         'http' => array(
             'method' => "GET",
             'header' => "X-Requested-With: XMLHttpRequest"
         )
     );
-    public function __construct(Match $match, Player $player, Date $date){
+    public function __construct(Match $match, Player $player, Date $date, Champ $champ){
         $this->player = $player;
         $this->match = $match;
         $this->date = $date;
+        $this->champ = $champ;
     }
 
 
@@ -356,6 +360,8 @@ class MatchController extends Controller
     public function commonMatch(Request $request)
     {
     
+        $countMatches = $request->countMatches;
+
         $player1 = $this->player->where('name', $request->player1)->first();
 
         $player2 = $this->player->where('name', $request->player2)->first();
@@ -417,11 +423,11 @@ class MatchController extends Controller
 
         $last1  = $this->match->where('champName', $request->champName)->where(function($query) use($player1) {
             $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
-        })->orderBy('date', 'desc')->take(10)->get();
+        })->orderBy('date', 'desc')->take($countMatches)->get();
         
         $last2  = $this->match->where('champName', $request->champName)->where(function($query) use($player2) {
             $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
-        })->orderBy('date', 'desc')->take(10)->get();
+        })->orderBy('date', 'desc')->take($countMatches)->get();
         
         $mergeArray = collect($game1)->merge($game2);
 
@@ -443,7 +449,8 @@ class MatchController extends Controller
                 'player1'=> $player1->name,
                 'player2'=>$player2->name,
                 'win1' => $win1, 
-                'win2' => $win2)
+                'win2' => $win2
+                )
         );
 
         return response()->json($array, 200);
@@ -453,5 +460,16 @@ class MatchController extends Controller
     {
 
        return response()->json($this->match->where('champName', 'like', '%' . $request->champName . '%')->get()->unique('champName')->pluck('champName'), 200); 
+    }
+    public function getAllChamps(Request $request)
+    {
+        return $this->champ->get()->pluck('name');
+
+    }
+    public function getLastUpdateDate(Request $request) 
+    {
+        $lastDateObject = $this->date->first();
+        $lastDate = $lastDateObject->date; //Дата последнего обновления
+        return $lastDateObject->date;
     }
 }

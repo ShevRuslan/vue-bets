@@ -8,13 +8,13 @@
             >
                 <v-row
                     justify="center"
-                    aligng="center"
+                    align="center"
                 >
                     <v-col class="text-center ">
-                        <div width="100%">
+                        <div width="100%" class="d-flex">
                             <v-card
-                                width="100%"
-                                class="pa-10"
+                                width="30%"
+                                class="pa-5 mr-5"
                             >
                                 <div class="display-1 pb-12 ">
                                     Поиск по спортсменам
@@ -57,9 +57,7 @@
 
                                         <v-autocomplete
                                             v-model="tourney"
-                                            :items="tournes"
-                                            :loading="isLoading3"
-                                            :search-input.sync="searchTourney"
+                                            :items="champs"
                                             item-text="name"
                                             return-object
                                             required
@@ -68,8 +66,15 @@
                                             hide-no-data
                                             >
                                         </v-autocomplete>
-
-                                       <div class="d-flex wrapper-buttons" >
+                                        <v-slider
+                                        color="primary"
+                                        v-model="count"
+                                        label="Количество"
+                                        min="1"
+                                        max="100"
+                                        thumb-label
+                                        ></v-slider>
+                                       <div class="d-flex wrapper-buttons mt-5" >
                                             <div class="button mr-5" >
                                                 <v-btn color="success" dense width="100%" @click="search">
                                                     Получить информацию
@@ -77,36 +82,42 @@
                                             </div>
 
                                             <div class="button">
-                                                  <v-tooltip top>
-                                                    <template v-slot:activator="{ on: tooltip }">
-                                                        <v-btn  v-on="{ ...tooltip}" color="primary" dense width="100%"  >
-                                                        Обновить данные
-                                                        </v-btn>
-                                                    </template>
-                                                    <span>Обновление базы данных расчитывается с последнего обновления (последней даты матча) и может занять несколько минут (зависит сколько дней не обновлялясь база).</span>
-                                                </v-tooltip>
+                                                 <v-btn  color="primary" dense width="100%" @click="getLastUpdateDate" >
+                                                    Актуальность базы
+                                                </v-btn>
+                                                <v-dialog 
+                                                    v-model="dialog"
+                                                    width="500"
+                                                >
+                                                 <v-card>
+                                                    <v-card-title class="headline">Последнее обновление базы</v-card-title>
+                                                    <v-card-text class="title">{{lastUpdateDate}}</v-card-text>
+                                                    <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn color="green darken-1" text @click="dialog = false">Закрыть</v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                                </v-dialog>
                                             </div>
+
                                        </div>
 
                                     </v-form>
                                 </div>
                             </v-card>
+                            <v-card width="70%" v-if="matches.length">
+                                    <CooperativeMatch 
+                                        :matches="matches[3].mergeGames"
+                                        :firstPlayer="matches[3].player1"
+                                        :secondPlayer="matches[3].player2"
+                                        :winFirst="matches[3].win1"
+                                        :winSecond="matches[3].win2"
+                                    ></CooperativeMatch>
+                            </v-card>
                         </div>
                         <div class="d-flex mt-12 wrapper-cards" v-if="matches.length">
-                           <CardMatches :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" width="50%"></CardMatches>
-                           <CardMatches :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" width="50%"></CardMatches>
-                        </div>
-                        <div class="d-flex flex-column mt-12" v-if="matches.length">
-                            <div class="display-1 pb-6 pt-10 ">
-                                Совместные матчи
-                            </div>
-                            <CooperativeMatch 
-                                :matches="matches[3].mergeGames"
-                                :firstPlayer="matches[3].player1"
-                                :secondPlayer="matches[3].player2"
-                                :winFirst="matches[3].win1"
-                                :winSecond="matches[3].win2"
-                            ></CooperativeMatch>
+                           <CardMatches :count="count" :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" ></CardMatches>
+                           <CardMatches :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" ></CardMatches>
                         </div>
                     </v-col>
                 </v-row>
@@ -144,7 +155,15 @@
                 tourney: null,
                 tournes: [],
                 isLoading3: false,
+
+                champs: [],
+                count: '',
+                lastUpdateDate: '',
+                dialog: false,
             }
+        },
+        async created() {
+            this.champs = await API.getAllChamps();
         },
         methods: {
             changeHeader: function() {
@@ -155,7 +174,12 @@
                     player1: this.player1.name,
                     player2: this.player2.name,
                     champName: this.tourney,
+                    countMatches: this.count,
                 })
+            },
+            getLastUpdateDate: async function() {
+                this.lastUpdateDate = await API.getLastUpdateDate();
+                this.dialog = true;
             }
         },
         watch: {
@@ -193,21 +217,16 @@
 </script>
 
 <style scoped >
-    .wrapper-card {
-        width: 50%;
-    }
     .button {
         width: 50%;
     }
-    @media screen and (max-width:1400px) {
-        .wrapper-cards {
-            flex-direction: column;
-        }
-        .wrapper-cards .wrapper-card {
-            width: 100%;
+    .wrapper-cards {
+        flex-direction: row;
+    }
+    .wrapper-cards .wrapper-card {
+            width: 50%;
             margin-right: 0px;
             margin-top: 20px;
-        }
     }
     @media screen and (max-width: 600px) {
         .wrapper-buttons {

@@ -2134,6 +2134,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2160,35 +2171,62 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       searchTourney: null,
       tourney: null,
       tournes: [],
-      isLoading3: false
+      isLoading3: false,
+      champs: [],
+      count: '',
+      lastUpdateDate: '',
+      dialog: false
     };
+  },
+  created: function created() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].getAllChamps();
+
+            case 2:
+              _this.champs = _context.sent;
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     changeHeader: function changeHeader() {
       this.drawer = !this.drawer;
     },
     search: function () {
-      var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context.next = 2;
+                _context2.next = 2;
                 return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchBySportsmen({
                   player1: this.player1.name,
                   player2: this.player2.name,
-                  champName: this.tourney
+                  champName: this.tourney,
+                  countMatches: this.count
                 });
 
               case 2:
-                this.matches = _context.sent;
+                this.matches = _context2.sent;
 
               case 3:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function search() {
@@ -2196,88 +2234,45 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return search;
-    }()
-  },
-  watch: {
-    searchSportsmen1: function searchSportsmen1(val) {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!_this.isLoading1) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt("return");
-
-              case 2:
-                _this.isLoading1 = true; // Lazily load input items
-
-                _context2.next = 5;
-                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchSportsmen({
-                  name: _this.searchSportsmen1
-                });
-
-              case 5:
-                _this.entries1 = _context2.sent;
-                _this.isLoading1 = false;
-
-              case 7:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
-    searchSportsmen2: function searchSportsmen2(val) {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+    }(),
+    getLastUpdateDate: function () {
+      var _getLastUpdateDate = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!_this2.isLoading2) {
-                  _context3.next = 2;
-                  break;
-                }
-
-                return _context3.abrupt("return");
+                _context3.next = 2;
+                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].getLastUpdateDate();
 
               case 2:
-                _this2.isLoading2 = true; // Lazily load input items
+                this.lastUpdateDate = _context3.sent;
+                this.dialog = true;
 
-                _context3.next = 5;
-                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchSportsmen({
-                  name: _this2.searchSportsmen2
-                });
-
-              case 5:
-                _this2.entries2 = _context3.sent;
-                _this2.isLoading2 = false;
-
-              case 7:
+              case 4:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3);
-      }))();
-    },
-    searchTourney: function searchTourney(val) {
-      var _this3 = this;
+        }, _callee3, this);
+      }));
+
+      function getLastUpdateDate() {
+        return _getLastUpdateDate.apply(this, arguments);
+      }
+
+      return getLastUpdateDate;
+    }()
+  },
+  watch: {
+    searchSportsmen1: function searchSportsmen1(val) {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                if (!_this3.isLoading3) {
+                if (!_this2.isLoading1) {
                   _context4.next = 2;
                   break;
                 }
@@ -2285,15 +2280,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context4.abrupt("return");
 
               case 2:
-                _this3.isLoading3 = true;
+                _this2.isLoading1 = true; // Lazily load input items
+
                 _context4.next = 5;
-                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchChamp({
-                  champName: _this3.searchTourney
+                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchSportsmen({
+                  name: _this2.searchSportsmen1
                 });
 
               case 5:
-                _this3.tournes = _context4.sent;
-                _this3.isLoading3 = false;
+                _this2.entries1 = _context4.sent;
+                _this2.isLoading1 = false;
 
               case 7:
               case "end":
@@ -2301,6 +2297,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee4);
+      }))();
+    },
+    searchSportsmen2: function searchSportsmen2(val) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                if (!_this3.isLoading2) {
+                  _context5.next = 2;
+                  break;
+                }
+
+                return _context5.abrupt("return");
+
+              case 2:
+                _this3.isLoading2 = true; // Lazily load input items
+
+                _context5.next = 5;
+                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchSportsmen({
+                  name: _this3.searchSportsmen2
+                });
+
+              case 5:
+                _this3.entries2 = _context5.sent;
+                _this3.isLoading2 = false;
+
+              case 7:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    searchTourney: function searchTourney(val) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (!_this4.isLoading3) {
+                  _context6.next = 2;
+                  break;
+                }
+
+                return _context6.abrupt("return");
+
+              case 2:
+                _this4.isLoading3 = true;
+                _context6.next = 5;
+                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchChamp({
+                  champName: _this4.searchTourney
+                });
+
+              case 5:
+                _this4.tournes = _context6.sent;
+                _this4.isLoading3 = false;
+
+              case 7:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
       }))();
     }
   }
@@ -2338,11 +2403,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     name: String,
-    matches: Array
+    matches: Array,
+    count: Number
   },
   data: function data() {
     return {};
@@ -2364,6 +2451,30 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Match__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Match */ "./resources/js/components/Match.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2493,97 +2604,12 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     name: String,
-    match: Object
+    match: Object,
+    player: String,
+    cooperativeMatch: Boolean
   },
   data: function data() {
     return {
@@ -2591,14 +2617,45 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         before: 1,
         after: 2
       }),
+      regexScore: /*#__PURE__*/_wrapRegExp(/^[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*([0-9]+):([0-9]+)[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*/gm, {
+        masterBefore: 1,
+        masterAfter: 2
+      }),
       total: 0,
       totalFirst: 0,
       totalSecond: 0,
       forFirst: 0,
-      forSecond: 0
+      forSecond: 0,
+      info: '',
+      scores: '',
+      date: '',
+      reverse: false,
+      nameMatch: ''
     };
   },
   created: function created() {
+    var _this2 = this;
+
+    if (this.player != undefined) {
+      var arrayPlayers = this.match.nameGame.split('-');
+      var first = arrayPlayers[0].trim();
+      var second = arrayPlayers[1].trim();
+
+      if (first != this.player) {
+        this.reverse = true;
+        this.nameMatch = "".concat(first);
+      } else {
+        this.nameMatch = "".concat(second);
+      }
+    } //Дата
+
+
+    var dateInMS = Date.parse(this.match.date);
+    var date = new Date(dateInMS);
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    this.date = "".concat(day, ".").concat(month); //Дата
+
     var matcher = this.match.scores.matchAll(this.regex);
 
     var _iterator = _createForOfIteratorHelper(matcher),
@@ -2611,8 +2668,14 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
             before = _match$groups.before,
             after = _match$groups.after;
         this.total += parseInt(before) + parseInt(after);
-        this.totalFirst += parseInt(before);
-        this.totalSecond += parseInt(after);
+
+        if (this.reverse) {
+          this.totalFirst += parseInt(after);
+          this.totalSecond += parseInt(before);
+        } else {
+          this.totalFirst += parseInt(before);
+          this.totalSecond += parseInt(after);
+        }
       }
     } catch (err) {
       _iterator.e(err);
@@ -2620,8 +2683,42 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       _iterator.f();
     }
 
+    var scores = this.match.scores.matchAll(this.regexScore);
+
+    var _iterator2 = _createForOfIteratorHelper(scores),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var score = _step2.value;
+        var _score$groups = score.groups,
+            masterBefore = _score$groups.masterBefore,
+            masterAfter = _score$groups.masterAfter;
+        if (this.reverse) this.scores = "".concat(masterAfter, ":").concat(masterBefore);else this.scores = "".concat(masterBefore, ":").concat(masterAfter);
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+
     this.forFirst = this.totalFirst - this.totalSecond;
     this.forSecond = this.totalSecond - this.totalFirst;
+
+    if (this.match.add_info != null) {
+      if (this.match.add_info.trim() != '') {
+        try {
+          var arrayInfo = JSON.parse(this.match.add_info);
+          arrayInfo.forEach(function (info) {
+            console.log(Object.values(info)[0]);
+            _this2.info += Object.values(info)[0];
+            _this2.info += " .";
+          });
+        } catch (e) {
+          this.info = this.match.add_info;
+        }
+      }
+    }
   }
 });
 
@@ -7108,7 +7205,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.wrapper-card[data-v-f348271a] {\n    width: 50%;\n}\n.button[data-v-f348271a] {\n    width: 50%;\n}\n@media screen and (max-width:1400px) {\n.wrapper-cards[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-cards .wrapper-card[data-v-f348271a] {\n        width: 100%;\n        margin-right: 0px;\n        margin-top: 20px;\n}\n}\n@media screen and (max-width: 600px) {\n.wrapper-buttons[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-buttons .button[data-v-f348271a] {\n        width: 100%;\n        margin-top: 15px;\n}\n.wrapper-selects[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-selects .select-player[data-v-f348271a] {\n        width: 100%;\n}\n}\n", ""]);
+exports.push([module.i, "\n.button[data-v-f348271a] {\n    width: 50%;\n}\n.wrapper-cards[data-v-f348271a] {\n    flex-direction: row;\n}\n.wrapper-cards .wrapper-card[data-v-f348271a] {\n        width: 50%;\n        margin-right: 0px;\n        margin-top: 20px;\n}\n@media screen and (max-width: 600px) {\n.wrapper-buttons[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-buttons .button[data-v-f348271a] {\n        width: 100%;\n        margin-top: 15px;\n}\n.wrapper-selects[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-selects .select-player[data-v-f348271a] {\n        width: 100%;\n}\n}\n", ""]);
 
 // exports
 
@@ -7127,7 +7224,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n@media screen and (max-width:600px) {\n.name-player[data-v-5b4e5568] {\n        font-size: 24px !important;\n}\n.card-match[data-v-5b4e5568] {\n        padding: 0px !important;\n}\n}\n", ""]);
+exports.push([module.i, "\n.element-header[data-v-5b4e5568] {\r\n  padding-left: 0px;\n}\n@media screen and (max-width:600px) {\n.name-player[data-v-5b4e5568] {\r\n         font-size: 24px !important;\n}\n.card-match[data-v-5b4e5568] {\r\n         padding: 0px !important;\n}\n}\r\n", ""]);
 
 // exports
 
@@ -7146,7 +7243,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n@media screen and (max-width:600px) {\n.name-player[data-v-0fd8bab6] {\n        font-size: 24px !important;\n}\n.card-match[data-v-0fd8bab6] {\n        padding: 10px !important;\n}\n}\n", ""]);
+exports.push([module.i, "\n.element-header[data-v-0fd8bab6] {\r\n  padding-left: 0px;\n}\n@media screen and (max-width:600px) {\n.name-player[data-v-0fd8bab6] {\r\n         font-size: 24px !important;\n}\n.card-match[data-v-0fd8bab6] {\r\n         padding: 10px !important;\n}\n}\r\n", ""]);
 
 // exports
 
@@ -7165,7 +7262,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n@media screen and (max-width:600px) {\n.v-list .v-list-item__action  .title[data-v-1220302c] {\n      font-size: 12px !important;\n}\n.item-list[data-v-1220302c] {\n      font-size: 12px !important;\n}\n.title-name[data-v-1220302c] {\n      font-size: 12px;\n      white-space: normal;\n}\n}\n", ""]);
+exports.push([module.i, "\n.element-match[data-v-1220302c] {\n  padding: 0px;\n  font-size: 12px;\n}\n@media screen and (max-width:600px) {\n.v-list .v-list-item__action  .title[data-v-1220302c] {\n        font-size: 12px !important;\n}\n.item-list[data-v-1220302c] {\n        font-size: 12px !important;\n}\n.title-name[data-v-1220302c] {\n        font-size: 12px;\n        white-space: normal;\n}\n}\n", ""]);
 
 // exports
 
@@ -39786,16 +39883,16 @@ var render = function() {
             [
               _c(
                 "v-row",
-                { attrs: { justify: "center", aligng: "center" } },
+                { attrs: { justify: "center", align: "center" } },
                 [
                   _c("v-col", { staticClass: "text-center " }, [
                     _c(
                       "div",
-                      { attrs: { width: "100%" } },
+                      { staticClass: "d-flex", attrs: { width: "100%" } },
                       [
                         _c(
                           "v-card",
-                          { staticClass: "pa-10", attrs: { width: "100%" } },
+                          { staticClass: "pa-5 mr-5", attrs: { width: "30%" } },
                           [
                             _c("div", { staticClass: "display-1 pb-12 " }, [
                               _vm._v(
@@ -39891,25 +39988,13 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("v-autocomplete", {
                                       attrs: {
-                                        items: _vm.tournes,
-                                        loading: _vm.isLoading3,
-                                        "search-input": _vm.searchTourney,
+                                        items: _vm.champs,
                                         "item-text": "name",
                                         "return-object": "",
                                         required: "",
                                         outlined: "",
                                         label: "Чемпионат",
                                         "hide-no-data": ""
-                                      },
-                                      on: {
-                                        "update:searchInput": function($event) {
-                                          _vm.searchTourney = $event
-                                        },
-                                        "update:search-input": function(
-                                          $event
-                                        ) {
-                                          _vm.searchTourney = $event
-                                        }
                                       },
                                       model: {
                                         value: _vm.tourney,
@@ -39920,9 +40005,29 @@ var render = function() {
                                       }
                                     }),
                                     _vm._v(" "),
+                                    _c("v-slider", {
+                                      attrs: {
+                                        color: "primary",
+                                        label: "Количество",
+                                        min: "1",
+                                        max: "100",
+                                        "thumb-label": ""
+                                      },
+                                      model: {
+                                        value: _vm.count,
+                                        callback: function($$v) {
+                                          _vm.count = $$v
+                                        },
+                                        expression: "count"
+                                      }
+                                    }),
+                                    _vm._v(" "),
                                     _c(
                                       "div",
-                                      { staticClass: "d-flex wrapper-buttons" },
+                                      {
+                                        staticClass:
+                                          "d-flex wrapper-buttons mt-5"
+                                      },
                                       [
                                         _c(
                                           "div",
@@ -39953,50 +40058,95 @@ var render = function() {
                                           { staticClass: "button" },
                                           [
                                             _c(
-                                              "v-tooltip",
+                                              "v-btn",
                                               {
-                                                attrs: { top: "" },
-                                                scopedSlots: _vm._u([
-                                                  {
-                                                    key: "activator",
-                                                    fn: function(ref) {
-                                                      var tooltip = ref.on
-                                                      return [
-                                                        _c(
-                                                          "v-btn",
-                                                          _vm._g(
-                                                            {
-                                                              attrs: {
-                                                                color:
-                                                                  "primary",
-                                                                dense: "",
-                                                                width: "100%"
-                                                              }
-                                                            },
-                                                            Object.assign(
-                                                              {},
-                                                              tooltip
-                                                            )
-                                                          ),
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                    Обновить данные\n                                                    "
-                                                            )
-                                                          ]
-                                                        )
-                                                      ]
-                                                    }
-                                                  }
-                                                ])
+                                                attrs: {
+                                                  color: "primary",
+                                                  dense: "",
+                                                  width: "100%"
+                                                },
+                                                on: {
+                                                  click: _vm.getLastUpdateDate
+                                                }
                                               },
                                               [
-                                                _vm._v(" "),
-                                                _c("span", [
-                                                  _vm._v(
-                                                    "Обновление базы данных расчитывается с последнего обновления (последней даты матча) и может занять несколько минут (зависит сколько дней не обновлялясь база)."
-                                                  )
-                                                ])
+                                                _vm._v(
+                                                  "\n                                                Актуальность базы\n                                            "
+                                                )
                                               ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-dialog",
+                                              {
+                                                attrs: { width: "500" },
+                                                model: {
+                                                  value: _vm.dialog,
+                                                  callback: function($$v) {
+                                                    _vm.dialog = $$v
+                                                  },
+                                                  expression: "dialog"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-card",
+                                                  [
+                                                    _c(
+                                                      "v-card-title",
+                                                      {
+                                                        staticClass: "headline"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "Последнее обновление базы"
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-card-text",
+                                                      { staticClass: "title" },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(
+                                                            _vm.lastUpdateDate
+                                                          )
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-card-actions",
+                                                      [
+                                                        _c("v-spacer"),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-btn",
+                                                          {
+                                                            attrs: {
+                                                              color:
+                                                                "green darken-1",
+                                                              text: ""
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                _vm.dialog = false
+                                                              }
+                                                            }
+                                                          },
+                                                          [_vm._v("Закрыть")]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
                                             )
                                           ],
                                           1
@@ -40010,7 +40160,26 @@ var render = function() {
                               1
                             )
                           ]
-                        )
+                        ),
+                        _vm._v(" "),
+                        _vm.matches.length
+                          ? _c(
+                              "v-card",
+                              { attrs: { width: "70%" } },
+                              [
+                                _c("CooperativeMatch", {
+                                  attrs: {
+                                    matches: _vm.matches[3].mergeGames,
+                                    firstPlayer: _vm.matches[3].player1,
+                                    secondPlayer: _vm.matches[3].player2,
+                                    winFirst: _vm.matches[3].win1,
+                                    winSecond: _vm.matches[3].win2
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e()
                       ],
                       1
                     ),
@@ -40023,9 +40192,9 @@ var render = function() {
                             _c("CardMatches", {
                               staticClass: "wrapper-card mr-5",
                               attrs: {
+                                count: _vm.count,
                                 name: _vm.matches[0].name,
-                                matches: _vm.matches[0].matches,
-                                width: "50%"
+                                matches: _vm.matches[0].matches
                               }
                             }),
                             _vm._v(" "),
@@ -40033,37 +40202,7 @@ var render = function() {
                               staticClass: "wrapper-card",
                               attrs: {
                                 name: _vm.matches[1].name,
-                                matches: _vm.matches[1].matches,
-                                width: "50%"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.matches.length
-                      ? _c(
-                          "div",
-                          { staticClass: "d-flex flex-column mt-12" },
-                          [
-                            _c(
-                              "div",
-                              { staticClass: "display-1 pb-6 pt-10 " },
-                              [
-                                _vm._v(
-                                  "\n                            Совместные матчи\n                        "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("CooperativeMatch", {
-                              attrs: {
-                                matches: _vm.matches[3].mergeGames,
-                                firstPlayer: _vm.matches[3].player1,
-                                secondPlayer: _vm.matches[3].player2,
-                                winFirst: _vm.matches[3].win1,
-                                winSecond: _vm.matches[3].win2
+                                matches: _vm.matches[1].matches
                               }
                             })
                           ],
@@ -40122,13 +40261,99 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("p", [_vm._v("Последние 10 матчей:")]),
+              _c("p", [_vm._v("Последние " + _vm._s(_vm.count) + " матчей:")]),
               _vm._v(" "),
-              _vm._l(_vm.matches, function(match) {
-                return _c("Match", { key: match.id, attrs: { match: match } })
+              _c("v-simple-table", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function() {
+                      return [
+                        _c("thead", [
+                          _c("tr", [
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Тотал")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Т1")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Т2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Ф1")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Ф2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              {
+                                staticClass:
+                                  "text-left name-match element-header"
+                              },
+                              [_vm._v("Название матча")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Счёт")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Турнир")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Стадия")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Дата")]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.matches, function(match) {
+                            return _c("Match", {
+                              key: match.id,
+                              attrs: { match: match, player: _vm.name }
+                            })
+                          }),
+                          1
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ])
               })
             ],
-            2
+            1
           )
         ],
         1
@@ -40166,6 +40391,10 @@ var render = function() {
         "v-card",
         { staticClass: "pa-10 card-match" },
         [
+          _c("div", { staticClass: "display-1 pb-6 pt-10 " }, [
+            _vm._v("\n        Совместные матчи\n    ")
+          ]),
+          _vm._v(" "),
           _c(
             "v-card-text",
             [
@@ -40179,7 +40408,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("p", [
+              _c("p", { staticClass: "title font-weight-black" }, [
                 _vm._v(
                   "\n              " +
                     _vm._s(_vm.winFirst) +
@@ -40189,11 +40418,92 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._l(_vm.matches, function(match) {
-                return _c("Match", { key: match.id, attrs: { match: match } })
+              _c("v-simple-table", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function() {
+                      return [
+                        _c("thead", [
+                          _c("tr", [
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Тотал")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Т1")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Т2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Ф1")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Ф2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Счёт")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Турнир")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Стадия")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Дата")]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.matches, function(match) {
+                            return _c("Match", {
+                              key: match.id,
+                              attrs: {
+                                match: match,
+                                player: _vm.firstPlayer,
+                                cooperativeMatch: ""
+                              }
+                            })
+                          }),
+                          1
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ])
               })
             ],
-            2
+            1
           )
         ],
         1
@@ -40259,292 +40569,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "v-list",
-    [
-      _c(
-        "v-list-group",
-        {
-          scopedSlots: _vm._u([
-            {
-              key: "activator",
-              fn: function() {
-                return [
-                  _c(
-                    "v-list-item-content",
-                    [
-                      _c("v-list-item-title", { staticClass: "title-name" }, [
-                        _vm._v(_vm._s(_vm.match.nameGame))
-                      ])
-                    ],
-                    1
-                  )
-                ]
-              },
-              proxy: true
-            }
-          ])
-        },
-        [
-          _vm._v(" "),
-          _c(
-            "v-row",
-            [
-              _c(
-                "v-col",
-                { attrs: { cols: "12", width: "100%" } },
-                [
-                  _c(
-                    "v-list",
-                    [
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Счёт:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(_vm.match.scores))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Турнир:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(_vm.match.champName))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Дата:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(_vm.match.date))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Стадия:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(_vm.match.add_info))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Тотал:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(this.total))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Тотал 1:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(this.totalFirst))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Тотал 2:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(this.totalSecond))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Фор 2:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(this.forFirst))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-action", [
-                            _c("p", { staticClass: "title ma-0" }, [
-                              _vm._v("Фор 2:")
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "item-list" },
-                                [_vm._v(_vm._s(this.forSecond))]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider")
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
+  return _c("tr", [
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.total))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.totalFirst))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.totalSecond))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.forFirst))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.forSecond))
+    ]),
+    _vm._v(" "),
+    !_vm.cooperativeMatch
+      ? _c("td", { staticClass: "text-left name-match element-match" }, [
+          _vm._v(_vm._s(this.nameMatch))
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.scores))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(_vm.match.champName))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.info))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left element-match" }, [
+      _vm._v(_vm._s(this.date))
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -95164,6 +95231,50 @@ var Api = function Api() {
       return _ref4.apply(this, arguments);
     };
   }());
+
+  _defineProperty(this, "getAllChamps", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+    var url, response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            url = 'getAllChamps';
+            _context5.next = 3;
+            return _this.getResource(url, null, 'GET');
+
+          case 3:
+            response = _context5.sent;
+            return _context5.abrupt("return", response);
+
+          case 5:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  })));
+
+  _defineProperty(this, "getLastUpdateDate", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+    var url, response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            url = 'getLastUpdateDate';
+            _context6.next = 3;
+            return _this.getResource(url, null, 'GET');
+
+          case 3:
+            response = _context6.sent;
+            return _context6.abrupt("return", response);
+
+          case 5:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (new Api());
