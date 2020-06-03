@@ -11,10 +11,9 @@
                     align="center"
                 >
                     <v-col class="text-center ">
-                        <div width="100%" class="d-flex">
+                        <div width="100%" class="d-flex wrapper-form-coop">
                             <v-card
-                                width="30%"
-                                class="pa-5 mr-5"
+                                class="pa-5 mr-5 wrapper-form"
                             >
                                 <div class="display-1 pb-12 ">
                                     Поиск по спортсменам
@@ -76,13 +75,27 @@
                                         ></v-slider>
                                        <div class="d-flex wrapper-buttons mt-5" >
                                             <div class="button mr-5" >
-                                                <v-btn color="success" dense width="100%" @click="search">
+                                                <v-btn :loading="loadingMatches" color="success" dense width="100%" @click="search">
                                                     Получить информацию
                                                 </v-btn>
+                                                 <v-snackbar
+                                                    v-model="snackbar"
+                                                    color="success"
+                                                    left
+                                                    bottom
+                                                >
+                                                    Матчи успешно получены!
+                                                    <v-btn
+                                                        text
+                                                        @click="snackbar = false"
+                                                    >
+                                                        <v-icon>mdi-close</v-icon>
+                                                    </v-btn>
+                                                </v-snackbar>
                                             </div>
 
                                             <div class="button">
-                                                 <v-btn  color="primary" dense width="100%" @click="getLastUpdateDate" >
+                                                 <v-btn :loading="loadingLastDate" color="primary" dense width="100%" @click="getLastUpdateDate" >
                                                     Актуальность базы
                                                 </v-btn>
                                                 <v-dialog 
@@ -105,7 +118,7 @@
                                     </v-form>
                                 </div>
                             </v-card>
-                            <v-card width="70%" v-if="matches.length">
+                            <v-card class="wrapper-coop" v-if="matches.length">
                                     <CooperativeMatch 
                                         :matches="matches[3].mergeGames"
                                         :firstPlayer="matches[3].player1"
@@ -116,8 +129,8 @@
                             </v-card>
                         </div>
                         <div class="d-flex mt-12 wrapper-cards" v-if="matches.length">
-                           <CardMatches :count="count" :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" ></CardMatches>
-                           <CardMatches :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" ></CardMatches>
+                           <CardMatches :count="countMatches" width="49%" :name="matches[0].name" :matches="matches[0].matches" class="wrapper-card mr-5" ></CardMatches>
+                           <CardMatches :count="countMatches" :name="matches[1].name" :matches="matches[1].matches" class="wrapper-card" ></CardMatches>
                         </div>
                     </v-col>
                 </v-row>
@@ -151,42 +164,44 @@
                 searchSportsmen2: null,
                 matches: [],
 
-                searchTourney: null,
-                tourney: null,
-                tournes: [],
-                isLoading3: false,
-
                 champs: [],
                 count: '',
                 lastUpdateDate: '',
                 dialog: false,
+
+                loadingMatches: false,
+                loadingLastDate: false,
+                countMatches:'',
+                snackbar: false,
             }
         },
         async created() {
             this.champs = await API.getAllChamps();
         },
         methods: {
-            changeHeader: function() {
-                this.drawer = !this.drawer;
-            },
             search: async function() {
+                this.loadingMatches = true;
                 this.matches = await API.searchBySportsmen({
                     player1: this.player1.name,
                     player2: this.player2.name,
                     champName: this.tourney,
                     countMatches: this.count,
                 })
+                this.countMatches = this.count;
+                this.snackbar = true;
+                this.loadingMatches = false;
             },
             getLastUpdateDate: async function() {
+                this.loadingLastDate = true;
                 this.lastUpdateDate = await API.getLastUpdateDate();
                 this.dialog = true;
+                this.loadingLastDate = false;
             }
         },
         watch: {
             async searchSportsmen1 (val) {
                 if (this.isLoading1) return
                 this.isLoading1 = true
-                // Lazily load input items
                 this.entries1 = await API.searchSportsmen({
                     name: this.searchSportsmen1,
                 })
@@ -196,37 +211,62 @@
             async searchSportsmen2 (val) {
                 if (this.isLoading2) return
                 this.isLoading2 = true
-                // Lazily load input items
                 this.entries2 = await API.searchSportsmen({
                     name: this.searchSportsmen2,
                 })
                 this.isLoading2 = false;
                 
             },
-            async searchTourney (val) {
-                if(this.isLoading3) return
-                this.isLoading3 = true;
-
-                this.tournes = await API.searchChamp({
-                    champName: this.searchTourney
-                })
-                this.isLoading3 = false;
-            },
         },
 }
 </script>
 
 <style scoped >
-    .button {
-        width: 50%;
+    
+    .wrapper-form {
+        width: 30%;
     }
+    .wrapper-coop {
+        width: 70%;
+    }
+    .button {
+        width: 100%;
+        margin-top: 15px;
+    }
+    .wrapper-buttons {
+        flex-direction: column;
+    }
+    .wrapper-form-coop,
     .wrapper-cards {
-        flex-direction: row;
+        justify-content: center;
     }
     .wrapper-cards .wrapper-card {
             width: 50%;
             margin-right: 0px;
             margin-top: 20px;
+    }
+    @media screen and (max-width: 1200px) {
+        .wrapper-form {
+            width: 40%;
+        }
+        .wrapper-coop {
+            width: 60%;
+        }
+    }
+    @media screen and (max-width: 768px) {
+        .wrapper-form-coop,
+        .wrapper-cards {
+            flex-direction: column;;
+        }
+        .wrapper-form,
+        .wrapper-coop,
+        .wrapper-cards .wrapper-card {
+            width: 100%;
+            margin-right: 0px;
+        }
+        .wrapper-coop {
+            margin-top: 48px;
+        }
     }
     @media screen and (max-width: 600px) {
         .wrapper-buttons {

@@ -1,15 +1,26 @@
 <template>
         <tr>
-          <td class="text-left element-match">{{ this.total }}</td>
-          <td class="text-left element-match">{{ this.totalFirst }}</td>
-          <td class="text-left element-match">{{ this.totalSecond }}</td>
-          <td class="text-left element-match">{{ this.forFirst }}</td>
-          <td class="text-left element-match">{{ this.forSecond }}</td>
-          <td v-if="!cooperativeMatch" class="text-left name-match element-match">{{ this.nameMatch }}</td>
-          <td class="text-left element-match">{{ this.scores }}</td>
-          <td class="text-left element-match">{{ match.champName }}</td>
-          <td class="text-left element-match">{{ this.info }}</td>
-          <td class="text-left element-match">{{ this.date }}</td>
+          <td v-if="!cooperativeMatch" class="text-right name-match string-info">{{ this.nameMatch }}</td>
+          <td class="text-left number-info">
+              <template v-if="scoreFirst > scoreSecond">
+                 <div class="scores-match ">
+                    <p style="color:#4CAF50">{{ this.scoreFirst }}</p>:<p>{{this.scoreSecond}}</p>
+                 </div>
+              </template>
+              <template v-else>
+                  <div class="scores-match ">
+                    <p style="color:#D32F2F">{{ this.scoreFirst }}</p>:<p>{{this.scoreSecond}}</p>
+                  </div>
+              </template>
+          </td>
+          <td class="text-left number-info">{{ this.forFirst }}</td>
+          <td class="text-left number-info">{{ this.totalFirst }}</td>
+          <td class="text-left number-info">{{ this.forSecond }}</td>
+          <td class="text-left number-info">{{ this.totalSecond }}</td>
+          <td class="text-left number-info">{{ this.total }}</td>
+          <td class="text-left number-info">{{ this.date }}</td>
+          <td class="text-left string-info">{{ match.champName }}</td>
+          <td class="text-left string-info">{{ this.info }}</td>
         </tr>
 </template>
 
@@ -31,10 +42,11 @@
         forFirst: 0,
         forSecond: 0,
         info: '',
-        scores: '',
         date: '',
         reverse: false,
-        nameMatch: ''
+        nameMatch: '',
+        scoreFirst:'',
+        scoreSecond:''
       }
     },
     created() {
@@ -79,8 +91,15 @@
 
         for(let score of scores) {
           let {masterBefore, masterAfter} = score.groups;
-          if(this.reverse)  this.scores = `${masterAfter}:${masterBefore}`;
-          else  this.scores = `${masterBefore}:${masterAfter}`;
+          if(this.reverse) {
+            this.scoreFirst = masterAfter;
+            this.scoreSecond = masterBefore;
+          }
+
+          else {
+            this.scoreFirst = masterBefore;
+            this.scoreSecond = masterAfter;
+          }
         }
         
         this.forFirst = this.totalFirst - this.totalSecond;
@@ -107,9 +126,27 @@
 </script>
 
 <style scoped>
-  .element-match {
+  .number-info {
+    font-size: 14px;
+    padding: 0px;
+  }
+  .string-info {
     padding: 0px;
     font-size: 12px;
+  }
+  .scores-match {
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .scores-match p {
+    margin-bottom: 0px;
+  }
+  .name-match {
+    border-right: 1px solid rgba(0,0,0,.12);
+    padding-right: 5px;
+    width:1%;
+    white-space:nowrap;
   }
     @media screen and (max-width:600px) {
         .v-list .v-list-item__action  .title {

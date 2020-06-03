@@ -2145,6 +2145,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2168,14 +2181,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       searchSportsmen1: null,
       searchSportsmen2: null,
       matches: [],
-      searchTourney: null,
-      tourney: null,
-      tournes: [],
-      isLoading3: false,
       champs: [],
       count: '',
       lastUpdateDate: '',
-      dialog: false
+      dialog: false,
+      loadingMatches: false,
+      loadingLastDate: false,
+      countMatches: '',
+      snackbar: false
     };
   },
   created: function created() {
@@ -2201,16 +2214,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   methods: {
-    changeHeader: function changeHeader() {
-      this.drawer = !this.drawer;
-    },
     search: function () {
       var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                this.loadingMatches = true;
+                _context2.next = 3;
                 return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchBySportsmen({
                   player1: this.player1.name,
                   player2: this.player2.name,
@@ -2218,10 +2229,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   countMatches: this.count
                 });
 
-              case 2:
-                this.matches = _context2.sent;
-
               case 3:
+                this.matches = _context2.sent;
+                this.countMatches = this.count;
+                this.snackbar = true;
+                this.loadingMatches = false;
+
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -2241,14 +2255,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
+                this.loadingLastDate = true;
+                _context3.next = 3;
                 return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].getLastUpdateDate();
 
-              case 2:
+              case 3:
                 this.lastUpdateDate = _context3.sent;
                 this.dialog = true;
+                this.loadingLastDate = false;
 
-              case 4:
+              case 6:
               case "end":
                 return _context3.stop();
             }
@@ -2280,8 +2296,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context4.abrupt("return");
 
               case 2:
-                _this2.isLoading1 = true; // Lazily load input items
-
+                _this2.isLoading1 = true;
                 _context4.next = 5;
                 return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchSportsmen({
                   name: _this2.searchSportsmen1
@@ -2315,8 +2330,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context5.abrupt("return");
 
               case 2:
-                _this3.isLoading2 = true; // Lazily load input items
-
+                _this3.isLoading2 = true;
                 _context5.next = 5;
                 return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchSportsmen({
                   name: _this3.searchSportsmen2
@@ -2332,40 +2346,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee5);
-      }))();
-    },
-    searchTourney: function searchTourney(val) {
-      var _this4 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                if (!_this4.isLoading3) {
-                  _context6.next = 2;
-                  break;
-                }
-
-                return _context6.abrupt("return");
-
-              case 2:
-                _this4.isLoading3 = true;
-                _context6.next = 5;
-                return _service_api__WEBPACK_IMPORTED_MODULE_4__["default"].searchChamp({
-                  champName: _this4.searchTourney
-                });
-
-              case 5:
-                _this4.tournes = _context6.sent;
-                _this4.isLoading3 = false;
-
-              case 7:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
       }))();
     }
   }
@@ -2604,6 +2584,17 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     name: String,
@@ -2627,10 +2618,11 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       forFirst: 0,
       forSecond: 0,
       info: '',
-      scores: '',
       date: '',
       reverse: false,
-      nameMatch: ''
+      nameMatch: '',
+      scoreFirst: '',
+      scoreSecond: ''
     };
   },
   created: function created() {
@@ -2694,7 +2686,14 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         var _score$groups = score.groups,
             masterBefore = _score$groups.masterBefore,
             masterAfter = _score$groups.masterAfter;
-        if (this.reverse) this.scores = "".concat(masterAfter, ":").concat(masterBefore);else this.scores = "".concat(masterBefore, ":").concat(masterAfter);
+
+        if (this.reverse) {
+          this.scoreFirst = masterAfter;
+          this.scoreSecond = masterBefore;
+        } else {
+          this.scoreFirst = masterBefore;
+          this.scoreSecond = masterAfter;
+        }
       }
     } catch (err) {
       _iterator2.e(err);
@@ -7205,7 +7204,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.button[data-v-f348271a] {\n    width: 50%;\n}\n.wrapper-cards[data-v-f348271a] {\n    flex-direction: row;\n}\n.wrapper-cards .wrapper-card[data-v-f348271a] {\n        width: 50%;\n        margin-right: 0px;\n        margin-top: 20px;\n}\n@media screen and (max-width: 600px) {\n.wrapper-buttons[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-buttons .button[data-v-f348271a] {\n        width: 100%;\n        margin-top: 15px;\n}\n.wrapper-selects[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-selects .select-player[data-v-f348271a] {\n        width: 100%;\n}\n}\n", ""]);
+exports.push([module.i, "\n.wrapper-form[data-v-f348271a] {\n    width: 30%;\n}\n.wrapper-coop[data-v-f348271a] {\n    width: 70%;\n}\n.button[data-v-f348271a] {\n    width: 100%;\n    margin-top: 15px;\n}\n.wrapper-buttons[data-v-f348271a] {\n    flex-direction: column;\n}\n.wrapper-form-coop[data-v-f348271a],\n.wrapper-cards[data-v-f348271a] {\n    justify-content: center;\n}\n.wrapper-cards .wrapper-card[data-v-f348271a] {\n        width: 50%;\n        margin-right: 0px;\n        margin-top: 20px;\n}\n@media screen and (max-width: 1200px) {\n.wrapper-form[data-v-f348271a] {\n        width: 40%;\n}\n.wrapper-coop[data-v-f348271a] {\n        width: 60%;\n}\n}\n@media screen and (max-width: 768px) {\n.wrapper-form-coop[data-v-f348271a],\n    .wrapper-cards[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-form[data-v-f348271a],\n    .wrapper-coop[data-v-f348271a],\n    .wrapper-cards .wrapper-card[data-v-f348271a] {\n        width: 100%;\n        margin-right: 0px;\n}\n.wrapper-coop[data-v-f348271a] {\n        margin-top: 48px;\n}\n}\n@media screen and (max-width: 600px) {\n.wrapper-buttons[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-buttons .button[data-v-f348271a] {\n        width: 100%;\n        margin-top: 15px;\n}\n.wrapper-selects[data-v-f348271a] {\n        flex-direction: column;\n}\n.wrapper-selects .select-player[data-v-f348271a] {\n        width: 100%;\n}\n}\n", ""]);
 
 // exports
 
@@ -7224,7 +7223,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.element-header[data-v-5b4e5568] {\r\n  padding-left: 0px;\n}\n@media screen and (max-width:600px) {\n.name-player[data-v-5b4e5568] {\r\n         font-size: 24px !important;\n}\n.card-match[data-v-5b4e5568] {\r\n         padding: 0px !important;\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.element-header[data-v-5b4e5568] {\r\n  padding-left: 0px;\n}\n.name-match[data-v-5b4e5568] {\r\n  border-right: 1px solid rgba(0,0,0,.12)\n}\n.scores-match[data-v-5b4e5568] {\r\n  padding-left: 10px;\n}\n@media screen and (max-width:600px) {\n.name-player[data-v-5b4e5568] {\r\n         font-size: 24px !important;\n}\n.card-match[data-v-5b4e5568] {\r\n         padding: 0px !important;\n}\n}\r\n", ""]);
 
 // exports
 
@@ -7243,7 +7242,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.element-header[data-v-0fd8bab6] {\r\n  padding-left: 0px;\n}\n@media screen and (max-width:600px) {\n.name-player[data-v-0fd8bab6] {\r\n         font-size: 24px !important;\n}\n.card-match[data-v-0fd8bab6] {\r\n         padding: 10px !important;\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.element-header[data-v-0fd8bab6] {\r\n  padding-left: 0px;\n}\n.card-match .name-player[data-v-0fd8bab6] {\r\n  font-size: 16px;\n}\n@media screen and (max-width:600px) {\n.card-match .name-player[data-v-0fd8bab6] {\r\n          font-size: 12px ;\n}\n.card-match[data-v-0fd8bab6] {\r\n          padding: 10px !important;\n}\n}\r\n", ""]);
 
 // exports
 
@@ -7262,7 +7261,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.element-match[data-v-1220302c] {\n  padding: 0px;\n  font-size: 12px;\n}\n@media screen and (max-width:600px) {\n.v-list .v-list-item__action  .title[data-v-1220302c] {\n        font-size: 12px !important;\n}\n.item-list[data-v-1220302c] {\n        font-size: 12px !important;\n}\n.title-name[data-v-1220302c] {\n        font-size: 12px;\n        white-space: normal;\n}\n}\n", ""]);
+exports.push([module.i, "\n.number-info[data-v-1220302c] {\n  font-size: 14px;\n  padding: 0px;\n}\n.string-info[data-v-1220302c] {\n  padding: 0px;\n  font-size: 12px;\n}\n.scores-match[data-v-1220302c] {\n  padding-left: 10px;\n  display: flex;\n  align-items: center;\n}\n.scores-match p[data-v-1220302c] {\n  margin-bottom: 0px;\n}\n.name-match[data-v-1220302c] {\n  border-right: 1px solid rgba(0,0,0,.12);\n  padding-right: 5px;\n  width:1%;\n  white-space:nowrap;\n}\n@media screen and (max-width:600px) {\n.v-list .v-list-item__action  .title[data-v-1220302c] {\n        font-size: 12px !important;\n}\n.item-list[data-v-1220302c] {\n        font-size: 12px !important;\n}\n.title-name[data-v-1220302c] {\n        font-size: 12px;\n        white-space: normal;\n}\n}\n", ""]);
 
 // exports
 
@@ -39888,11 +39887,14 @@ var render = function() {
                   _c("v-col", { staticClass: "text-center " }, [
                     _c(
                       "div",
-                      { staticClass: "d-flex", attrs: { width: "100%" } },
+                      {
+                        staticClass: "d-flex wrapper-form-coop",
+                        attrs: { width: "100%" }
+                      },
                       [
                         _c(
                           "v-card",
-                          { staticClass: "pa-5 mr-5", attrs: { width: "30%" } },
+                          { staticClass: "pa-5 mr-5 wrapper-form" },
                           [
                             _c("div", { staticClass: "display-1 pb-12 " }, [
                               _vm._v(
@@ -40037,6 +40039,7 @@ var render = function() {
                                               "v-btn",
                                               {
                                                 attrs: {
+                                                  loading: _vm.loadingMatches,
                                                   color: "success",
                                                   dense: "",
                                                   width: "100%"
@@ -40048,6 +40051,47 @@ var render = function() {
                                                   "\n                                                Получить информацию\n                                            "
                                                 )
                                               ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-snackbar",
+                                              {
+                                                attrs: {
+                                                  color: "success",
+                                                  left: "",
+                                                  bottom: ""
+                                                },
+                                                model: {
+                                                  value: _vm.snackbar,
+                                                  callback: function($$v) {
+                                                    _vm.snackbar = $$v
+                                                  },
+                                                  expression: "snackbar"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                Матчи успешно получены!\n                                                "
+                                                ),
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    attrs: { text: "" },
+                                                    on: {
+                                                      click: function($event) {
+                                                        _vm.snackbar = false
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("v-icon", [
+                                                      _vm._v("mdi-close")
+                                                    ])
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
                                             )
                                           ],
                                           1
@@ -40061,6 +40105,7 @@ var render = function() {
                                               "v-btn",
                                               {
                                                 attrs: {
+                                                  loading: _vm.loadingLastDate,
                                                   color: "primary",
                                                   dense: "",
                                                   width: "100%"
@@ -40165,7 +40210,7 @@ var render = function() {
                         _vm.matches.length
                           ? _c(
                               "v-card",
-                              { attrs: { width: "70%" } },
+                              { staticClass: "wrapper-coop" },
                               [
                                 _c("CooperativeMatch", {
                                   attrs: {
@@ -40192,7 +40237,8 @@ var render = function() {
                             _c("CardMatches", {
                               staticClass: "wrapper-card mr-5",
                               attrs: {
-                                count: _vm.count,
+                                count: _vm.countMatches,
+                                width: "49%",
                                 name: _vm.matches[0].name,
                                 matches: _vm.matches[0].matches
                               }
@@ -40201,6 +40247,7 @@ var render = function() {
                             _c("CardMatches", {
                               staticClass: "wrapper-card",
                               attrs: {
+                                count: _vm.countMatches,
                                 name: _vm.matches[1].name,
                                 matches: _vm.matches[1].matches
                               }
@@ -40250,14 +40297,16 @@ var render = function() {
     [
       _c(
         "v-card",
-        { staticClass: "pa-10 card-match" },
+        { staticClass: "pa-5 card-match" },
         [
           _c(
             "v-card-text",
             [
               _c("p", { staticClass: "display-1 text--primary name-player" }, [
                 _vm._v(
-                  "\n                " + _vm._s(_vm.name) + "\n            "
+                  "\r\n                    " +
+                    _vm._s(_vm.name) +
+                    "\r\n                "
                 )
               ]),
               _vm._v(" "),
@@ -40273,20 +40322,20 @@ var render = function() {
                           _c("tr", [
                             _c(
                               "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Тотал")]
+                              {
+                                staticClass:
+                                  "text-right name-match element-header"
+                              },
+                              [_vm._v("Название матча")]
                             ),
                             _vm._v(" "),
                             _c(
                               "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Т1")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Т2")]
+                              {
+                                staticClass:
+                                  "text-left element-header scores-match"
+                              },
+                              [_vm._v("Счёт")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -40298,22 +40347,31 @@ var render = function() {
                             _c(
                               "th",
                               { staticClass: "text-left element-header" },
-                              [_vm._v("Ф2")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              {
-                                staticClass:
-                                  "text-left name-match element-header"
-                              },
-                              [_vm._v("Название матча")]
+                              [_vm._v("Т1")]
                             ),
                             _vm._v(" "),
                             _c(
                               "th",
                               { staticClass: "text-left element-header" },
-                              [_vm._v("Счёт")]
+                              [_vm._v("Ф2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Т2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Тотал")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Дата")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -40326,12 +40384,6 @@ var render = function() {
                               "th",
                               { staticClass: "text-left element-header" },
                               [_vm._v("Стадия")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Дата")]
                             )
                           ])
                         ]),
@@ -40398,7 +40450,7 @@ var render = function() {
           _c(
             "v-card-text",
             [
-              _c("p", { staticClass: "display-1 text--primary name-player" }, [
+              _c("p", { staticClass: "text--primary name-player" }, [
                 _vm._v(
                   "\n                " +
                     _vm._s(_vm.firstPlayer) +
@@ -40428,20 +40480,11 @@ var render = function() {
                           _c("tr", [
                             _c(
                               "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Тотал")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Т1")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Т2")]
+                              {
+                                staticClass:
+                                  "text-left element-header scores-match"
+                              },
+                              [_vm._v("Счёт")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -40453,13 +40496,31 @@ var render = function() {
                             _c(
                               "th",
                               { staticClass: "text-left element-header" },
+                              [_vm._v("Т1")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
                               [_vm._v("Ф2")]
                             ),
                             _vm._v(" "),
                             _c(
                               "th",
                               { staticClass: "text-left element-header" },
-                              [_vm._v("Счёт")]
+                              [_vm._v("Т2")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Тотал")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              { staticClass: "text-left element-header" },
+                              [_vm._v("Дата")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -40472,12 +40533,6 @@ var render = function() {
                               "th",
                               { staticClass: "text-left element-header" },
                               [_vm._v("Стадия")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "th",
-                              { staticClass: "text-left element-header" },
-                              [_vm._v("Дата")]
                             )
                           ])
                         ]),
@@ -40570,46 +40625,69 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("tr", [
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.total))
-    ]),
-    _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.totalFirst))
-    ]),
-    _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.totalSecond))
-    ]),
-    _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.forFirst))
-    ]),
-    _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.forSecond))
-    ]),
-    _vm._v(" "),
     !_vm.cooperativeMatch
-      ? _c("td", { staticClass: "text-left name-match element-match" }, [
+      ? _c("td", { staticClass: "text-right name-match string-info" }, [
           _vm._v(_vm._s(this.nameMatch))
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.scores))
+    _c(
+      "td",
+      { staticClass: "text-left number-info" },
+      [
+        _vm.scoreFirst > _vm.scoreSecond
+          ? [
+              _c("div", { staticClass: "scores-match " }, [
+                _c("p", { staticStyle: { color: "#4CAF50" } }, [
+                  _vm._v(_vm._s(this.scoreFirst))
+                ]),
+                _vm._v(":"),
+                _c("p", [_vm._v(_vm._s(this.scoreSecond))])
+              ])
+            ]
+          : [
+              _c("div", { staticClass: "scores-match " }, [
+                _c("p", { staticStyle: { color: "#D32F2F" } }, [
+                  _vm._v(_vm._s(this.scoreFirst))
+                ]),
+                _vm._v(":"),
+                _c("p", [_vm._v(_vm._s(this.scoreSecond))])
+              ])
+            ]
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left number-info" }, [
+      _vm._v(_vm._s(this.forFirst))
     ]),
     _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
+    _c("td", { staticClass: "text-left number-info" }, [
+      _vm._v(_vm._s(this.totalFirst))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left number-info" }, [
+      _vm._v(_vm._s(this.forSecond))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left number-info" }, [
+      _vm._v(_vm._s(this.totalSecond))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left number-info" }, [
+      _vm._v(_vm._s(this.total))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left number-info" }, [
+      _vm._v(_vm._s(this.date))
+    ]),
+    _vm._v(" "),
+    _c("td", { staticClass: "text-left string-info" }, [
       _vm._v(_vm._s(_vm.match.champName))
     ]),
     _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
+    _c("td", { staticClass: "text-left string-info" }, [
       _vm._v(_vm._s(this.info))
-    ]),
-    _vm._v(" "),
-    _c("td", { staticClass: "text-left element-match" }, [
-      _vm._v(_vm._s(this.date))
     ])
   ])
 }

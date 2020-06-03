@@ -7,7 +7,7 @@
             Совместные матчи
         </div>
             <v-card-text>
-                <p   class="display-1 text--primary name-player">
+                <p   class="text--primary name-player">
                     {{  firstPlayer  }} - {{secondPlayer}}
                 </p>
                 <p class="title font-weight-black">
@@ -17,15 +17,15 @@
                    <template v-slot:default>
                       <thead>
                         <tr>
-                          <th class="text-left element-header">Тотал</th>
-                          <th class="text-left element-header">Т1</th>
-                          <th class="text-left element-header">Т2</th>
+                          <th class="text-left element-header scores-match">Счёт</th>
                           <th class="text-left element-header">Ф1</th>
+                          <th class="text-left element-header">Т1</th>
                           <th class="text-left element-header">Ф2</th>
-                          <th class="text-left element-header">Счёт</th>
+                          <th class="text-left element-header">Т2</th>
+                          <th class="text-left element-header">Тотал</th>
+                          <th class="text-left element-header">Дата</th>
                           <th class="text-left element-header">Турнир</th>
                           <th class="text-left element-header">Стадия</th>
-                          <th class="text-left element-header">Дата</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -69,12 +69,15 @@ import Match from './Match';
 .element-header {
   padding-left: 0px;
 }
+.card-match .name-player {
+  font-size: 16px;
+}
  @media screen and (max-width:600px) {
-       .name-player {
-         font-size: 24px !important;
-       }
-       .card-match {
-         padding: 10px !important;
-       }
+        .card-match .name-player {
+          font-size: 12px ;
+        }
+        .card-match {
+          padding: 10px !important;
+        }
     }
 </style>

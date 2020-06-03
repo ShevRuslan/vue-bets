@@ -34,7 +34,7 @@ class MatchController extends Controller
 
     public function createList()
     {
-        $obj = $this->update();
+        $obj = $this->getCreateList();
         return response()->json($obj, 200);
     }
 
@@ -48,7 +48,7 @@ class MatchController extends Controller
         $lastDate = $this->date->first();
         $dateArray = array();
 
-        $i = 331;
+        $i = 0;
 
         if(!$lastDate) {
             $lastDate = new Date();
@@ -56,7 +56,7 @@ class MatchController extends Controller
             $lastDate->save();
         }
         
-        while ($i != 371) {
+        while ($i != 2) {
             $tennis = array();
             
             $dateMatch = Carbon::now()->subDays($i)->format('Y-m-d');
@@ -87,6 +87,12 @@ class MatchController extends Controller
                 foreach ($match['Elems'] as $match) {
                     $currentMatch = $this->match->where('idgame', $match['idgame'])->first();
                     if(!$currentMatch) {   
+                        $currentChamp = $this->champ->where('name', $match['champName']);
+                        if(!$currentChamp) {
+                            $currentChamp = new Champ();
+                            $currentChamp['name'] = $match['champName'];
+                            $currentChamp->save();
+                        }
                         $player1 = $this->player->where('name', $match['opp1'])->first();
                         if (!$player1) {
                             $player1 = new Player();
@@ -469,7 +475,6 @@ class MatchController extends Controller
     public function getLastUpdateDate(Request $request) 
     {
         $lastDateObject = $this->date->first();
-        $lastDate = $lastDateObject->date; //Дата последнего обновления
         return $lastDateObject->date;
     }
 }
