@@ -3,13 +3,13 @@
           <td v-if="!cooperativeMatch" class="text-right name-match string-info">{{ this.nameMatch }}</td>
           <td class="text-left number-info">
               <template v-if="scoreFirst > scoreSecond">
-                 <div class="scores-match ">
-                    <p style="color:#4CAF50">{{ this.scoreFirst }}</p>:<p>{{this.scoreSecond}}</p>
+                 <div class="scores-match font-weight-bold ">
+                    <p style="color:#4CAF50">{{ this.scoreFirst }}:{{this.scoreSecond}}</p>
                  </div>
               </template>
               <template v-else>
-                  <div class="scores-match ">
-                    <p style="color:#D32F2F">{{ this.scoreFirst }}</p>:<p>{{this.scoreSecond}}</p>
+                  <div class="scores-match font-weight-bold">
+                    <p style="color:#D32F2F">{{ this.scoreFirst }}:{{this.scoreSecond}}</p>
                   </div>
               </template>
           </td>
@@ -127,7 +127,7 @@
 
 <style scoped>
   .number-info {
-    font-size: 14px;
+    font-size: 15px;
     padding: 0px;
   }
   .string-info {

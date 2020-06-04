@@ -1,5 +1,4 @@
 <template>
-    <div>
         <v-card
             class="pa-10 card-match"
         >
@@ -41,7 +40,6 @@
                 </v-simple-table>
             </v-card-text>
         </v-card>
-    </div>
 </template>
 
 <script>
@@ -66,6 +64,9 @@ import Match from './Match';
 </script>
 
 <style scoped>
+.card-match {
+  height: 100%;
+}
 .element-header {
   padding-left: 0px;
 }

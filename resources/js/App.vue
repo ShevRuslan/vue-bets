@@ -112,7 +112,10 @@
                                                 </v-card>
                                                 </v-dialog>
                                             </div>
-
+                                            <HistorySearch 
+                                            :history="historySearch" 
+                                            @changeHistorySearch="changeHistorySearch"
+                                            @searchByData="searchByData"/>
                                        </div>
 
                                     </v-form>
@@ -143,13 +146,15 @@
     import Header from './components/Header';
     import CardMatches from './components/CardMatches';
     import CooperativeMatch from './components/CooperativeMatch';
+    import HistorySearch from './components/HistrorySearch';
     import API from './service/api';
     export default {
         name: "App",
         components:{
             Header,
             CardMatches,
-            CooperativeMatch
+            CooperativeMatch,
+            HistorySearch
         },
         data: function() {
             return {
@@ -173,20 +178,42 @@
                 loadingLastDate: false,
                 countMatches:'',
                 snackbar: false,
+                
+                historySearch: [],
             }
         },
         async created() {
             this.champs = await API.getAllChamps();
+            const saveHistorySearch = JSON.parse(localStorage.getItem('historySearch'));
+            if(saveHistorySearch) this.historySearch = saveHistorySearch;
         },
         methods: {
             search: async function() {
-                this.loadingMatches = true;
-                this.matches = await API.searchBySportsmen({
+                const data = {
                     player1: this.player1.name,
                     player2: this.player2.name,
                     champName: this.tourney,
                     countMatches: this.count,
+                };
+                this.searchByData(data);
+            },
+            searchByData: async function (data) {
+                this.loadingMatches = true;
+                this.matches = await API.searchBySportsmen(data);
+
+                const current = this.historySearch.filter(match => {
+                    return (match.player1 == data.player1 && match.player2 == data.player2 && match.champName == data.champName);
                 })
+
+                if(current.length == 0) {
+                    this.historySearch.push(data);
+                    let saveHistorySearch = JSON.parse(localStorage.getItem('historySearch'));
+                    if(!saveHistorySearch) saveHistorySearch = [];
+                    saveHistorySearch.push(data);
+                    localStorage.setItem('historySearch', JSON.stringify(saveHistorySearch));
+                    
+                }
+
                 this.countMatches = this.count;
                 this.snackbar = true;
                 this.loadingMatches = false;
@@ -196,6 +223,9 @@
                 this.lastUpdateDate = await API.getLastUpdateDate();
                 this.dialog = true;
                 this.loadingLastDate = false;
+            },
+            changeHistorySearch: function() {
+                this.historySearch = [];
             }
         },
         watch: {
@@ -247,10 +277,10 @@
     }
     @media screen and (max-width: 1200px) {
         .wrapper-form {
-            width: 40%;
+            width: 50%;
         }
         .wrapper-coop {
-            width: 60%;
+            width: 50%;
         }
     }
     @media screen and (max-width: 768px) {
