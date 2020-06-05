@@ -36,7 +36,7 @@
 
 <style scoped>
   .history-match {
-    max-height: 274px;
+    max-height: 524px;
     overflow: auto;
     font-size: 12px;
   }

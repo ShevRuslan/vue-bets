@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// Route::get('/create', 'API\MatchController@update');
+Route::get('/create', 'API\MatchController@update');
 Route::get('/search','API\MatchController@search');
 Route::get('/sportsmen','API\MatchController@getSporstsmen');
 Route::get('/commonMatch','API\MatchController@commonMatch');

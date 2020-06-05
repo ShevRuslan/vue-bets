@@ -56,7 +56,7 @@ class MatchController extends Controller
             $lastDate->save();
         }
         
-        while ($i != 2) {
+        while ($i != 15) {
             $tennis = array();
             
             $dateMatch = Carbon::now()->subDays($i)->format('Y-m-d');
@@ -84,65 +84,73 @@ class MatchController extends Controller
             }
 
             foreach ($tennis['Elems'] as $match) {
-                foreach ($match['Elems'] as $match) {
-                    $currentMatch = $this->match->where('idgame', $match['idgame'])->first();
-                    if(!$currentMatch) {   
-                        $currentChamp = $this->champ->where('name', $match['champName']);
+                    foreach ($match['Elems'] as $match) {
+                        $currentMatch = Match::where('idgame', $match['idgame'])->first();
+                        $currentChamp = Champ::where('name', $match['champName'])->first();
                         if(!$currentChamp) {
                             $currentChamp = new Champ();
                             $currentChamp['name'] = $match['champName'];
                             $currentChamp->save();
                         }
-                        $player1 = $this->player->where('name', $match['opp1'])->first();
+                        $player1 = Player::where('name', $match['opp1'])->first();
                         if (!$player1) {
                             $player1 = new Player();
                             $player1['name'] = $match['opp1'];
                             $player1->save();
                         }
-                        $player2 = $this->player->where('name', $match['opp2'])->first();
+                        $player2 = Player::where('name', $match['opp2'])->first();
                         if (!$player2) {
                             $player2 = new Player();
                             $player2['name'] = $match['opp2'];
                             $player2->save();
                         }
-                        $object = new Match();
-                        $object["idgame"] = $match["idgame"];
-                        $object["sportId"] = $match["sportId"];
-                        $object["sportName"] = $match["sportName"];
-                        $object["champId"] = $match["champId"];
-                        $object["champName"] = $match["champName"];
-                        $object["nameGame"] = $match["nameGame"];
-                        $object["gameTyp"] = $match["gameTyp"];
-                        $object["opp1"] = $player1->id;
-                        $object["opp2"] = $player2->id;
-                        $object["ResultPriority"] = $match["ResultPriority"];
-                        $object["clid_opp1"] = $match["clid_opp1"] ?? null;
-                        $object["clid_opp2"] = $match["clid_opp2"] ?? null;
-                        $object["country"] = $match["country"];
-                        $object["idbetgames_main"] = $match["idbetgames_main"];
-                        $object["opp1Country"] = $match["opp1Country"] ?? null;
-                        $object["opp2Country"] = $match["opp2Country"] ?? null;
-                        $object["dopScore"] = $match["dopScore"] ?? null;
-                        $object["IdSubGame"] = $match["IdSubGame"];
-
-                      
-                        $dateResMatch = Carbon::createFromFormat('d.m H:i', $match["date"]);
-                        $dateMatchMonth = Carbon::parse($dateResMatch)->month;
-                        $dateMonthSearch = Carbon::parse($dateMatch)->month;
-                        $year = $dateYear;
-                        if($dateMonthSearch < $dateMatchMonth) {
-                            $year--;
+                        if(!$currentMatch) {   
+                            $object = new Match();
+                            $object["idgame"] = $match["idgame"];
+                            $object["sportId"] = $match["sportId"];
+                            $object["sportName"] = $match["sportName"];
+                            $object["champId"] = $match["champId"];
+                            $object["champName"] = $match["champName"];
+                            $object["nameGame"] = $match["nameGame"];
+                            $object["gameTyp"] = $match["gameTyp"];
+                            $object["opp1"] = $player1->id;
+                            $object["opp2"] = $player2->id;
+                            $object["ResultPriority"] = $match["ResultPriority"];
+                            $object["clid_opp1"] = $match["clid_opp1"] ?? null;
+                            $object["clid_opp2"] = $match["clid_opp2"] ?? null;
+                            $object["country"] = $match["country"];
+                            $object["idbetgames_main"] = $match["idbetgames_main"];
+                            $object["opp1Country"] = $match["opp1Country"] ?? null;
+                            $object["opp2Country"] = $match["opp2Country"] ?? null;
+                            $object["dopScore"] = $match["dopScore"] ?? null;
+                            $object["IdSubGame"] = $match["IdSubGame"];
+    
+                          
+                            $dateResMatch = Carbon::createFromFormat('d.m H:i', $match["date"]);
+                            $dateMatchMonth = Carbon::parse($dateResMatch)->month;
+                            $dateMonthSearch = Carbon::parse($dateMatch)->month;
+                            $year = $dateYear;
+                            if($dateMonthSearch < $dateMatchMonth) {
+                                $year--;
+                            }
+    
+                            $object["date"] = Carbon::createFromFormat('Y.d.m H:i', $year . '.' . $match["date"]);
+                            $object["add_info"] = $match["add_info"];
+                            $object["scores"] = $match["scores"][0];
+                            $object->save();
                         }
-
-                        $object["date"] = Carbon::createFromFormat('Y.d.m H:i', $year . '.' . $match["date"]);
-                        $object["add_info"] = $match["add_info"];
-                        $object["scores"] = $match["scores"][0];
-                        $object->save();
                         if (isset($match['sub_games'])) {
                             $sub_games = $match['sub_games'];
                             foreach($sub_games as $sub_game) {
-                                $currentSubMatch = $this->match->where('idgame', $sub_game["idgame"])->first();
+                                $currentSubMatch = Match::where('idgame', $sub_game["idgame"])->first();
                                 if(!$currentSubMatch) {
+                                    $dateResMatch = Carbon::createFromFormat('d.m H:i', $match["date"]);
+                                    $dateMatchMonth = Carbon::parse($dateResMatch)->month;
+                                    $dateMonthSearch = Carbon::parse($dateMatch)->month;
+                                    $year = $dateYear;
+                                    if($dateMonthSearch < $dateMatchMonth) {
+                                        $year--;
+                                    }
                                     $sub_object = new Match();
                                     $sub_object["idgame"] = $sub_game["idgame"];
                                     $sub_object["sportId"] = $sub_game["sportId"];
@@ -157,7 +165,7 @@ class MatchController extends Controller
                                     $sub_object["clid_opp1"] = $sub_game["clid_opp1"] ?? null;
                                     $sub_object["clid_opp2"] = $sub_game["clid_opp2"] ?? null;
                                     $sub_object["country"] = $sub_game["country"];
-                                    $sub_object["idbetgames_main"] = $object["idgame"];
+                                    $sub_object["idbetgames_main"] = $match["idgame"];
                                     $sub_object["opp1Country"] = $sub_game["opp1Country"] ?? null;
                                     $sub_object["opp2Country"] = $sub_game["opp2Country"] ?? null;
                                     $sub_object["dopScore"] = $sub_game["dopScore"] ?? null;
@@ -171,7 +179,6 @@ class MatchController extends Controller
                         }
                     }
                 }
-            }
         }
             $dateArray['day - ' . $i] = $dateMatch;
             $i++;
@@ -469,7 +476,7 @@ class MatchController extends Controller
     }
     public function getAllChamps(Request $request)
     {
-        return $this->champ->get()->pluck('name');
+        return $this->champ->all()->pluck('name');
 
     }
     public function getLastUpdateDate(Request $request) 
