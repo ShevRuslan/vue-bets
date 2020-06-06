@@ -33,11 +33,6 @@ class Api {
     const response = await this.getResource(url, null, 'GET');
     return response;
   }
-  searchChamp = async (data) => {
-    let url = 'searchTourney?' + this.createGetParams(data);
-    const response = await this.getResource(url, null, 'GET');
-    return response;
-  }
   getAllChamps = async () => {
     let url = 'getAllChamps';
     const response = await this.getResource(url, null, 'GET');
