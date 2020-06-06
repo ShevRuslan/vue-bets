@@ -5,7 +5,6 @@
             color="indigo"
             dark
         >
-<!--            <v-app-bar-nav-icon @click.stop="close"></v-app-bar-nav-icon>-->
             <v-toolbar-title>Ставки</v-toolbar-title>
         </v-app-bar>
     </div>
@@ -13,15 +12,7 @@
 
 <script>
     export default {
-        props: {
-            drawer: Boolean,
-        },
         name: "Header",
-        methods: {
-            close: function() {
-                this.$emit('close');
-            }
-        }
     }
 </script>
 

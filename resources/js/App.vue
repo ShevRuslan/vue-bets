@@ -14,7 +14,7 @@
                                     <v-form ref="form">
                                         <div class="d-flex wrapper-selects">
                                             <v-autocomplete
-                                                v-model="player1"
+                                                v-model.trim="player1"
                                                 :items="entries1"
                                                 :loading="isLoading1"
                                                 :search-input.sync="searchSportsmen1"
@@ -29,7 +29,7 @@
                                             >
                                             </v-autocomplete>
                                             <v-autocomplete
-                                                v-model="player2"
+                                                v-model.trim="player2"
                                                 :items="entries2"
                                                 :loading="isLoading2"
                                                 :search-input.sync="searchSportsmen2"
@@ -45,7 +45,7 @@
                                         </div>
 
                                         <v-autocomplete
-                                            v-model="tourney"
+                                            v-model.trim="tourney"
                                             :items="champs"
                                             item-text="name"
                                             return-object
@@ -230,7 +230,6 @@ export default {
             this.searchByData(data);
         },
         searchByData: async function(data) {
-            //this.matches = [];
             this.loadingMatches = true;
             this.matches = await API.searchBySportsmen(data);
 

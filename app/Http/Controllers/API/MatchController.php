@@ -27,7 +27,6 @@ class MatchController extends Controller
     //Поиск спортсмена
     public function getSporstsmen (Request $request) 
     {
-        //TODO: Проверка на пустоту
         $name = $request->name;
         $player = $this->player->where('name', 'like', '%' . $name . '%')->get();
         return response()->json($player, 200);

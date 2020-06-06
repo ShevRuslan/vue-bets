@@ -2293,7 +2293,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                //this.matches = [];
                 this.loadingMatches = true;
                 _context3.next = 3;
                 return _service_api__WEBPACK_IMPORTED_MODULE_5__["default"].searchBySportsmen(data);
@@ -2605,17 +2604,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    drawer: Boolean
-  },
-  name: "Header",
-  methods: {
-    close: function close() {
-      this.$emit('close');
-    }
-  }
+  name: "Header"
 });
 
 /***/ }),
@@ -40158,7 +40148,10 @@ var render = function() {
                                           model: {
                                             value: _vm.player1,
                                             callback: function($$v) {
-                                              _vm.player1 = $$v
+                                              _vm.player1 =
+                                                typeof $$v === "string"
+                                                  ? $$v.trim()
+                                                  : $$v
                                             },
                                             expression: "player1"
                                           }
@@ -40193,7 +40186,10 @@ var render = function() {
                                           model: {
                                             value: _vm.player2,
                                             callback: function($$v) {
-                                              _vm.player2 = $$v
+                                              _vm.player2 =
+                                                typeof $$v === "string"
+                                                  ? $$v.trim()
+                                                  : $$v
                                             },
                                             expression: "player2"
                                           }
@@ -40215,7 +40211,10 @@ var render = function() {
                                       model: {
                                         value: _vm.tourney,
                                         callback: function($$v) {
-                                          _vm.tourney = $$v
+                                          _vm.tourney =
+                                            typeof $$v === "string"
+                                              ? $$v.trim()
+                                              : $$v
                                         },
                                         expression: "tourney"
                                       }
