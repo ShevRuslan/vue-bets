@@ -141,7 +141,7 @@ class Kernel extends ConsoleKernel
                                     $sub_object["clid_opp1"] = $sub_game["clid_opp1"] ?? null;
                                     $sub_object["clid_opp2"] = $sub_game["clid_opp2"] ?? null;
                                     $sub_object["country"] = $sub_game["country"];
-                                    $sub_object["idbetgames_main"] = $object["idgame"];
+                                    $sub_object["idbetgames_main"] = $match["idgame"];
                                     $sub_object["opp1Country"] = $sub_game["opp1Country"] ?? null;
                                     $sub_object["opp2Country"] = $sub_game["opp2Country"] ?? null;
                                     $sub_object["dopScore"] = $sub_game["dopScore"] ?? null;
@@ -158,7 +158,7 @@ class Kernel extends ConsoleKernel
                 $lastDateUpdate->date = Carbon::now()->format('Y.d.m H:i');
                 $lastDateUpdate->save();
             }
-        })->cron('0 */2 * * *');
+        })->cron('0 */2 * * *');;
     }
 
     /**
