@@ -158,7 +158,7 @@ class Kernel extends ConsoleKernel
                 $lastDateUpdate->date = Carbon::now()->format('Y.d.m H:i');
                 $lastDateUpdate->save();
             }
-        })->cron('0 */2 * * *');;
+        })->cron('0 */2 * * *');
     }
 
     /**

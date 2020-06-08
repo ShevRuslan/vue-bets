@@ -143,11 +143,11 @@
                             </v-card>
                             <v-card class="wrapper-coop" v-if="matches.length">
                                 <CooperativeMatch
-                                    :matches="matches[3].mergeGames"
-                                    :firstPlayer="matches[3].player1"
-                                    :secondPlayer="matches[3].player2"
-                                    :winFirst="matches[3].win1"
-                                    :winSecond="matches[3].win2"
+                                    :matches="matches[2].mergeGames"
+                                    :firstPlayer="matches[2].player1"
+                                    :secondPlayer="matches[2].player2"
+                                    :winFirst="matches[2].win1"
+                                    :winSecond="matches[2].win2"
                                 ></CooperativeMatch>
                             </v-card>
                         </div>
