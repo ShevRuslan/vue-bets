@@ -19,3 +19,4 @@ Route::get('/sportsmen','API\MatchController@getSporstsmen');
 Route::get('/commonMatch','API\MatchController@commonMatch');
 Route::get('/getAllChamps','API\MatchController@getAllChamps');
 Route::get('/getLastUpdateDate','API\MatchController@getLastUpdateDate');
+Route::get('/line', 'API\LineMatchController@line');

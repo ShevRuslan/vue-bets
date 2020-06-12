@@ -43,5 +43,10 @@ class Api {
     const response = await this.getResource(url, null, 'GET');
     return response;
   }
+  getLineMatches = async () => {
+    let url = 'line'
+    const response = await this.getResource(url, null, 'GET');
+    return response;
+  }
 }
 export default new Api();
