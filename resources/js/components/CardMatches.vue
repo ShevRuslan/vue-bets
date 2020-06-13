@@ -6,7 +6,7 @@
                     {{ name }}
                 </p>
                 <p>Последние {{ count }} матчей:</p>
-                <v-simple-table>
+                <v-simple-table :dense="dense">
                     <template v-slot:default>
                         <thead>
                             <tr>
@@ -51,7 +51,8 @@ export default {
     props: {
         name: String,
         matches: Array,
-        count: Number
+        count: Number,
+        dense: Boolean
     },
     data() {
         return {};

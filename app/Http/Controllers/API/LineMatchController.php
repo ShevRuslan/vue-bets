@@ -5,8 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Http\Controllers\API\MatchController;
+
 class LineMatchController extends Controller
 {
+    public function __construct(MatchController $match){
+        $this->match = $match;
+    }
     public function line (Request $request)
     {
         // https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true - получение чемпионатов
@@ -22,71 +27,113 @@ class LineMatchController extends Controller
          $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true", false, $context), true);
          $matches = $url['Value'];
          //return $matches;
-         $normallyArrayMatches = [];
+         $normallyArrayMatches = ['champs' => []];
 
          foreach  ($matches as $match) {
             $date = Carbon::parse($match['S'] )->timezone('Europe/Moscow')->format('d.m H:i');
-
             $normallyMatch = [];
+            $currentChamp = $match['L'];
+            $player1 = $match['O1'];
+            $player2 = $match['O2'];
 
+            //$normallyMatch['statics'] = $this->match->getMatchesSportsmen($player1, $player2, $currentChamp, 10);
+            $normallyMatch['id'] = $match['I'];
             $normallyMatch['date'] =  $date ?? '-';
-            $normallyMatch['nameMatch'] = $match['O1'] . ' - ' . $match['O2'];
+            $normallyMatch['nameMatch'] = $player1 . ' - ' .  $player2;
 
-            $normallyMatch['plus'] = '+' . $match['EC'] ?? '-';
 
+            if(isset($normallyMatch['plus'] )) {
+                $normallyMatch['plus'] = '+' . $match['EC'] ?? '-';
+            }
             $normallyMatch['P1'] = $match['E'][0]['C'] ?? '-';
             $normallyMatch['P2'] = $match['E'][1]['C'] ?? '-';
             
             //17 - total, 2- for, 15 - IT1, 62 - IT2,
             if(isset($match['AE'][0]['G'])) {
-                //total
                 if($match['AE'][0]['G'] == 17) {
                     $totales = $match['AE'][0]['ME']; 
-                     //TODO: Цикл и делать массив
-                    $normallyMatch['totalMore'] = $totales[0]['C'] ?? '-';
-                    $normallyMatch['total'] = $totales[0]['P'] ?? '-';
-                    $normallyMatch['totalLess'] = $totales[1]['C'] ?? '-';
-    
-                    $fores = $match['AE'][1]['ME'] ?? null;
 
-                    $normallyMatch['forFirst'] = $fores[0]['C'] ?? '-';
-                    if($normallyMatch['forFirst'] != '-') {
-                        if(isset($fores[0]['P'])) {
-                            $normallyMatch['for'] = $fores[0]['P'];
-                        }
-                        else {
-                            $normallyMatch['for'] = 0;
+                    foreach($totales as $total) {
+                        if(isset($total['CE'])) {
+                            if(!isset($normallyMatch['totalMore'])) {
+                                $normallyMatch['totalMore'] = $total['C'] ?? '-';
+                            }
+                            if(isset( $normallyMatch['totalMore'])) {
+                                $normallyMatch['totalLess'] = $total['C'] ?? '-';
+                            }
+                            if(!isset($normallyMatch['total'])) {
+                                $normallyMatch['total'] = $total['P'] ?? '-';
+                            }
                         }
                     }
-                    else {
-                        $normallyMatch['for'] = '-';
+                    
+                    $fores = $match['AE'][1]['ME'] ?? null; 
+                    if(isset($fores)) {
+                        foreach($fores as $for) {
+                            if(isset($for['CE'])) {
+                                if(!isset($normallyMatch['forFirst'] )) {
+                                    $normallyMatch['forFirst'] = $for['C'] ?? '-';
+                                    if($normallyMatch['forFirst'] != '-') {
+                                        if(!isset($normallyMatch['for'])) {
+                                            $normallyMatch['for'] = $for['P'];
+                                        }
+                                        else {
+                                            $normallyMatch['for'] = 0;
+                                        }
+                                    }
+                                    else {
+                                        $normallyMatch['for'] = '-';
+                                    }
+                                    $normallyMatch['for'] = $for['P'];
+                                }
+                                if(isset($normallyMatch['forFirst'])) {
+                                    $normallyMatch['forSecond'] = $for['C'] ?? '-';
+                                }
+                            }
+                        }
                     }
-                    $normallyMatch['forSecond'] = $fores[1]['C'] ?? '-';
                 }
-                //for
                 else if($match['AE'][0]['G'] == 2) {
-                    //TODO: Цикл и делать массив
                     $fores = $match['AE'][0]['ME'];
-
-                    $normallyMatch['forFirst'] = $fores[0]['C'] ?? '-';
-                    if($normallyMatch['forFirst'] != '-') {
-                        if(isset($fores[0]['P'])) {
-                            $normallyMatch['for'] = $fores[0]['P'];
-                        }
-                        else {
-                            $normallyMatch['for'] = 0;
+                    if(isset($fores)) {
+                        foreach($fores as $for) {
+                            if(isset($for['CE'])) {
+                                if(!isset($normallyMatch['forFirst'] )) {
+                                    $normallyMatch['forFirst'] = $for['C'] ?? '-';
+                                    if($normallyMatch['forFirst'] != '-') {
+                                        if(!isset($normallyMatch['for'])) {
+                                            $normallyMatch['for'] = $for['P'];
+                                        }
+                                        else {
+                                            $normallyMatch['for'] = 0;
+                                        }
+                                    }
+                                    else {
+                                        $normallyMatch['for'] = '-';
+                                    }
+                                    $normallyMatch['for'] = $for['P'];
+                                }
+                                if(isset($normallyMatch['forFirst'])) {
+                                    $normallyMatch['forSecond'] = $for['C'] ?? '-';
+                                }
+                            }
                         }
                     }
-                    else {
-                        $normallyMatch['for'] = '-';
-                    }
-                    $normallyMatch['forSecond'] = $fores[1]['C'] ?? '-';
 
                     $totales = $match['AE'][1]['ME'] ?? null; 
-
-                    $normallyMatch['totalMore'] = $totales[0]['C'] ?? '-';
-                    $normallyMatch['total'] = $totales[0]['P'] ?? '-';
-                    $normallyMatch['totalLess'] = $totales[1]['C'] ?? '-';
+                    foreach($totales as $total) {
+                        if(isset($total['CE'])) {
+                            if(!isset($normallyMatch['totalMore'])) {
+                                $normallyMatch['totalMore'] = $total['C'] ?? '-';
+                            }
+                            if(isset( $normallyMatch['totalMore'])) {
+                                $normallyMatch['totalLess'] = $total['C'] ?? '-';
+                            }
+                            if(!isset($normallyMatch['total'])) {
+                                $normallyMatch['total'] = $total['P'] ?? '-';
+                            }
+                        }
+                    }
                 }
             }
             else {
@@ -99,39 +146,52 @@ class LineMatchController extends Controller
                 $normallyMatch['forSecond'] =  '-';
             }
 
+            $individualTotalFirst = null;
+            $individualTotalFirstMore = null;
+            $individualTotalFirstLess = null;
+            $individualTotalSecond = null;
+            $individualTotalSecondMore = null;
+            $individualTotalSecondLess = null;
+
             if(count($match['E']) > 0) {
-                $infs = $match['E'];
-                foreach($infs as $info) {
+                $informations = $match['E'];
+                foreach($informations as $info) {
+
                     if($info['G'] == 15) {
-                        $normallyMatch['individualTotalFirst'] = $info['P'] ?? '-';
-                        if(!isset($normallyMatch['individualTotalFirstMore'])) {
-                            $normallyMatch['individualTotalFirstMore'] = $info['C'] ?? '-';
+                        $individualTotalFirst = $info['P'] ?? '-';
+                        if(!isset($individualTotalFirstMore)) {
+                            $individualTotalFirstMore = $info['C'] ?? '-';
                         }
                         else {
-                            $normallyMatch['individualTotalFirstLess'] = $info['C'] ?? '-';
+                            $individualTotalFirstLess = $info['C'] ?? '-';
                         }
                     }
+
                     if($info['G'] == 62) {
-                        $normallyMatch['individualTotalSecond'] = $info['P'] ?? '-';
-                        if(!isset($normallyMatch['individualTotalSecondMore'])) {
-                            $normallyMatch['individualTotalSecondMore'] = $info['C'] ?? '-';
+                        $individualTotalSecond = $info['P'] ?? '-';
+                        if(!isset($individualTotalSecondMore)) {
+                            $individualTotalSecondMore = $info['C'] ?? '-';
                         }
                         else {
-                            $normallyMatch['individualTotalSecondLess'] = $info['C'] ?? '-';
+                            $individualTotalSecondLess = $info['C'] ?? '-';
                         }
                     }
                 }
             }
-                $normallyMatch['individualTotalFirstMore'] = $normallyMatch['individualTotalFirstMore'] ?? '-';
-                $normallyMatch['individualTotalFirst'] = $normallyMatch['individualTotalFirst'] ?? '-';
-                $normallyMatch['individualTotalFirstLess'] =  $normallyMatch['individualTotalFirstLess'] ?? '-';
-    
-                $normallyMatch['individualTotalSecondMore'] = $normallyMatch['individualTotalSecondMore'] ?? '-';
-                $normallyMatch['individualTotalSecond'] =  $normallyMatch['individualTotalSecond'] ?? '-';
-                $normallyMatch['individualTotalSecondLess'] =  $normallyMatch['individualTotalSecondLess'] ?? '-';
+            $normallyMatch['individualTotalFirstMore'] = $individualTotalFirstMore ?? '-';
+            $normallyMatch['individualTotalFirst'] = $individualTotalFirst ?? '-';
+            $normallyMatch['individualTotalFirstLess'] =  $individualTotalFirstLess ?? '-';
 
-            array_push($normallyArrayMatches, $normallyMatch);
+            $normallyMatch['individualTotalSecondMore'] = $individualTotalSecondMore ?? '-';
+            $normallyMatch['individualTotalSecond'] =  $individualTotalSecond ?? '-';
+            $normallyMatch['individualTotalSecondLess'] =  $individualTotalSecondLess ?? '-';
+            
+            if(!isset($normallyArrayMatches[$currentChamp])) {
+                $normallyArrayMatches[$currentChamp] = [];
+                array_push($normallyArrayMatches['champs'], $currentChamp);
+            }
+            array_push($normallyArrayMatches[$currentChamp], $normallyMatch);
          }
-         return $normallyArrayMatches;
+         return response()->json($normallyArrayMatches, 200);
     }
 }
