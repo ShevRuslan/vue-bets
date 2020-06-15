@@ -4,12 +4,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Line,
+    component: Home,
   },
   {
     path: '/line-match',
     name: 'LineMatch',
-    component: Home,
+    component: Line,
   },
 ];
 

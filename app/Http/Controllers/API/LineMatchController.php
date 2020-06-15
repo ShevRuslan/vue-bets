@@ -121,16 +121,18 @@ class LineMatchController extends Controller
                     }
 
                     $totales = $match['AE'][1]['ME'] ?? null; 
-                    foreach($totales as $total) {
-                        if(isset($total['CE'])) {
-                            if(!isset($normallyMatch['totalMore'])) {
-                                $normallyMatch['totalMore'] = $total['C'] ?? '-';
-                            }
-                            if(isset( $normallyMatch['totalMore'])) {
-                                $normallyMatch['totalLess'] = $total['C'] ?? '-';
-                            }
-                            if(!isset($normallyMatch['total'])) {
-                                $normallyMatch['total'] = $total['P'] ?? '-';
+                    if($totales) {
+                        foreach($totales as $total) {
+                            if(isset($total['CE'])) {
+                                if(!isset($normallyMatch['totalMore'])) {
+                                    $normallyMatch['totalMore'] = $total['C'] ?? '-';
+                                }
+                                if(isset( $normallyMatch['totalMore'])) {
+                                    $normallyMatch['totalLess'] = $total['C'] ?? '-';
+                                }
+                                if(!isset($normallyMatch['total'])) {
+                                    $normallyMatch['total'] = $total['P'] ?? '-';
+                                }
                             }
                         }
                     }
