@@ -1,21 +1,23 @@
-require('./bootstrap');
-window.Vue = require('vue');
-
-import vuetify from './vuetify';
-import VueRouter from 'vue-router';
-import App from './App.vue';
-import routes from './router/routes';
-
+require("./bootstrap");
+window.Vue = require("vue");
+import 'es6-promise/auto';
+import vuetify from "./vuetify";
+import VueRouter from "vue-router";
+import App from "./App.vue";
+import routes from "./router/routes";
+import store from './store'
 Vue.use(VueRouter);
+
 
 const router = new VueRouter({
     routes,
-    mode: 'history'
-})
+    mode: "history"
+});
 
-const app = new Vue({
+new Vue({
     vuetify,
     router,
-    el: '#app',
+    store,
+    el: "#app",
     render: h => h(App)
 });

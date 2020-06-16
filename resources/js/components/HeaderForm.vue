@@ -48,8 +48,8 @@
                 class="champ"
             />
             <v-autocomplete
-                v-model.trim="tourney"
-                :items="champs"
+                v-model.trim="count"
+                :items="numbers"
                 item-text="name"
                 return-object
                 required
@@ -118,14 +118,214 @@
 </template>
 
 <script>
+import API from "../service/api";
+import { mapActions } from 'vuex';
 export default {
     name: "HeaderForm",
     data() {
         return {
             value: 0,
             fruits: 0,
-            ticksLabels: ["10", "20", "30", "40"]
+            ticksLabels: ["10", "20", "30", "40"],
+            tourney: null,
+            isLoading1: false,
+            isLoading2: false,
+            player1: null,
+            player2: null,
+            entries1: [],
+            entries2: [],
+            searchSportsmen1: null,
+            searchSportsmen2: null,
+            matches: [],
+            champs: [],
+            count: "",
+            lastUpdateDate: "",
+            loadingMatches: false,
+            snackbar: false,
+            historySearch: [],
+            numbers: [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44,
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87,
+                88,
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96,
+                97,
+                98,
+                99,
+                100
+            ]
         };
+    },
+    async created() {
+        this.champs = await API.getAllChamps();
+        const saveHistorySearch = JSON.parse(
+            localStorage.getItem("historySearch")
+        );
+        if (saveHistorySearch) this.historySearch = saveHistorySearch;
+    },
+    methods: {
+        ...mapActions(['setResponse']),
+        search: async function() {
+            const data = {
+                player1: this.player1.name,
+                player2: this.player2.name,
+                champName: this.tourney,
+                countMatches: this.count
+            };
+            this.searchByData(data);
+        },
+        searchByData: async function(data) {
+
+            this.loadingMatches = true;
+            const matches = await API.searchBySportsmen(data);
+            console.log()
+            this.setResponse(matches);
+
+            const current = this.historySearch.filter(match => {
+                return (
+                    match.player1 == data.player1 &&
+                    match.player2 == data.player2 &&
+                    match.champName == data.champName
+                );
+            });
+
+            if (current.length == 0) {
+                this.historySearch.push(data);
+                let saveHistorySearch = JSON.parse(
+                    localStorage.getItem("historySearch")
+                );
+                if (!saveHistorySearch) saveHistorySearch = [];
+                saveHistorySearch.push(data);
+                localStorage.setItem(
+                    "historySearch",
+                    JSON.stringify(saveHistorySearch)
+                );
+            }
+            this.snackbar = true;
+            this.loadingMatches = false;
+        },
+        getLastUpdateDate: async function() {
+            this.loadingLastDate = true;
+            this.lastUpdateDate = await API.getLastUpdateDate();
+            this.dialog = true;
+            this.loadingLastDate = false;
+        },
+        changeHistorySearch: function() {
+            this.historySearch = [];
+        },
+        showAsideMenu: function(data) {
+            this.drawer = data ? data : !this.drawer;
+        }
+    },
+    watch: {
+        async searchSportsmen1(val) {
+            if (this.isLoading1) return;
+            this.isLoading1 = true;
+            this.entries1 = await API.searchSportsmen({
+                name: this.searchSportsmen1
+            });
+            this.isLoading1 = false;
+        },
+        async searchSportsmen2(val) {
+            if (this.isLoading2) return;
+            this.isLoading2 = true;
+            this.entries2 = await API.searchSportsmen({
+                name: this.searchSportsmen2
+            });
+            this.isLoading2 = false;
+        }
     }
 };
 </script>
@@ -148,8 +348,8 @@ export default {
     }
     .secondSportsmen {
         fieldset {
-            border-right: 1px solid #F1F3FA ;
-            border-left: 1px solid #F1F3FA ;
+            border-right: 1px solid #f1f3fa;
+            border-left: 1px solid #f1f3fa;
         }
         .v-input__control {
             border-radius: 0px;
@@ -157,11 +357,11 @@ export default {
     }
     .champ {
         fieldset {
-            border-right: 1px solid #F1F3FA ;
+            border-right: 1px solid #f1f3fa;
         }
         border: none;
         .v-input__control {
-           border-radius: 0px;
+            border-radius: 0px;
         }
     }
     .count {

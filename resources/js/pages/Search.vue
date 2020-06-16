@@ -2,78 +2,28 @@
     <v-content>
         <v-container fluid class="fill-height align-start wrapper-page-search">
             <v-row justify="center" align="center">
-                <v-col>
+                <v-col class="pa-0">
                     <div class="wrapper-tables">
                         <div class="wrapper-coop-matches">
-                            <div class="header">
-                                <div class="header__title">
-                                    Михайлова П.-Фетюхина М.
-                                </div>
-                                <div class="header__score">
-                                    <v-chip
-                                        color="#FF0000"
-                                        text-color="white"
-                                        class="score__chip"
-                                    >
-                                        10
-                                    </v-chip>
-                                    :
-                                    <v-chip
-                                        color="#33CC33"
-                                        text-color="white"
-                                        class="score__chip"
-                                    >
-                                        15
-                                    </v-chip>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <v-data-table
-                                    :headers="headers"
-                                    :items="desserts"
-                                    disable-filtering
-                                    disable-pagination
-                                    disable-sort
-                                    hide-default-footer
-                                    class="elevation-0"
-                                ></v-data-table>
-                            </div>
+                            <CooperativeMatchNew
+                                firstPlayer="Михайлова П."
+                                secondPlayer="Фетюхина М."
+                                winFirst=10
+                                winSecond=15
+                                :matches="desserts"
+                            ></CooperativeMatchNew>
                         </div>
                         <div class="wrapper-firstplayer-matches">
-                            <div class="header">
-                                <div class="header__title">
-                                    Михайлова П.
-                                </div>
-                            </div>
-                            <div class="content">
-                                <v-data-table
-                                    :headers="headers"
-                                    :items="desserts"
-                                    disable-filtering
-                                    disable-pagination
-                                    disable-sort
-                                    hide-default-footer
-                                    class="elevation-0"
-                                ></v-data-table>
-                            </div>
+                            <CardMatchesNew
+                                name="Фетюхина М."
+                                :matches="desserts"
+                            ></CardMatchesNew>
                         </div>
                         <div class="wrapper-secondplayer-matches">
-                            <div class="header">
-                                <div class="header__title">
-                                    Фетюхина М.
-                                </div>
-                            </div>
-                            <div class="content">
-                                <v-data-table
-                                    :headers="headers"
-                                    :items="desserts"
-                                    disable-filtering
-                                    disable-pagination
-                                    disable-sort
-                                    hide-default-footer
-                                    class="elevation-0"
-                                ></v-data-table>
-                            </div>
+                            <CardMatchesNew
+                                name="Михайлова П."
+                                :matches="desserts"
+                            ></CardMatchesNew>
                         </div>
                     </div>
                 </v-col>
@@ -83,115 +33,117 @@
 </template>
 
 <script>
+import CooperativeMatchNew from '../components/CooperativeMatchNew';
+import CardMatchesNew from '../components/CardMatchesNew';
 export default {
     name: "Search",
+    components: {
+        CooperativeMatchNew,
+        CardMatchesNew
+    },
     data() {
         return {
-            headers: [
-                {
-                    text: "Дата",
-                    align: "start",
-                    sortable: false,
-                    value: "name",
-                    class: "element-header"
-                },
-                { text: "Счёт", value: "calories", class: "element-header" },
-                { text: "Δ1", value: "fat", class: "element-header" },
-                { text: "Очки", value: "carbs", class: "element-header" },
-                { text: "Δ2", value: "protein", class: "element-header" },
-                { text: "Тотал", value: "iron", class: "element-header" },
-                { text: "Турнир", value: "champ", class: "element-header" }
-            ],
+
             desserts: [
                 {
                     name: "11.06.20",
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                    iron: "1%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                    iron: "1%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "Tennis Point Exhibition Series",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
-                    iron: "7%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                    iron: "8%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
-                    iron: "16%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
-                    iron: "0%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
-                    iron: "2%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
-                    iron: "45%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
-                    iron: "22%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 },
                 {
                     name: "11.06.20",
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
-                    iron: "6%",
-                    champ: "BoomCup"
+                    calories: "3:4",
+                    fat: "+4",
+                    carbs: "5:26",
+                    protein: "-13",
+                    iron: "27",
+                    champ: "BoomCup",
+                    nameMatch: "Феликс Оже-Альяссим"
                 }
             ]
         };
@@ -229,7 +181,6 @@ export default {
             font-weight: bold;
             font-size: 18px;
             line-height: 21px;
-            /* identical to box height */
             color: #474d56;
             .header__title {
                 margin-right: 10px;
@@ -259,7 +210,7 @@ export default {
         }
         .content {
             margin-top: 20px;
-            background: #FFFFFF;
+            background: #ffffff;
             box-shadow: 0px 0px 35px rgba(154, 161, 171, 0.15);
             .element-header {
                 border-bottom: none;
@@ -283,7 +234,29 @@ export default {
                 font-size: 12px;
                 line-height: 14px;
                 padding-left: 0px;
+                padding-top: 8px;
+                padding-bottom: 8px;
+                padding-right: 0px;
                 color: #474d56;
+                .slot-name-match {
+                    white-space: nowrap;
+                    margin-right: 12px;
+                    .slot-date-champ {
+                        margin-bottom: 4px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: self-start;
+                        justify-content: left;
+                        .date {
+                            margin-right: 10px;
+                        }
+                        .champ-name {
+                            font-size: 11px;
+                            line-height: 13px;
+                            color: #f0ac0e;
+                        }
+                    }
+                }
             }
             .v-data-table tr:last-child td {
                 border-bottom: none !important;
