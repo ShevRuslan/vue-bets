@@ -31,5 +31,8 @@ export default {
 </script>
 
 <style scoped>
-
+#inspire {
+    background-color: #FAFBFE;
+    padding: 0px;
+}
 </style>

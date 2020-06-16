@@ -30,7 +30,6 @@
                 hide-no-data
                 dense
                 background-color="#3C4655"
-                clear-icon
                 append-icon=""
                 class="secondSportsmen"
             />
@@ -44,11 +43,42 @@
                 label="Лига"
                 hide-no-data
                 dense
+                append-icon=""
                 background-color="#3C4655"
                 class="champ"
             />
+            <v-autocomplete
+                v-model.trim="tourney"
+                :items="champs"
+                item-text="name"
+                return-object
+                required
+                outlined
+                label="Кол-во"
+                hide-no-data
+                dense
+                background-color="#3C4655"
+                class="count"
+            />
+            <v-btn
+                :loading="loadingMatches"
+                color="#3688FC"
+                dense
+                @click="search"
+                height="100%"
+                width="104"
+                class="text-capitalize button-search"
+            >
+                Поиск
+            </v-btn>
+            <v-snackbar v-model="snackbar" color="success" left bottom>
+                Матчи успешно получены!
+                <v-btn text @click="snackbar = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-snackbar>
         </div>
-        <div class="wrapper-slider d-flex flex-row">
+        <!-- <div class="wrapper-slider d-flex flex-row">
             <v-slider
                 v-model="count"
                 label="Количество"
@@ -64,8 +94,8 @@
                 :max="40"
                 step="10"
             ></v-slider>
-        </div>
-        <div class="wrapper-button-search d-flex flex-row">
+        </div> -->
+        <!-- <div class="wrapper-button-search d-flex flex-row">
             <v-btn
                 :loading="loadingMatches"
                 color="#3688FC"
@@ -83,7 +113,7 @@
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </v-snackbar>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -104,9 +134,12 @@ export default {
 .wrapper-header__forms {
     height: 40px;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
 }
 .wrapper-selects {
+    fieldset {
+        border: none;
+    }
     .firstSportsmen {
         .v-input__control {
             border-top-right-radius: 0px;
@@ -114,15 +147,33 @@ export default {
         }
     }
     .secondSportsmen {
+        fieldset {
+            border-right: 1px solid #F1F3FA ;
+            border-left: 1px solid #F1F3FA ;
+        }
         .v-input__control {
             border-radius: 0px;
         }
     }
     .champ {
+        fieldset {
+            border-right: 1px solid #F1F3FA ;
+        }
+        border: none;
+        .v-input__control {
+           border-radius: 0px;
+        }
+    }
+    .count {
+        width: 120px;
         .v-input__control {
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
         }
+    }
+    .button-search {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
     }
 }
 .wrapper-slider {
