@@ -3,27 +3,27 @@
         <v-container fluid class="fill-height align-start wrapper-page-search">
             <v-row justify="center" align="center">
                 <v-col class="pa-0">
-                    <div class="wrapper-tables">
+                    <div class="wrapper-tables" v-if="getMatches.length > 0">
                         <div class="wrapper-coop-matches">
-                            <CooperativeMatchNew
-                                firstPlayer="Михайлова П."
-                                secondPlayer="Фетюхина М."
-                                winFirst=10
-                                winSecond=15
-                                :matches="desserts"
-                            ></CooperativeMatchNew>
+                            <CooperativeMatch
+                                :firstPlayer="cooperativePlayers.player1"
+                                :secondPlayer="cooperativePlayers.player2"
+                                :winFirst="cooperativePlayers.win1"
+                                :winSecond="cooperativePlayers.win2"
+                                :matches="cooperativePlayers.mergeGames"
+                            ></CooperativeMatch>
                         </div>
                         <div class="wrapper-firstplayer-matches">
-                            <CardMatchesNew
-                                name="Фетюхина М."
-                                :matches="desserts"
-                            ></CardMatchesNew>
+                            <CardMatches
+                                :name="firstPlayer.name"
+                                :matches="firstPlayer.matches"
+                            ></CardMatches>
                         </div>
                         <div class="wrapper-secondplayer-matches">
-                            <CardMatchesNew
-                                name="Михайлова П."
-                                :matches="desserts"
-                            ></CardMatchesNew>
+                            <CardMatches
+                                :name="secondPlayer.name"
+                                :matches="secondPlayer.matches"
+                            ></CardMatches>
                         </div>
                     </div>
                 </v-col>
@@ -33,120 +33,30 @@
 </template>
 
 <script>
-import CooperativeMatchNew from '../components/CooperativeMatchNew';
-import CardMatchesNew from '../components/CardMatchesNew';
+import CooperativeMatch from "../components/CooperativeMatch";
+import CardMatches from "../components/CardMatches";
+import { mapGetters } from 'vuex';
 export default {
     name: "Search",
     components: {
-        CooperativeMatchNew,
-        CardMatchesNew
+        CooperativeMatch,
+        CardMatches
     },
     data() {
-        return {
-
-            desserts: [
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "Tennis Point Exhibition Series",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                },
-                {
-                    name: "11.06.20",
-                    calories: "3:4",
-                    fat: "+4",
-                    carbs: "5:26",
-                    protein: "-13",
-                    iron: "27",
-                    champ: "BoomCup",
-                    nameMatch: "Феликс Оже-Альяссим"
-                }
-            ]
-        };
+        return {};
+    },
+    computed: {
+        ...mapGetters(["getMatches"]),
+        firstPlayer() {
+            return this.getMatches[0];
+            console.log(this.getMatches);
+        },
+        secondPlayer() {
+            return this.getMatches[1];
+        },
+        cooperativePlayers() {
+            return this.getMatches[2];
+        }
     }
 };
 </script>

@@ -1,7 +1,12 @@
 <template>
     <v-list nav dense color="wrapper-navbar">
         <v-list-item-group class="wrapper-navbar__items">
-            <v-list-item class="navbar-item" ripple="false">
+            <v-list-item
+                class="navbar-item"
+                ripple="false"
+                to="/"
+                color="false"
+            >
                 <v-list-item-icon>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +29,12 @@
                     <v-list-item-title>Поиск</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item class="navbar-item" ripple="false">
+            <v-list-item
+                class="navbar-item"
+                ripple="false"
+                to="/line"
+                color="#fff"
+            >
                 <v-list-item-icon>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +69,7 @@
                     <v-list-item-title>Линия</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item class="navbar-item" ripple="false">
+            <v-list-item class="navbar-item" ripple="false" color="false">
                 <v-list-item-icon>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +101,41 @@
                 </v-list-item-icon>
 
                 <v-list-item-content>
-                    <v-list-item-title>История</v-list-item-title>
+                    <v-menu offset-y content-class="history-menu">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-list-item-title
+                                class="ma-0"
+                                v-on="on"
+                                v-bind="attrs"
+                                >История</v-list-item-title
+                            >
+                        </template>
+                        <v-list
+                            v-for="(item, index) in items"
+                            :key="index"
+                            @click=""
+                            class="history-menu__content"
+                        >
+                            <span class="history-menu__content-date">
+                                {{ item.date }}
+                            </span>
+                            <v-list-item
+                                v-for="(match, index) in item.matches"
+                                :key="index"
+                                class="history-menu__content-item"
+                                dense
+                            >
+                                <v-list-item-title>
+                                    <span class="match-name">
+                                        {{ match.matchName }}
+                                    </span>
+                                    <span class="match-champ">{{
+                                        match.champName
+                                    }}</span>
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </v-list-item-content>
             </v-list-item>
         </v-list-item-group>
@@ -101,7 +145,73 @@
 <script>
 export default {
     name: "Navbar",
-    data: () => ({})
+    data: () => ({
+        items: [
+            {
+                date: "16 июня",
+                matches: [
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    }
+                ]
+            },
+            {
+                date: "16 июня",
+                matches: [
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    }
+                ]
+            },
+            {
+                date: "15 июня",
+                matches: [
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    },
+                    {
+                        matchName: "Михайлова П. : Фетюхина М.",
+                        champName: "Хертогенбосх"
+                    }
+                ]
+            }
+        ]
+    })
 };
 </script>
 
@@ -111,7 +221,8 @@ export default {
         display: flex;
         .navbar-item {
             margin-right: 32px;
-            height:100%;
+            color: transparent !important;
+            height: 100%;
             .v-list-item__title {
                 font-style: normal;
                 font-weight: normal;
@@ -127,6 +238,82 @@ export default {
                 margin-right: 5px;
             }
         }
+        .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+            color: transparent !important;
+        }
+        a.v-item--active {
+            .v-list-item__icon {
+                svg path {
+                    fill: #3688fc;
+                }
+            }
+            .v-list-item__content {
+                .v-list-item__title {
+                    color: #3688fc;
+                }
+            }
+        }
     }
+}
+.history-menu {
+    font-size: 14px;
+    max-height: 324px;
+    overflow-y: auto;
+    .history-menu__content {
+        padding: 20px;
+        padding-bottom: 0px;
+        .history-menu__content-date {
+            color: #474d56;
+            font-weight: bold;
+        }
+        .history-menu__content-item {
+            padding: 0px;
+            min-height: 30px;
+            padding-right: 10px;
+            .match-name {
+                font-size: 14px;
+                font-weight: 500;
+                color: #474d56;
+            }
+            .match-champ {
+                line-height: 13px;
+                color: #f0ac0e;
+                padding-left: 10px;
+            }
+        }
+    }
+}
+.history-menu::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+.history-menu::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+}
+.history-menu::-webkit-scrollbar-thumb {
+    background: #474D56;
+    border: 0px none #ffffff;
+    border-radius: 0px;
+}
+.history-menu::-webkit-scrollbar-thumb:hover {
+    background: #474D56;
+}
+.history-menu::-webkit-scrollbar-thumb:active {
+    background: #474D56;
+}
+.history-menu::-webkit-scrollbar-track {
+    background: #C8CACC;
+    border: 0px none #ffffff;
+    border-radius: 0px;
+}
+.history-menu::-webkit-scrollbar-track:hover {
+    background: #C8CACC;
+}
+.history-menu::-webkit-scrollbar-track:active {
+    background: #C8CACC;
+}
+.history-menu::-webkit-scrollbar-corner {
+    background: transparent;
 }
 </style>

@@ -1,33 +1,29 @@
 <template>
     <div>
-        <v-card class="pa-5 card-match">
-            <v-card-text>
-                <p class="display-1 text--primary name-player">
-                    {{ name }}
-                </p>
-                <p>Последние {{ count }} матчей:</p>
-                <v-simple-table :dense="dense">
+        <div class="header">
+            <div class="header__title">
+                {{ getNameCard(name) }}
+            </div>
+        </div>
+        <div class="content">
+             <v-simple-table :dense="dense">
                     <template v-slot:default>
                         <thead>
                             <tr>
                                 <th
-                                    class="text-right name-match element-header"
+                                    class="text-left name-match element-header"
                                 >
-                                    Название матча
+                                    Матч
                                 </th>
                                 <th
                                     class="text-left element-header scores-match"
                                 >
                                     Счёт
                                 </th>
-                                <th class="text-left element-header">Ф1</th>
-                                <th class="text-left element-header">Т1</th>
-                                <th class="text-left element-header">Ф2</th>
-                                <th class="text-left element-header">Т2</th>
+                                <th class="text-left element-header">Δ1</th>
+                                <th class="text-left element-header">Очки</th>
+                                <th class="text-left element-header">Δ2</th>
                                 <th class="text-left element-header">Тотал</th>
-                                <th class="text-left element-header">Дата</th>
-                                <th class="text-left element-header">Турнир</th>
-                                <th class="text-left element-header">Стадия</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,8 +36,7 @@
                         </tbody>
                     </template>
                 </v-simple-table>
-            </v-card-text>
-        </v-card>
+        </div>
     </div>
 </template>
 
@@ -50,25 +45,42 @@ import Match from "./Match";
 export default {
     props: {
         name: String,
-        matches: Array,
-        count: Number,
-        dense: Boolean
-    },
-    data() {
-        return {};
+        matches: Array
     },
     components: {
-        Match
-    }
+        Match,
+    },
+    data() {
+        return {
+            headers: [
+                {
+                    text: "",
+                    align: "start",
+                    sortable: false,
+                    value: "name",
+                    class: "element-header"
+                },
+                { text: "Счёт", value: "calories", class: "element-header" },
+                { text: "Δ1", value: "fat", class: "element-header" },
+                { text: "Очки", value: "carbs", class: "element-header" },
+                { text: "Δ2", value: "protein", class: "element-header" },
+                { text: "Тотал", value: "iron", class: "element-header" }
+            ]
+        };
+    },
+    methods: {
+        getNameCard(name) {
+            const arrayName = name.split(' ');
+            return `${arrayName[1]} ${arrayName[0][0]}.`;
+        }
+    },
+    name: "CardMatches"
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .element-header {
     padding-left: 0px;
-}
-.name-match {
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 .scores-match {
     padding-left: 10px;
@@ -80,5 +92,5 @@ export default {
     .card-match {
         padding: 0px !important;
     }
-}
-</style>
+}</style>
+

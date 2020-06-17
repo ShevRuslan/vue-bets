@@ -1,32 +1,38 @@
 <template>
     <tr>
-        <td v-if="!cooperativeMatch" class="text-right name-match string-info">
-            {{ this.nameMatch }}
+        <td>
+            <div class="slot-name-match">
+                        <div class="slot-date-champ">
+                            <div class="date">
+                                {{ this.date }}
+                            </div>
+                            <span class="champ-name">{{ match.champName }}</span>
+                        </div>
+                        <div>
+                            {{ this.nameMatch }}
+                        </div>
+        </div>
         </td>
         <td class="text-left number-info">
             <template v-if="scoreFirst > scoreSecond">
-                <div class="scores-match font-weight-bold ">
-                    <p style="color:#4CAF50">
+                <div class="scores-match">
+                    <p style="color:#33CC33">
                         {{ this.scoreFirst }}:{{ this.scoreSecond }}
                     </p>
                 </div>
             </template>
             <template v-else>
-                <div class="scores-match font-weight-bold">
-                    <p style="color:#D32F2F">
+                <div class="scores-match ">
+                    <p style="color:#FF0000">
                         {{ this.scoreFirst }}:{{ this.scoreSecond }}
                     </p>
                 </div>
             </template>
         </td>
         <td class="text-left number-info">{{ this.forFirst }}</td>
-        <td class="text-left number-info">{{ this.totalFirst }}</td>
+        <td class="text-left number-info">{{ this.totalFirst }}:{{ this.totalSecond}}</td>
         <td class="text-left number-info">{{ this.forSecond }}</td>
-        <td class="text-left number-info">{{ this.totalSecond }}</td>
         <td class="text-left number-info">{{ this.total }}</td>
-        <td class="text-left number-info">{{ this.date }}</td>
-        <td class="text-left string-info">{{ match.champName }}</td>
-        <td class="text-left string-info">{{ this.info }}</td>
     </tr>
 </template>
 
@@ -36,8 +42,8 @@ export default {
         name: String,
         match: Object,
         player: String,
-        cooperativeMatch: Boolean
     },
+    name: 'Match',
     data() {
         return {
             regex: /[\(\,](?<before>\d+)[\:](?<after>\d+)/gm,
@@ -89,8 +95,10 @@ export default {
             const dateInMS = Date.parse(this.match.date);
             const date = new Date(dateInMS);
             const day = date.getDate();
-            const month = date.getMonth() + 1;
-            this.date = `${day}.${month}`;
+            const year = date.getFullYear() - 2000;
+            let month = date.getMonth() + 1;
+             if (parseInt(month) < 10) month = '0' + month;
+            this.date = `${day}.${month}.${year}`;
 
             let matcher = this.match.scores.matchAll(this.regex);
 
@@ -121,6 +129,10 @@ export default {
 
             this.forFirst = this.totalFirst - this.totalSecond;
             this.forSecond = this.totalSecond - this.totalFirst;
+
+            if(this.forFirst > 0)  this.forFirst = '+' + this.forFirst;
+
+            if(this.forSecond > 0)  this.forSecond = '+' + this.forSecond;
 
             if (this.match.add_info != null) {
                 if (this.match.add_info.trim() != "") {
@@ -165,12 +177,15 @@ export default {
     padding-left: 10px;
     display: flex;
     align-items: center;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
 }
 .scores-match p {
     margin-bottom: 0px;
 }
 .name-match {
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
     padding-right: 5px;
     width: 1%;
     white-space: nowrap;

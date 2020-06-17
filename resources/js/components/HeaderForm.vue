@@ -10,6 +10,7 @@
                 return-object
                 required
                 outlined
+                solo
                 label="Первый игрок"
                 hide-no-data
                 dense
@@ -29,6 +30,7 @@
                 label="Второй игрок"
                 hide-no-data
                 dense
+                solo
                 background-color="#3C4655"
                 append-icon=""
                 class="secondSportsmen"
@@ -43,6 +45,7 @@
                 label="Лига"
                 hide-no-data
                 dense
+                solo
                 append-icon=""
                 background-color="#3C4655"
                 class="champ"
@@ -54,6 +57,7 @@
                 return-object
                 required
                 outlined
+                solo
                 label="Кол-во"
                 hide-no-data
                 dense
@@ -119,13 +123,11 @@
 
 <script>
 import API from "../service/api";
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 export default {
     name: "HeaderForm",
     data() {
         return {
-            value: 0,
-            fruits: 0,
             ticksLabels: ["10", "20", "30", "40"],
             tourney: null,
             isLoading1: false,
@@ -256,7 +258,7 @@ export default {
         if (saveHistorySearch) this.historySearch = saveHistorySearch;
     },
     methods: {
-        ...mapActions(['setResponse']),
+        ...mapActions(["setResponse"]),
         search: async function() {
             const data = {
                 player1: this.player1.name,
@@ -267,10 +269,9 @@ export default {
             this.searchByData(data);
         },
         searchByData: async function(data) {
-
             this.loadingMatches = true;
             const matches = await API.searchBySportsmen(data);
-            console.log()
+            console.log();
             this.setResponse(matches);
 
             const current = this.historySearch.filter(match => {
@@ -304,9 +305,6 @@ export default {
         },
         changeHistorySearch: function() {
             this.historySearch = [];
-        },
-        showAsideMenu: function(data) {
-            this.drawer = data ? data : !this.drawer;
         }
     },
     watch: {
@@ -337,8 +335,19 @@ export default {
     justify-content: center;
 }
 .wrapper-selects {
+    .v-label {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+    }
+    .v-text-field--outlined.v-input--has-state fieldset,
+    .v-text-field--outlined.v-input--is-focused fieldset {
+        border: none;
+    }
     fieldset {
         border: none;
+        font-size: 12px;
     }
     .firstSportsmen {
         .v-input__control {
@@ -348,8 +357,8 @@ export default {
     }
     .secondSportsmen {
         fieldset {
-            border-right: 1px solid #f1f3fa;
-            border-left: 1px solid #f1f3fa;
+            border-right: 1px solid #f1f3fa !important;
+            border-left: 1px solid #f1f3fa !important;
         }
         .v-input__control {
             border-radius: 0px;
@@ -357,7 +366,7 @@ export default {
     }
     .champ {
         fieldset {
-            border-right: 1px solid #f1f3fa;
+            border-right: 1px solid #f1f3fa !important;
         }
         border: none;
         .v-input__control {
