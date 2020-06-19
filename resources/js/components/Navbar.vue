@@ -69,75 +69,78 @@
                     <v-list-item-title>Линия</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item class="navbar-item" ripple="false" color="false">
-                <v-list-item-icon>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="19"
-                        height="16"
-                        viewBox="0 0 19 16"
-                        fill="none"
+            <v-menu offset-y content-class="history-menu elevation-0">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item
+                        class="navbar-item"
+                        ripple="false"
+                        color="false"
                     >
-                        <g clip-path="url(#clip0)">
-                            <path
-                                d="M5.01891 13.6677C5.44436 13.2423 5.86231 12.8243 6.28067 12.406C7.32492 13.4227 8.56626 14.0469 10.0285 14.1969C11.5282 14.3507 12.9145 14.0019 14.1567 13.1531C15.4718 12.2543 16.3389 11.0192 16.7181 9.46864C17.0519 8.10312 16.9365 6.76302 16.3552 5.4775C15.7426 4.12281 14.7692 3.10398 13.4375 2.43726C12.0899 1.76263 10.6777 1.61553 9.2134 1.95264C8.27291 2.16891 7.43659 2.60394 6.69445 3.21357C6.07107 3.7257 5.56562 4.34366 5.18476 5.05497C4.69472 5.97004 4.44262 6.9497 4.44553 7.99561C5.32852 7.99561 6.21442 7.99561 7.11574 7.99561C5.91398 9.20237 4.72222 10.3991 3.52505 11.6013C3.51754 11.583 3.51379 11.5696 3.50671 11.5584C3.47171 11.5055 3.44254 11.4459 3.39837 11.4017C2.28245 10.2833 1.16486 9.16612 0.0472795 8.04895C0.0335284 8.0352 0.0156104 8.02561 -0.000640869 8.01436C0.00269272 8.00936 0.00602631 8.00478 0.0089432 7.99978C0.891094 7.99978 1.77283 7.99978 2.65915 7.99978C2.70082 5.69502 3.53505 3.73361 5.20892 2.15224C6.40902 1.01923 7.84121 0.328347 9.4755 0.0916617C11.5257 -0.205028 13.43 0.216255 15.1476 1.37635C16.6948 2.42143 17.7574 3.85112 18.3066 5.63709C18.8462 7.39182 18.7912 9.14237 18.1328 10.8608C17.4736 12.5806 16.3427 13.9157 14.768 14.8661C13.42 15.68 11.9474 16.055 10.3772 15.9929C8.29583 15.9116 6.51069 15.1228 5.01891 13.6677Z"
-                                fill="#919CA7"
-                            />
-                            <path
-                                d="M14.224 10.072C14.009 10.435 13.7973 10.7913 13.5848 11.1496C13.4489 11.0692 13.3152 10.9909 13.1818 10.9117C13.0106 10.81 12.8389 10.7083 12.668 10.6062C12.4422 10.4716 12.2167 10.3358 11.9905 10.2016C11.7671 10.0691 11.5421 9.93911 11.3188 9.8066C11.0587 9.65242 10.8 9.49574 10.5404 9.34156C10.2987 9.19822 10.0566 9.0557 9.81365 8.91444C9.78407 8.89736 9.7724 8.87902 9.7724 8.84444C9.77323 7.39432 9.77323 5.94421 9.77323 4.4941C9.77323 4.48118 9.77323 4.46785 9.77323 4.45201C10.2195 4.45201 10.6621 4.45201 11.1121 4.45201C11.1121 4.4716 11.1121 4.49243 11.1121 4.51368C11.1121 5.72211 11.1129 6.93054 11.11 8.13897C11.11 8.21064 11.1333 8.24689 11.1929 8.28106C11.445 8.42649 11.6938 8.57733 11.9438 8.72526C12.1688 8.85819 12.3947 8.98987 12.6197 9.12321C12.8685 9.2703 13.1164 9.41948 13.3656 9.56658C13.616 9.71451 13.8673 9.86118 14.1177 10.0087C14.1527 10.0283 14.1873 10.0499 14.224 10.072Z"
-                                fill="#919CA7"
-                            />
-                        </g>
-                        <defs>
-                            <clipPath id="clip0">
-                                <rect
-                                    width="18.6731"
-                                    height="16"
-                                    fill="white"
-                                />
-                            </clipPath>
-                        </defs>
-                    </svg>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                    <v-menu offset-y content-class="history-menu">
-                        <template v-slot:activator="{ on, attrs }">
+                        <v-list-item-icon v-on="on" v-bind="attrs">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="19"
+                                height="16"
+                                viewBox="0 0 19 16"
+                                fill="none"
+                            >
+                                <g clip-path="url(#clip0)">
+                                    <path
+                                        d="M5.01891 13.6677C5.44436 13.2423 5.86231 12.8243 6.28067 12.406C7.32492 13.4227 8.56626 14.0469 10.0285 14.1969C11.5282 14.3507 12.9145 14.0019 14.1567 13.1531C15.4718 12.2543 16.3389 11.0192 16.7181 9.46864C17.0519 8.10312 16.9365 6.76302 16.3552 5.4775C15.7426 4.12281 14.7692 3.10398 13.4375 2.43726C12.0899 1.76263 10.6777 1.61553 9.2134 1.95264C8.27291 2.16891 7.43659 2.60394 6.69445 3.21357C6.07107 3.7257 5.56562 4.34366 5.18476 5.05497C4.69472 5.97004 4.44262 6.9497 4.44553 7.99561C5.32852 7.99561 6.21442 7.99561 7.11574 7.99561C5.91398 9.20237 4.72222 10.3991 3.52505 11.6013C3.51754 11.583 3.51379 11.5696 3.50671 11.5584C3.47171 11.5055 3.44254 11.4459 3.39837 11.4017C2.28245 10.2833 1.16486 9.16612 0.0472795 8.04895C0.0335284 8.0352 0.0156104 8.02561 -0.000640869 8.01436C0.00269272 8.00936 0.00602631 8.00478 0.0089432 7.99978C0.891094 7.99978 1.77283 7.99978 2.65915 7.99978C2.70082 5.69502 3.53505 3.73361 5.20892 2.15224C6.40902 1.01923 7.84121 0.328347 9.4755 0.0916617C11.5257 -0.205028 13.43 0.216255 15.1476 1.37635C16.6948 2.42143 17.7574 3.85112 18.3066 5.63709C18.8462 7.39182 18.7912 9.14237 18.1328 10.8608C17.4736 12.5806 16.3427 13.9157 14.768 14.8661C13.42 15.68 11.9474 16.055 10.3772 15.9929C8.29583 15.9116 6.51069 15.1228 5.01891 13.6677Z"
+                                        fill="#919CA7"
+                                    />
+                                    <path
+                                        d="M14.224 10.072C14.009 10.435 13.7973 10.7913 13.5848 11.1496C13.4489 11.0692 13.3152 10.9909 13.1818 10.9117C13.0106 10.81 12.8389 10.7083 12.668 10.6062C12.4422 10.4716 12.2167 10.3358 11.9905 10.2016C11.7671 10.0691 11.5421 9.93911 11.3188 9.8066C11.0587 9.65242 10.8 9.49574 10.5404 9.34156C10.2987 9.19822 10.0566 9.0557 9.81365 8.91444C9.78407 8.89736 9.7724 8.87902 9.7724 8.84444C9.77323 7.39432 9.77323 5.94421 9.77323 4.4941C9.77323 4.48118 9.77323 4.46785 9.77323 4.45201C10.2195 4.45201 10.6621 4.45201 11.1121 4.45201C11.1121 4.4716 11.1121 4.49243 11.1121 4.51368C11.1121 5.72211 11.1129 6.93054 11.11 8.13897C11.11 8.21064 11.1333 8.24689 11.1929 8.28106C11.445 8.42649 11.6938 8.57733 11.9438 8.72526C12.1688 8.85819 12.3947 8.98987 12.6197 9.12321C12.8685 9.2703 13.1164 9.41948 13.3656 9.56658C13.616 9.71451 13.8673 9.86118 14.1177 10.0087C14.1527 10.0283 14.1873 10.0499 14.224 10.072Z"
+                                        fill="#919CA7"
+                                    />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0">
+                                        <rect
+                                            width="18.6731"
+                                            height="16"
+                                            fill="white"
+                                        />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </v-list-item-icon>
+                        <v-list-item-content>
                             <v-list-item-title
                                 class="ma-0"
                                 v-on="on"
                                 v-bind="attrs"
                                 >История</v-list-item-title
                             >
-                        </template>
-                        <v-list
-                            v-for="(item, index) in items"
-                            :key="index"
-                            @click=""
-                            class="history-menu__content"
-                        >
-                            <span class="history-menu__content-date">
-                                {{ item.date }}
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+                <v-list
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click=""
+                    class="history-menu__content"
+                >
+                    <span class="history-menu__content-date">
+                        {{ item.date }}
+                    </span>
+                    <v-list-item
+                        v-for="(match, index) in item.matches"
+                        :key="index"
+                        class="history-menu__content-item"
+                        dense
+                    >
+                        <v-list-item-title>
+                            <span class="match-name">
+                                {{ match.matchName }}
                             </span>
-                            <v-list-item
-                                v-for="(match, index) in item.matches"
-                                :key="index"
-                                class="history-menu__content-item"
-                                dense
-                            >
-                                <v-list-item-title>
-                                    <span class="match-name">
-                                        {{ match.matchName }}
-                                    </span>
-                                    <span class="match-champ">{{
-                                        match.champName
-                                    }}</span>
-                                </v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </v-list-item-content>
-            </v-list-item>
+                            <span class="match-champ">{{
+                                match.champName
+                            }}</span>
+                        </v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-list-item-group>
     </v-list>
 </template>
@@ -223,6 +226,7 @@ export default {
             margin-right: 32px;
             color: transparent !important;
             height: 100%;
+            padding-left: 0px;
             .v-list-item__title {
                 font-style: normal;
                 font-weight: normal;
@@ -257,10 +261,11 @@ export default {
 }
 .history-menu {
     font-size: 14px;
-    max-height: 324px;
+    max-height: 348px;
     overflow-y: auto;
+    top: 125px !important;
     .history-menu__content {
-        padding: 20px;
+        padding: 24px;
         padding-bottom: 0px;
         .history-menu__content-date {
             color: #474d56;
@@ -273,45 +278,47 @@ export default {
             .match-name {
                 font-size: 14px;
                 font-weight: 500;
+                line-height: 14px;
                 color: #474d56;
             }
             .match-champ {
                 line-height: 13px;
                 color: #f0ac0e;
                 padding-left: 10px;
+                line-height: 15px;
             }
         }
     }
 }
 .history-menu::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
 }
 .history-menu::-webkit-scrollbar-button {
     width: 0px;
     height: 0px;
 }
 .history-menu::-webkit-scrollbar-thumb {
-    background: #474D56;
+    background: #474d56;
     border: 0px none #ffffff;
     border-radius: 0px;
 }
 .history-menu::-webkit-scrollbar-thumb:hover {
-    background: #474D56;
+    background: #474d56;
 }
 .history-menu::-webkit-scrollbar-thumb:active {
-    background: #474D56;
+    background: #474d56;
 }
 .history-menu::-webkit-scrollbar-track {
-    background: #C8CACC;
+    background: #c8cacc;
     border: 0px none #ffffff;
     border-radius: 0px;
 }
 .history-menu::-webkit-scrollbar-track:hover {
-    background: #C8CACC;
+    background: #c8cacc;
 }
 .history-menu::-webkit-scrollbar-track:active {
-    background: #C8CACC;
+    background: #c8cacc;
 }
 .history-menu::-webkit-scrollbar-corner {
     background: transparent;
