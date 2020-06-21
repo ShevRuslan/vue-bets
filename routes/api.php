@@ -21,3 +21,4 @@ Route::get('/getAllChamps','API\MatchController@getAllChamps');
 Route::get('/getLastUpdateDate','API\MatchController@getLastUpdateDate');
 Route::get('/line', 'API\LineMatchController@line');
 Route::get('/getLineChamps', 'API\LineMatchController@getLineChamps');
+Route::get('/getBetsMatch', 'API\LineMatchController@getBetsMatch');

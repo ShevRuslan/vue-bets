@@ -203,6 +203,9 @@
                             <template v-else-if="champ.img == 204">
                                 <img class="champ-img" src="img/cz.png" />
                             </template>
+                            <template v-else-if="champ.img == 53">
+                                <img class="champ-img" src="img/ge.png" />
+                            </template>
                         </v-list-item-icon>
                         <v-list-item-title class="wrapper__item-champ">
                             <div class="champ-name">

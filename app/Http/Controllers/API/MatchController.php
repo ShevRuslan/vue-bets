@@ -40,54 +40,29 @@ class MatchController extends Controller
         $array = $this->getMatchesSportsmen($request->player1, $request->player2, $champName, $countMatches );
         return response()->json($array, 200);
     }
-    public function getMatchesSportsmen($player1, $player2, $champName, $countMatches = 10) 
+    public function getCooperativeMatches($player1, $player2, $champName) 
     {
-        $player1 = $this->player->where('name', $player1)->first();
-
-        $player2 = $this->player->where('name', $player2)->first();
-        
+        //Если передано имя игроков, а не объект с базы
+        if(is_string($player1)) {
+            $player1 = $this->player->where('name', $player1)->first();
+        }
+        if(is_string($player2)) {
+            $player2 = $this->player->where('name', $player2)->first();
+        }
         $game1 = [];
         $game2 = [];
-        $last1 = [];
-        $last2 = [];
-
         if($champName !== 'null') {
             if(isset($player1) && isset($player2)) {
                 $game1 = $this->match->where('opp1', $player1->id)->where('opp2',$player2->id)->where('champName', $champName)->orderBy('date', 'desc')->get();
                 $game2 = $this->match->where('opp1',$player2->id)->where('opp2',$player1->id)->where('champName', $champName)->orderBy('date', 'desc')->get();
             }
-            if(isset($player1)) {
-                $last1  = $this->match->where('champName', $champName)->where(function($query) use($player1) {
-                    $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
-                })->orderBy('date', 'desc')->take($countMatches)->get();
-            }
-            if(isset($player2)) {
-                $last2  = $this->match->where('champName', $champName)->where(function($query) use($player2) {
-                    $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
-                })->orderBy('date', 'desc')->take($countMatches)->get();
-            }
-            
         }
         else {
             if(isset($player1) && (isset($player2))) {
                 $game1 = $this->match->where('opp1', $player1->id)->where('opp2',$player2->id)->orderBy('date', 'desc')->get();
-
                 $game2 = $this->match->where('opp1',$player2->id)->where('opp2',$player1->id)->orderBy('date', 'desc')->get();
             }
-
-            if(isset($player1)) {
-                $last1  = $this->match->where(function($query) use($player1) {
-                    $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
-                })->orderBy('date', 'desc')->take($countMatches)->get();
-            }
-            if(isset($player2)) {
-                $last2  = $this->match->where(function($query) use($player2) {
-                    $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
-                })->orderBy('date', 'desc')->take($countMatches)->get();
-            }
-            
         }
-
         $mergeArray = collect($game1)->merge($game2)->toArray();
         usort($mergeArray, function($a, $b) {
             $t1 = strtotime($a['date']);
@@ -140,9 +115,53 @@ class MatchController extends Controller
                 }
             }
         }
+        return array(
+            'mergeGames'=> $mergeArray, 
+            'player1'=> $player1->name,
+            'player2'=>$player2->name,
+            'win1' => $win1, 
+            'win2' => $win2
+        );
+    }
+    public function getMatchesSportsmen($player1, $player2, $champName, $countMatches = 10) 
+    {
+        $player1 = $this->player->where('name', $player1)->first();
+        $player2 = $this->player->where('name', $player2)->first();
+        
+        $game1 = [];
+        $game2 = [];
+        $last1 = [];
+        $last2 = [];
+
+        if($champName !== 'null') {
+            if(isset($player1)) {
+                $last1  = $this->match->where('champName', $champName)->where(function($query) use($player1) {
+                    $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+                })->orderBy('date', 'desc')->take($countMatches)->get();
+            }
+            if(isset($player2)) {
+                $last2  = $this->match->where('champName', $champName)->where(function($query) use($player2) {
+                    $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+                })->orderBy('date', 'desc')->take($countMatches)->get();
+            }
+            
+        }
+        else {
+            if(isset($player1)) {
+                $last1  = $this->match->where(function($query) use($player1) {
+                    $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+                })->orderBy('date', 'desc')->take($countMatches)->get();
+            }
+            if(isset($player2)) {
+                $last2  = $this->match->where(function($query) use($player2) {
+                    $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+                })->orderBy('date', 'desc')->take($countMatches)->get();
+            }
+            
+        }
         $firstPlayerArray = [];
         $secondPlayerArray = [];
-        $mergePlayersArray = [];
+        $mergePlayersArray = $this->getCooperativeMatches($player1, $player2, $champName);
         if(isset($player1)) {
             $firstPlayerArray = array(
                 'id' => $player1->id,
@@ -157,17 +176,7 @@ class MatchController extends Controller
                 'matches' => $last2,
             );
         }
-        if(isset($player1) && isset($player2)) {
-            $mergePlayersArray =  array(
-                'mergeGames'=> $mergeArray, 
-                'player1'=> $player1->name,
-                'player2'=>$player2->name,
-                'win1' => $win1, 
-                'win2' => $win2
-            );
-        }
         $array = array($firstPlayerArray, $secondPlayerArray, $mergePlayersArray);
-
         return $array;
     }
     public function getAllChamps(Request $request)

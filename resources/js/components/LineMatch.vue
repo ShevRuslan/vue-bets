@@ -45,15 +45,8 @@
             <div class="table-lite_header-group"></div>
         </div>
         <div class="table-line__content">
-            <div
-                class="table-line__content-item"
-                v-for="(match, index) in matches"
-                :key="match.id"
-            >
-                <div
-                    class="table-line__content-date"
-                    v-if="newDate(match, matches, index)"
-                >
+            <div class="table-line__content-item" v-for="(match, index) in matches" :key="match.id">
+                <div class="table-line__content-date" v-if="newDate(match, matches, index)">
                     {{ getDate(match.date) }}
                 </div>
                 <div class="wrapper-info">
@@ -82,9 +75,7 @@
                         <div class="content-item__group-item number-block">
                             {{ match.totalMore }}
                         </div>
-                        <div
-                            class="content-item__group-item important-number-block"
-                        >
+                        <div class="content-item__group-item important-number-block">
                             {{ match.total }}
                         </div>
                         <div class="content-item__group-item number-block">
@@ -95,9 +86,7 @@
                         <div class="content-item__group-item number-block">
                             {{ match.forFirst }}
                         </div>
-                        <div
-                            class="content-item__group-item important-number-block"
-                        >
+                        <div class="content-item__group-item important-number-block">
                             {{ match.for }}
                         </div>
                         <div class="content-item__group-item number-block">
@@ -122,58 +111,141 @@
                 </div>
             </div>
         </div>
-        <v-dialog
-            fullscreen
-            v-model="dialog"
-            hide-overlay
-            transition="dialog-bottom-transition"
-            class="modal-statics"
-        >
+        <v-dialog fullscreen v-model="dialog" hide-overlay transition="dialog-bottom-transition" class="modal-statics">
             <v-card class="wrapper-dialog">
                 <v-btn class="btn-close" dark icon absolute @click="dialog = false">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
-                    <v-container
-                        fluid
-                        class="fill-height align-start wrapper-page-search"
-                    >
-                        <v-row justify="center" align="center">
-                            <v-col class="pa-0">
-                                <div
-                                    class="wrapper-tables"
-                                    v-if="currentStatics.length > 1"
-                                >
-                                    <div class="wrapper-coop-matches">
-                                        <CooperativeMatch
-                                            :firstPlayer="
-                                                currentStatics[2].player1
-                                            "
-                                            :secondPlayer="
-                                                currentStatics[2].player2
-                                            "
-                                            :winFirst="currentStatics[2].win1"
-                                            :winSecond="currentStatics[2].win2"
-                                            :matches="
-                                                currentStatics[2].mergeGames
-                                            "
-                                        ></CooperativeMatch>
+                <v-container fluid class="fill-height align-start wrapper-page-search">
+                    <v-row justify="center" align="center">
+                        <v-col class="pa-0">
+                            <div class="wrapper-tables" v-if="currentStatics.length > 1">
+                                <div class="wrapper-coop-matches">
+                                    <CooperativeMatch
+                                        :firstPlayer="currentStatics[2].player1"
+                                        :secondPlayer="currentStatics[2].player2"
+                                        :winFirst="currentStatics[2].win1"
+                                        :winSecond="currentStatics[2].win2"
+                                        :matches="currentStatics[2].mergeGames"
+                                    ></CooperativeMatch>
+                                </div>
+                                <div class="wrapper-firstplayer-matches">
+                                    <CardMatches
+                                        :name="currentStatics[0].name"
+                                        :matches="currentStatics[0].matches"
+                                    ></CardMatches>
+                                </div>
+                                <div class="wrapper-secondplayer-matches">
+                                    <CardMatches
+                                        :name="currentStatics[1].name"
+                                        :matches="currentStatics[1].matches"
+                                    ></CardMatches>
+                                </div>
+                            </div>
+                            <div class="wrapper-bets">
+                                <div class="current-champ pb-10 ">
+                                    Таблица ставок
+                                </div>
+                                <div class="tables-bets">
+                                    <div class="wrapper-wins">
+                                        <div class="win">
+                                            <v-chip class="win-text win-item" small label>
+                                                Победа 1
+                                            </v-chip>
+                                            <v-chip class="win-number win-item" small label>
+                                                11/20
+                                            </v-chip>
+                                        </div>
+                                        <div class="win">
+                                            <v-chip class="win-text win-item" small label>
+                                                Победа 2
+                                            </v-chip>
+                                            <v-chip class="win-number win-item" small label>
+                                                9/20
+                                            </v-chip>
+                                        </div>
                                     </div>
-                                    <div class="wrapper-firstplayer-matches">
-                                        <CardMatches
-                                            :name="currentStatics[0].name"
-                                            :matches="currentStatics[0].matches"
-                                        ></CardMatches>
-                                    </div>
-                                    <div class="wrapper-secondplayer-matches">
-                                        <CardMatches
-                                            :name="currentStatics[1].name"
-                                            :matches="currentStatics[1].matches"
-                                        ></CardMatches>
+                                    <div class="wrapper-tables">
+                                        <div class="table-bet" v-for="n in 4" :key="n">
+                                            <v-simple-table class="table">
+                                                <template v-slot:default>
+                                                    <thead class="table-header">
+                                                        <tr>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center">
+                                                                ТБ
+                                                            </th>
+                                                            <th class="text-center">
+                                                                ТМ
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-content">
+                                                        <tr>
+                                                            <td class="text-center wrapper-left-number">
+                                                                <div class="left-number">
+                                                                    109,5
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                class="text-center wrapper-color-block wrapper-more-green "
+                                                            >
+                                                                <div class="more-green">
+                                                                    19/20
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                class="text-center wrapper-color-block wrapper-not-green"
+                                                            >
+                                                                <div class="not-green">
+                                                                    1/20
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center wrapper-left-number">
+                                                                <div class="left-number">
+                                                                    109,5
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                class="text-center wrapper-color-block wrapper-not-green"
+                                                            >
+                                                                <div class="not-green">
+                                                                    8/20
+                                                                </div>
+                                                            </td>
+                                                            <td
+                                                                class="text-center wrapper-color-block wrapper-less-green"
+                                                            >
+                                                                <div class="less-green">
+                                                                    12/20
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-center wrapper-left-number">
+                                                                <div class="left-number">
+                                                                    109,5
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                19/20
+                                                            </td>
+                                                            <td class="text-center">
+                                                                1/20
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </template>
+                                            </v-simple-table>
+                                        </div>
                                     </div>
                                 </div>
-                            </v-col>
-                        </v-row>
-                    </v-container>
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-card>
         </v-dialog>
         <v-overlay :value="dialog" opacity="0.4"></v-overlay>
@@ -181,12 +253,12 @@
 </template>
 
 <script>
-import API from "../service/api";
-import CooperativeMatch from "../components/CooperativeMatch";
-import CardMatches from "../components/CardMatches";
-import { mapActions } from "vuex";
-import { mapMutations } from "vuex";
-import { mapGetters } from "vuex";
+import API from '../service/api';
+import CooperativeMatch from '../components/CooperativeMatch';
+import CardMatches from '../components/CardMatches';
+import { mapActions } from 'vuex';
+import { mapMutations } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
     props: {
         matches: Array
@@ -198,29 +270,40 @@ export default {
     data() {
         return {
             currentStatics: [],
-            dialog: false
+            bets: [],
+            dialog: false,
         };
     },
     methods: {
-        ...mapActions(["setResponse"]),
-        ...mapMutations(["setHistory"]),
-        getInfo(item) {
-            this.search({
+        ...mapActions(['setResponse']),
+        ...mapMutations(['setHistory']),
+        async getInfo(item) {
+            const data = {
                 player1: item.player1,
                 player2: item.player2,
                 champName: item.champName,
                 countMatches: 10
+            } 
+            await this.search(data);
+            console.log(item);
+            this.bets = await API.getBetsMatch({
+                ...data,
+                totalArray:JSON.stringify(item.totalArray),
+                forArray: item.forArray,
+                individualTotalFirstArray: item.individualTotalFirstArray,
+                individualTotalSecondArray: item.individualTotalSecondArray
+
             });
+            this.dialog = true
         },
         search: async function(data) {
             this.searchByData(data);
         },
         searchByData: async function(data) {
-            this.currentStatics = await API.searchBySportsmen(data);
-            this.dialog = true;
+            this.currentStatics = await API.searchBySportsmen(data);;
         },
         getMatchName(player) {
-            const arrayName = player.split(" ");
+            const arrayName = player.split(' ');
             return `${arrayName[1]} ${arrayName[0][0]}.`;
         },
         newDate(match, matches, index) {
@@ -229,10 +312,10 @@ export default {
             }
             if (matches != undefined) {
                 if (matches[index - 1] != undefined) {
-                    const oldDateArray = match.date.split(" ");
-                    const oldDateDay = oldDateArray[0].split(".")[0];
-                    const newDateArray = matches[index - 1].date.split(" ");
-                    const newDateDay = newDateArray[0].split(".")[0];
+                    const oldDateArray = match.date.split(' ');
+                    const oldDateDay = oldDateArray[0].split('.')[0];
+                    const newDateArray = matches[index - 1].date.split(' ');
+                    const newDateDay = newDateArray[0].split('.')[0];
                     if (newDateDay != oldDateDay) return true;
                     else return false;
                 } else {
@@ -241,12 +324,12 @@ export default {
             }
         },
         getTime(date) {
-            const oldDateArray = date.split(" ");
+            const oldDateArray = date.split(' ');
             return oldDateArray[1];
         },
         getDate(date) {
-            const oldDateArray = date.split(" ");
-            const oldDateDayAndMonth = oldDateArray[0].split(".");
+            const oldDateArray = date.split(' ');
+            const oldDateDayAndMonth = oldDateArray[0].split('.');
             const oldDateDay = oldDateDayAndMonth[0];
             const oldDateMonth = oldDateDayAndMonth[1];
             const month = this.getNameMonth(parseInt(oldDateMonth));
@@ -255,29 +338,29 @@ export default {
         getNameMonth(month) {
             switch (month) {
                 case 1:
-                    return "января";
+                    return 'января';
                 case 2:
-                    return "февраля";
+                    return 'февраля';
                 case 3:
-                    return "марта";
+                    return 'марта';
                 case 4:
-                    return "апреля";
+                    return 'апреля';
                 case 5:
-                    return "мая";
+                    return 'мая';
                 case 6:
-                    return "июня";
+                    return 'июня';
                 case 7:
-                    return "июля";
+                    return 'июля';
                 case 8:
-                    return "августа";
+                    return 'августа';
                 case 9:
-                    return "сентября";
+                    return 'сентября';
                 case 10:
-                    return "октября";
+                    return 'октября';
                 case 11:
-                    return "ноября";
+                    return 'ноября';
                 case 12:
-                    return "декабря";
+                    return 'декабря';
             }
         }
     }
@@ -291,7 +374,6 @@ export default {
         position: absolute;
         right: -26px;
         top: -24px;
-        
     }
 }
 .v-dialog--fullscreen {
@@ -415,6 +497,97 @@ export default {
     .content-item__group:nth-child(5),
     .table-lite_header-group:nth-child(5) {
         width: 10%;
+    }
+}
+.wrapper-bets {
+    display: flex;
+    flex-direction: column;
+    .tables-bets {
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        box-shadow: 0px 0px 35px rgba(154, 161, 171, 0.15);
+        padding: 16px 13px;
+        .wrapper-wins {
+            display: flex;
+            margin-bottom: 16px;
+            .win {
+                display: flex;
+                margin-right: 24px;
+                .win-item {
+                    border-radius: 0% !important;
+                }
+                .win-text {
+                    background: #e8ecef;
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 14px;
+
+                    /* identical to box height */
+
+                    color: #474d56;
+                }
+                .win-number {
+                    border: 1px solid #e8ecef;
+                    background: #fff;
+                }
+            }
+        }
+        .wrapper-tables {
+            display: flex;
+            justify-content: space-between;
+            .table-bet {
+                width: 24%;
+                table {
+                    border: 1px solid #dde2f0;
+                    .table-header {
+                        tr {
+                            th {
+                                font-weight: bold;
+                                font-size: 12px;
+                                line-height: 14px;
+                                color: #474d56;
+                            }
+                        }
+                        background: #f0f3fa;
+                    }
+                    .table-content {
+                        tr td:nth-child(2) {
+                            border-left: 1px solid #dde2f0;
+                            border-right: 1px solid #dde2f0;
+                        }
+                        .wrapper-left-number {
+                            padding: 0px;
+                            background: #e8ecef;
+                        }
+                        .left-number {
+                            padding: 8px 14px;
+                            font-weight: bold;
+                            font-size: 12px;
+                            line-height: 14px;
+                            color: #474d56;
+                        }
+                        .wrapper-color-block {
+                            padding: 0px;
+                            .less-green,
+                            .more-green,
+                            .not-green {
+                                padding: 8px 14px;
+                            }
+                        }
+                        .wrapper-not-green {
+                            background: #ffffff;
+                        }
+                        .wrapper-less-green {
+                            background: #ecf9e9;
+                        }
+                        .wrapper-more-green {
+                            background: #cbeec2;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 </style>

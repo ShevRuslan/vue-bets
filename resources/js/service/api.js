@@ -53,5 +53,10 @@ class Api {
     const response = await this.getResource(url, null, 'GET');
     return response;
   }
+  getBetsMatch = async (data) => {
+    let url = 'getBetsMatch?' + this.createGetParams(data);
+    const response = await this.getResource(url, null, 'GET');
+    return response;
+  }
 }
 export default new Api();
