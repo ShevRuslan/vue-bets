@@ -289,9 +289,9 @@ export default {
             this.bets = await API.getBetsMatch({
                 ...data,
                 totalArray:JSON.stringify(item.totalArray),
-                forArray: item.forArray,
-                individualTotalFirstArray: item.individualTotalFirstArray,
-                individualTotalSecondArray: item.individualTotalSecondArray
+                forArray: JSON.stringify(item.forArray),
+                individualTotalFirstArray: JSON.stringify(item.individualTotalFirstArray),
+                individualTotalSecondArray: JSON.stringify(item.individualTotalSecondArray)
 
             });
             this.dialog = true

@@ -255,27 +255,55 @@ class LineMatchController extends Controller
     }
     public function getBetsMatch (Request $request) {
         $totalArray = array_unique(json_decode($request->totalArray), SORT_NUMERIC);
+        $individualTotalFirstArray = json_decode($request->individualTotalFirstArray);
+        $individualTotalSecondArray = json_decode($request->individualTotalSecondArray);
         $response = [
             'totalMore'=> [],
             'totalLess'=> [],
+            'individualTotalFirstMore' => [],
+            'individualTotalFirstLess' => [],
+            'individualTotalSecondMore' => [],
+            'individualTotalSecondLess' => [],
+            'forFirst' => [],
+            'forSecond' => [],
         ];
         $coopMatch = app('App\Http\Controllers\API\MatchController')->getCooperativeMatches($request->player1, $request->player2, $request->champName);//TODO:Сделать отдельный класс для работы с матчами.
         $coopMatches = $coopMatch['mergeGames'];
         $regexTotal = "/[\(\,](?<before>\d+)[\:](?<after>\d+)/m";
+        $regexScore = "/^\s*(?<masterBefore>\d+)\:(?<masterAfter>\d+)\s*/m";
         forEach($coopMatches as $match) {
+
             $total = 0;
-            $matches = null;
-            preg_match_all($regexTotal, $match['scores'],$matches, PREG_SET_ORDER, 0);
-            forEach($matches as $mch) {
+            $matchesTotal = null;
+            preg_match_all($regexTotal, $match['scores'],$matchesTotal, PREG_SET_ORDER, 0);
+            forEach($matchesTotal as $mch) {
                 $total += $mch['before'] + $mch['after'];
             }
             $passedTotalMore = $this->checkPassedTotalMore($totalArray, $total);
             $passedTotalLess = $this->checkPassedTotalLess($totalArray, $total);
             array_push($response['totalMore'], $passedTotalMore);
             array_push($response['totalLess'], $passedTotalLess);
+
+            $scoreFirst = 0;
+            $scoreSecond = 0;
+            $matchesScoreFirst = null;
+            preg_match_all($regexTotal, $match['scores'],$matchesScoreFirst, PREG_SET_ORDER, 0);
+            forEach($matchesScoreFirst as $mch) {
+                $scoreFirst += $mch['before'];
+                $scoreSecond += $mch['after'];
+            }
+            array_push(($response['individualTotalFirstMore']), $this->checkPassedTotalMore($individualTotalFirstArray, $scoreFirst));
+            array_push(($response['individualTotalFirstLess']), $this->checkPassedTotalLess($individualTotalFirstArray, $scoreFirst));
+
+            array_push(($response['individualTotalSecondMore']), $this->checkPassedTotalMore($individualTotalSecondArray, $scoreSecond));
+            array_push(($response['individualTotalSecondLess']), $this->checkPassedTotalLess($individualTotalSecondArray, $scoreSecond));
         }
         $response['totalMore'] = $this->normallyView($response['totalMore']);
         $response['totalLess'] = $this->normallyView($response['totalLess']);
+        $response['individualTotalFirstMore'] = $this->normallyView($response['individualTotalFirstMore']);
+        $response['individualTotalFirstLess'] = $this->normallyView($response['individualTotalFirstLess']);
+        $response['individualTotalSecondMore'] = $this->normallyView($response['individualTotalSecondMore']);
+        $response['individualTotalSecondLess'] = $this->normallyView($response['individualTotalSecondLess']);
         return response()->json($response, 200);
     }
     private function checkPassedTotalMore($lineTotals, $total) 
