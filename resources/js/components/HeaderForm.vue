@@ -124,6 +124,8 @@
 <script>
 import API from "../service/api";
 import { mapActions } from "vuex";
+import { mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 export default {
     name: "HeaderForm",
     data() {
@@ -144,7 +146,6 @@ export default {
             lastUpdateDate: "",
             loadingMatches: false,
             snackbar: false,
-            historySearch: [],
             numbers: [
                 0,
                 1,
@@ -247,7 +248,8 @@ export default {
                 98,
                 99,
                 100
-            ]
+            ],
+            historyMatches: null
         };
     },
     async created() {
@@ -255,10 +257,12 @@ export default {
         const saveHistorySearch = JSON.parse(
             localStorage.getItem("historySearch")
         );
-        if (saveHistorySearch) this.historySearch = saveHistorySearch;
+        if (saveHistorySearch) {
+            this.setHistory(saveHistorySearch);
+        }
     },
     methods: {
-        ...mapActions(["setResponse"]),
+        ...mapMutations(["setHistory"]),
         search: async function() {
             const data = {
                 player1: this.player1.name,
@@ -266,45 +270,13 @@ export default {
                 champName: this.tourney,
                 countMatches: this.count
             };
-            this.searchByData(data);
-        },
-        searchByData: async function(data) {
-            this.loadingMatches = true;
-            const matches = await API.searchBySportsmen(data);
-            console.log();
-            this.setResponse(matches);
-
-            const current = this.historySearch.filter(match => {
-                return (
-                    match.player1 == data.player1 &&
-                    match.player2 == data.player2 &&
-                    match.champName == data.champName
-                );
-            });
-
-            if (current.length == 0) {
-                this.historySearch.push(data);
-                let saveHistorySearch = JSON.parse(
-                    localStorage.getItem("historySearch")
-                );
-                if (!saveHistorySearch) saveHistorySearch = [];
-                saveHistorySearch.push(data);
-                localStorage.setItem(
-                    "historySearch",
-                    JSON.stringify(saveHistorySearch)
-                );
-            }
-            this.snackbar = true;
-            this.loadingMatches = false;
+            this.$emit('search', data);
         },
         getLastUpdateDate: async function() {
             this.loadingLastDate = true;
             this.lastUpdateDate = await API.getLastUpdateDate();
             this.dialog = true;
             this.loadingLastDate = false;
-        },
-        changeHistorySearch: function() {
-            this.historySearch = [];
         }
     },
     watch: {

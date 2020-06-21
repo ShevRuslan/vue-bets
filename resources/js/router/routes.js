@@ -5,12 +5,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Search,
+    component: Line,
   },
   {
     path: '/line-match',
     name: 'LineMatch',
-    component: Line,
+    component: Search,
   },
 ];
 

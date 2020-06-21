@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="content">
-             <v-simple-table :dense="dense">
+             <v-simple-table>
                     <template v-slot:default>
                         <thead>
                             <tr>

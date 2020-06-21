@@ -49,7 +49,6 @@ export default {
         ...mapGetters(["getMatches"]),
         firstPlayer() {
             return this.getMatches[0];
-            console.log(this.getMatches);
         },
         secondPlayer() {
             return this.getMatches[1];

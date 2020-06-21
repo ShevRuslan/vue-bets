@@ -1,12 +1,7 @@
 <template>
     <v-list nav dense color="wrapper-navbar">
         <v-list-item-group class="wrapper-navbar__items">
-            <v-list-item
-                class="navbar-item"
-                ripple="false"
-                to="/"
-                color="false"
-            >
+            <v-list-item class="navbar-item" to="/" color="false">
                 <v-list-item-icon>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -29,12 +24,7 @@
                     <v-list-item-title>Поиск</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item
-                class="navbar-item"
-                ripple="false"
-                to="/line"
-                color="#fff"
-            >
+            <v-list-item class="navbar-item" to="/line" color="#fff">
                 <v-list-item-icon>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -69,13 +59,9 @@
                     <v-list-item-title>Линия</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-menu offset-y content-class="history-menu elevation-0">
+            <v-menu offset-y content-class="menu elevation-1" z-index="0">
                 <template v-slot:activator="{ on, attrs }">
-                    <v-list-item
-                        class="navbar-item"
-                        ripple="false"
-                        color="false"
-                    >
+                    <v-list-item class="navbar-item" color="false">
                         <v-list-item-icon v-on="on" v-bind="attrs">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -116,19 +102,29 @@
                     </v-list-item>
                 </template>
                 <v-list
-                    v-for="(item, index) in items"
+                    v-for="(item, index) in getHistory"
                     :key="index"
-                    @click=""
-                    class="history-menu__content"
+                    class="menu__content"
                 >
-                    <span class="history-menu__content-date">
+                    <span class="menu__content-date">
                         {{ item.date }}
+                        <v-btn
+                            text
+                            class="clear-history"
+                            x-small
+                            color="#4D72C0"
+                            v-if="index == 0"
+                            @click="clearHistorySearch"
+                        >
+                            Очистить историю
+                        </v-btn>
                     </span>
                     <v-list-item
                         v-for="(match, index) in item.matches"
                         :key="index"
-                        class="history-menu__content-item"
+                        class="menu__content-item"
                         dense
+                        @click="getMatch(match)"
                     >
                         <v-list-item-title>
                             <span class="match-name">
@@ -141,80 +137,117 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
+            <v-menu offset-y content-class="menu elevation-1" z-index="0">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item class="navbar-item" color="#fff">
+                        <v-list-item-icon>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="17"
+                                height="16"
+                                viewBox="0 0 17 16"
+                                fill="none"
+                            >
+                                <g clip-path="url(#clip0)">
+                                    <path
+                                        d="M8.12113 0.00316025C9.65055 0.00316025 11.1796 0.00552202 12.709 -0.000213714C12.8501 -0.000888506 12.8757 0.0436478 12.8646 0.170171C12.8464 0.376995 12.8528 0.586518 12.8329 0.793004C12.8201 0.924589 12.8535 0.963726 12.9904 0.962377C13.7718 0.955292 14.5536 0.965076 15.3347 0.953267C15.5398 0.950231 15.6893 1.01838 15.8246 1.15942C16.08 1.42596 16.2352 1.74581 16.2497 2.10784C16.3047 3.4915 16.0432 4.79654 15.1653 5.90928C14.4402 6.82834 13.4591 7.14212 12.317 7.00278C12.1503 6.98253 11.982 6.95622 11.8214 6.90831C11.7002 6.8722 11.6425 6.90156 11.5825 7.00615C11.3443 7.42351 11.0528 7.79903 10.6921 8.11989C10.4461 8.33886 10.1739 8.51499 9.86311 8.62363C9.77809 8.65332 9.75109 8.6911 9.75278 8.77815C9.75818 9.0366 9.75177 9.29538 9.75616 9.55383C9.75751 9.64054 9.74637 9.68406 9.64077 9.68372C8.63431 9.68001 7.62786 9.68069 6.62174 9.68372C6.53368 9.68406 6.50501 9.65876 6.50669 9.57036C6.51175 9.30618 6.5077 9.042 6.50872 8.77782C6.50905 8.71371 6.50804 8.66276 6.42808 8.6351C5.79512 8.41647 5.34706 7.96705 4.96176 7.44342C4.85548 7.29901 4.75628 7.14853 4.66653 6.99333C4.61289 6.90021 4.56397 6.87726 4.45364 6.90493C3.82304 7.06283 3.18705 7.09995 2.55612 6.91202C1.67923 6.65087 1.08035 6.05706 0.664003 5.26822C0.143064 4.28134 -0.0465529 3.21854 0.00945489 2.10986C0.0253125 1.79507 0.144751 1.50862 0.345501 1.26198C0.506777 1.06393 0.687284 0.943145 0.97407 0.95158C1.73794 0.974186 2.50315 0.955966 3.26769 0.961027C3.38881 0.961702 3.43639 0.941796 3.42289 0.8065C3.4013 0.58888 3.40973 0.368223 3.39016 0.149927C3.37937 0.0288023 3.41412 -0.000213714 3.53288 0.000123682C4.90474 0.00417243 6.27659 0.00282285 7.64844 0.00316025C7.80634 0.00316025 7.96357 0.00316025 8.12113 0.00316025ZM12.2569 15.9981C12.3895 15.9984 12.4253 15.9657 12.4223 15.8324C12.4128 15.439 12.4084 15.0449 12.4243 14.6522C12.4317 14.47 12.3976 14.3729 12.1969 14.3685C12.123 14.3668 12.0471 14.3239 11.9769 14.2905C11.6996 14.1589 11.4759 13.9545 11.2437 13.7588C10.2083 12.8853 9.69947 11.7584 9.62457 10.4216C9.61782 10.3015 9.56823 10.2897 9.47038 10.29C8.57088 10.2927 7.67172 10.2941 6.77222 10.2887C6.66156 10.288 6.64739 10.3295 6.63996 10.4223C6.5907 11.0296 6.46857 11.6207 6.23037 12.1848C5.91186 12.9389 5.33795 13.4828 4.73401 14C4.49784 14.2025 4.235 14.3671 3.91313 14.3958C3.8109 14.4049 3.83553 14.4731 3.83553 14.5291C3.83418 14.9505 3.84228 15.3726 3.83114 15.7936C3.82709 15.9502 3.85813 16.0001 4.02784 15.9991C5.39362 15.991 6.75974 15.9947 8.12552 15.9947C9.50277 15.9951 10.8797 15.993 12.2569 15.9981ZM1.24972 1.80182C1.13467 1.79946 1.09385 1.83151 1.09115 1.95027C1.08237 2.35481 1.0817 2.75901 1.12084 3.1622C1.17786 3.75062 1.28346 4.3279 1.53314 4.8701C1.99199 5.86676 2.97753 6.29425 3.98871 5.93964C4.09667 5.90185 4.12164 5.86137 4.07811 5.75205C3.91853 5.35021 3.79909 4.93555 3.71879 4.51111C3.56055 3.67538 3.53862 2.82649 3.48497 1.98098C3.47654 1.84669 3.44921 1.79642 3.30582 1.80114C2.96909 1.8116 2.6317 1.80452 2.29464 1.80452C1.94645 1.80452 1.59792 1.8089 1.24972 1.80182ZM12.9439 1.80216C12.8346 1.80013 12.7745 1.81936 12.7823 1.94386C12.7866 2.01606 12.7708 2.08928 12.7664 2.16216C12.6929 3.39534 12.6473 4.63324 12.1658 5.79895C12.1361 5.87048 12.1628 5.89814 12.2279 5.92142C12.7155 6.09619 13.2033 6.13162 13.6882 5.91974C14.2904 5.65657 14.6396 5.16869 14.8488 4.56914C15.1501 3.70642 15.1963 2.81198 15.1606 1.90844C15.1565 1.80958 15.111 1.80351 15.0347 1.80384C14.6862 1.8062 14.3377 1.80485 13.9891 1.80485C13.6406 1.80452 13.2921 1.80857 12.9439 1.80216Z"
+                                        fill="#919CA7"
+                                    />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0">
+                                        <rect
+                                            width="16.2571"
+                                            height="16"
+                                            fill="white"
+                                        />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title v-on="on" v-bind="attrs"
+                                >Турниры</v-list-item-title
+                            >
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+                <v-list class="menu__content">
+                    <v-list-item
+                        v-for="(champ, index) in getLineChamps"
+                        :key="index"
+                        class="menu__content-item"
+                        dense
+                        @click="changeLineChamp(champ)"
+                    >
+                        <v-list-item-icon class="wrapper__champ-img">
+                            <template v-if="typeof champ.img == 'string'">
+                                <img
+                                    class="champ-img"
+                                    :src="
+                                        'https://cdn.1xstavka.ru/genfiles/logo-champ/' +
+                                            champ.img
+                                    "
+                                />
+                            </template>
+                            <template v-else-if="champ.img == 1">
+                                <img class="champ-img" src="img/ru.png" />
+                            </template>
+                            <template v-else-if="champ.img == 2">
+                                <img class="champ-img" src="img/uk.png" />
+                            </template>
+                            <template v-else-if="champ.img == 15">
+                                <img class="champ-img" src="img/ar.png" />
+                            </template>
+                            <template v-else-if="champ.img == 204">
+                                <img class="champ-img" src="img/cz.png" />
+                            </template>
+                        </v-list-item-icon>
+                        <v-list-item-title class="wrapper__item-champ">
+                            <div class="champ-name">
+                                {{ champ.champName }}
+                            </div>
+                            <div class="champ-count">
+                                {{ champ.countMatches }}
+                            </div>
+                        </v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-list-item-group>
     </v-list>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
 export default {
     name: "Navbar",
-    data: () => ({
-        items: [
-            {
-                date: "16 июня",
-                matches: [
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    }
-                ]
-            },
-            {
-                date: "16 июня",
-                matches: [
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    }
-                ]
-            },
-            {
-                date: "15 июня",
-                matches: [
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    },
-                    {
-                        matchName: "Михайлова П. : Фетюхина М.",
-                        champName: "Хертогенбосх"
-                    }
-                ]
-            }
-        ]
-    })
+    data: () => ({}),
+    methods: {
+        ...mapMutations(["setHistory", "setCurrentLineChamps"]),
+        getMatch(item) {
+            const data = {
+                player1: item.player1,
+                player2: item.player2,
+                champName: item.champName,
+                countMatches: item.countMatches
+            };
+            console.log(item);
+            this.$emit("search", data);
+        },
+        clearHistorySearch() {
+            localStorage.clear();
+            this.setHistory([]);
+        },
+        changeLineChamp({champName}) {
+            this.setCurrentLineChamps(champName);
+        }
+    },
+    computed: {
+        ...mapGetters(["getHistory", "getLineChamps"])
+    }
 };
 </script>
 
@@ -259,19 +292,32 @@ export default {
         }
     }
 }
-.history-menu {
+.menu {
     font-size: 14px;
-    max-height: 348px;
+    max-height: 350px;
     overflow-y: auto;
     top: 125px !important;
-    .history-menu__content {
+    .menu__content {
         padding: 24px;
         padding-bottom: 0px;
-        .history-menu__content-date {
+        .menu__content-date:first-child {
+            display: flex;
+            justify-content: space-between;
+        }
+        .menu__content-date {
             color: #474d56;
             font-weight: bold;
+            margin-bottom: 6px;
+            .clear-history {
+                text-transform: none !important;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 13px;
+                line-height: 15px;
+                letter-spacing: 0em;
+            }
         }
-        .history-menu__content-item {
+        .menu__content-item {
             padding: 0px;
             min-height: 30px;
             padding-right: 10px;
@@ -287,40 +333,58 @@ export default {
                 padding-left: 10px;
                 line-height: 15px;
             }
+            .wrapper__champ-img {
+                margin-right: 12px;
+                .champ-img {
+                    width: 28px;
+                    height: auto;
+                    object-fit: contain;
+                }
+            }
+            .wrapper__item-champ {
+                display: flex;
+                justify-content: space-between;
+                .champ-count {
+                    font-size: 14px;
+                    line-height: 16px;
+                    color: #919ca7;
+                    margin-left: 6px;
+                }
+            }
         }
     }
 }
-.history-menu::-webkit-scrollbar {
+.menu::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
-.history-menu::-webkit-scrollbar-button {
+.menu::-webkit-scrollbar-button {
     width: 0px;
     height: 0px;
 }
-.history-menu::-webkit-scrollbar-thumb {
+.menu::-webkit-scrollbar-thumb {
     background: #474d56;
     border: 0px none #ffffff;
     border-radius: 0px;
 }
-.history-menu::-webkit-scrollbar-thumb:hover {
+.menu::-webkit-scrollbar-thumb:hover {
     background: #474d56;
 }
-.history-menu::-webkit-scrollbar-thumb:active {
+.menu::-webkit-scrollbar-thumb:active {
     background: #474d56;
 }
-.history-menu::-webkit-scrollbar-track {
+.menu::-webkit-scrollbar-track {
     background: #c8cacc;
     border: 0px none #ffffff;
     border-radius: 0px;
 }
-.history-menu::-webkit-scrollbar-track:hover {
+.menu::-webkit-scrollbar-track:hover {
     background: #c8cacc;
 }
-.history-menu::-webkit-scrollbar-track:active {
+.menu::-webkit-scrollbar-track:active {
     background: #c8cacc;
 }
-.history-menu::-webkit-scrollbar-corner {
+.menu::-webkit-scrollbar-corner {
     background: transparent;
 }
 </style>

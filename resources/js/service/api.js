@@ -48,5 +48,10 @@ class Api {
     const response = await this.getResource(url, null, 'GET');
     return response;
   }
+  getLineChamps = async () => {
+    let url = 'getLineChamps'
+    const response = await this.getResource(url, null, 'GET');
+    return response;
+  }
 }
 export default new Api();

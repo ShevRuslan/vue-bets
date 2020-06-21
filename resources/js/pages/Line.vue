@@ -2,27 +2,15 @@
     <v-content>
         <v-container class="fill-height pa-6 align-start" max-width="600px">
             <v-row justify="center" align="center">
-                <v-col class="text-center ">
-                    <div class="display-1 pb-12 ">
-                        Линия
+                <v-col>
+                    <div class="current-champ pb-12 ">
+                        {{ getCurrentLineChamps }}
                     </div>
-                    <div>
-                        <v-autocomplete
-                            v-model.trim="currentChamp"
-                            :items="champs.champs"
-                            item-text="name"
-                            return-object
-                            required
-                            outlined
-                            label="Чемпионат"
-                            hide-no-data
-                            @change="changeChamp"
-                        />
-                    </div>
-                    <div>
-                        <v-data-table
+                    <div class="wrapper-line">
+                        <LineMatch :matches="currentChampMatches" />
+                        <!-- <v-data-table
                             :headers="headers"
-                            :items="matches"
+                            :items="currentChampMatches"
                             item-key="id"
                             disable-filtering
                             disable-pagination
@@ -36,31 +24,29 @@
                             :single-expand="singleExpand"
                             @item-expanded="loadStatics"
                             :expanded.sync="expanded"
-                            
                         >
-                            <template v-slot:expanded-item="{ item,headers }">
+                            <template v-slot:expanded-item="{ item, headers }">
                                 <td
-                                        
-                                        v-for="(fetchMatch, index) in fetchMatches"
-                                        :key="index"
-                                        v-if="fetchMatch.id == item.id"
-                                        :colspan="headers.length"
-                                    >
-                                        <CardMatches
-                                            :count="10"
-                                            :name="fetchMatch.matches[0].name"
-                                            :matches="fetchMatch.matches[0].matches"
-                                            class="wrapper-card"
-                                        ></CardMatches>
-                                        <CardMatches
-                                            :count="10"
-                                            :name="fetchMatch.matches[1].name"
-                                            :matches="fetchMatch.matches[1].matches"
-                                            class="wrapper-card"
-                                        ></CardMatches>
+                                    v-for="(fetchMatch, index) in fetchMatches"
+                                    :key="index"
+                                    v-if="fetchMatch.id == item.id"
+                                    :colspan="headers.length"
+                                >
+                                    <CardMatches
+                                        :count="10"
+                                        :name="fetchMatch.matches[0].name"
+                                        :matches="fetchMatch.matches[0].matches"
+                                        class="wrapper-card"
+                                    ></CardMatches>
+                                    <CardMatches
+                                        :count="10"
+                                        :name="fetchMatch.matches[1].name"
+                                        :matches="fetchMatch.matches[1].matches"
+                                        class="wrapper-card"
+                                    ></CardMatches>
                                 </td>
                             </template>
-                        </v-data-table>
+                        </v-data-table> -->
                     </div>
                 </v-col>
             </v-row>
@@ -69,8 +55,10 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 import API from "../service/api";
-import CardMatches from "../components/CardMatches";
+import LineMatch from "../components/LineMatch";
 export default {
     name: "Line",
     data: function() {
@@ -152,37 +140,38 @@ export default {
                 }
             ],
             loading: false,
-            timer: null,
-            fetchMatches: [],
-            mapIndex: {}
+            timer: null
         };
     },
     components: {
-        CardMatches
+        LineMatch
     },
     async created() {
+        this.getLineMatches();
         this.getMatches();
     },
     beforeDestroy() {
         clearTimeout(this.timer);
     },
-    watch: {
-        champs: {
-            handler() {
-                this.$nextTick(() => {
-                    this.matches = this.champs[this.currentChamp];
-                });
-            },
-            immediate: true
+    computed: {
+        ...mapGetters(["getCurrentLineChamps"]),
+        currentChampMatches() {
+            return this.champs[this.getCurrentLineChamps];
         }
     },
     methods: {
+        ...mapMutations(["setLineChamps"]),
         getMatches: async function() {
             this.loading = true;
             const response = await API.getLineMatches();
             this.champs = response;
             this.loading = false;
-            this.timer = setTimeout(this.getMatches, 60000); // (*)
+            this.getLineMatches();
+            this.timer = setTimeout(this.getMatches, 60000);
+        },
+        async getLineMatches() {
+            const response = await API.getLineChamps();
+            this.setLineChamps(response);
         },
         changeChamp() {
             this.matches = this.champs[this.currentChamp];
@@ -209,17 +198,16 @@ export default {
                 const exMatch = this.exsistMatch(item.id);
 
                 console.log(exMatch);
-                if(exMatch != null) {
-                    this.fetchMatches[exMatch] = objectMatch
-                } 
-                else {
+                if (exMatch != null) {
+                    this.fetchMatches[exMatch] = objectMatch;
+                } else {
                     this.fetchMatches.push(objectMatch);
                 }
                 this.loading = false;
             }
         },
         exsistMatch(id) {
-            let exsist = null
+            let exsist = null;
             this.fetchMatches.forEach((element, index) => {
                 if (element.id == id) exsist = index;
             });
@@ -230,30 +218,16 @@ export default {
 </script>
 
 <style lang="scss">
-.v-data-table__expanded__content td {
-    padding: 0px !important;
+.current-champ {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+    /* identical to box height */
+
+    color: #474d56;
 }
-.v-data-table tbody tr.v-data-table__expanded__content {
-    box-shadow: none !important;
-}
-.wrapper-cards {
-    flex-direction: column;
-}
-wrapper-cards .wrapper-card {
-    width: 100%;
-}
-.element-header {
-    padding-left: 0px;
-}
-.scores-match {
-    padding-left: 10px;
-}
-@media screen and (max-width: 600px) {
-    .name-player {
-        font-size: 24px !important;
-    }
-    .card-match {
-        padding: 0px !important;
-    }
+.wrapper-line {
+    display: flex;
+    justify-content: flex-start;
 }
 </style>
