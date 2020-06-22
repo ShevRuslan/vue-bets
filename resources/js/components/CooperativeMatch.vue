@@ -1,17 +1,35 @@
 <template>
     <div>
         <div class="header">
-            <div class="header__title">
-                {{ getNameCard(firstPlayer) }}-{{ getNameCard(secondPlayer) }}
-            </div>
+            <div class="header__title">{{ getNameCard(firstPlayer) }}-{{ getNameCard(secondPlayer) }}</div>
             <div class="header__score">
-                <v-chip color="#FF0000" text-color="white" class="score__chip">
-                    {{ winFirst }}
-                </v-chip>
-                :
-                <v-chip color="#33CC33" text-color="white" class="score__chip">
-                    {{ winSecond }}
-                </v-chip>
+                <template v-if="winFirst < winSecond">
+                    <v-chip color="#FF0000" text-color="white" class="score__chip">
+                        {{ winFirst }}
+                    </v-chip>
+                    :
+                    <v-chip color="#33CC33" text-color="white" class="score__chip">
+                        {{ winSecond }}
+                    </v-chip>
+                </template>
+                <template v-else-if="winFirst > winSecond">
+                    <v-chip color="#33CC33" text-color="white" class="score__chip">
+                        {{ winFirst }}
+                    </v-chip>
+                    :
+                    <v-chip color="#FF0000" text-color="white" class="score__chip">
+                        {{ winSecond }}
+                    </v-chip>
+                </template>
+                <template v-else>
+                    <v-chip color="#33CC33" text-color="white" class="score__chip">
+                        {{ winFirst }}
+                    </v-chip>
+                    :
+                    <v-chip color="#33CC33" text-color="white" class="score__chip">
+                        {{ winSecond }}
+                    </v-chip>
+                </template>
             </div>
         </div>
         <div class="content">
@@ -33,12 +51,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <CoopMatch
-                            v-for="match in matches"
-                            :key="match.id"
-                            :match="match"
-                            :player="firstPlayer"
-                        />
+                        <CoopMatch v-for="match in matches" :key="match.id" :match="match" :player="firstPlayer" />
                     </tbody>
                 </template>
             </v-simple-table>
@@ -47,9 +60,9 @@
 </template>
 
 <script>
-import CoopMatch from "./СoopMatch";
+import CoopMatch from './СoopMatch';
 export default {
-    name: "CooperativeMatch",
+    name: 'CooperativeMatch',
     components: {
         CoopMatch
     },
@@ -65,7 +78,7 @@ export default {
     },
     methods: {
         getNameCard(name) {
-            const arrayName = name.split(" ");
+            const arrayName = name.split(' ');
             return `${arrayName[1]} ${arrayName[0][0]}.`;
         }
     }

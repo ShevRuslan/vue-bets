@@ -1,66 +1,27 @@
 <template>
     <v-content>
-        <v-container class="fill-height pa-6 align-start" max-width="600px">
+        <v-container class="fill-height pa-6 pl-0 align-start" max-width="600px">
             <v-row justify="center" align="center">
-                <v-col>
+                <v-col class="pa-0">
                     <div class="current-champ pb-12 ">
                         {{ getCurrentLineChamps }}
                     </div>
                     <div class="wrapper-line">
                         <LineMatch :matches="currentChampMatches" />
-                        <!-- <v-data-table
-                            :headers="headers"
-                            :items="currentChampMatches"
-                            item-key="id"
-                            disable-filtering
-                            disable-pagination
-                            disable-sort
-                            :loading="loading"
-                            hide-default-footer
-                            loading-text="Загрузка данных..."
-                            no-data-text="Выберите чемпионат"
-                            no-results-text="Выберите чемпионат"
-                            show-expand
-                            :single-expand="singleExpand"
-                            @item-expanded="loadStatics"
-                            :expanded.sync="expanded"
-                        >
-                            <template v-slot:expanded-item="{ item, headers }">
-                                <td
-                                    v-for="(fetchMatch, index) in fetchMatches"
-                                    :key="index"
-                                    v-if="fetchMatch.id == item.id"
-                                    :colspan="headers.length"
-                                >
-                                    <CardMatches
-                                        :count="10"
-                                        :name="fetchMatch.matches[0].name"
-                                        :matches="fetchMatch.matches[0].matches"
-                                        class="wrapper-card"
-                                    ></CardMatches>
-                                    <CardMatches
-                                        :count="10"
-                                        :name="fetchMatch.matches[1].name"
-                                        :matches="fetchMatch.matches[1].matches"
-                                        class="wrapper-card"
-                                    ></CardMatches>
-                                </td>
-                            </template>
-                        </v-data-table> -->
                     </div>
                 </v-col>
             </v-row>
-        </v-container>
+        </v-container>>
     </v-content>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import { mapGetters } from "vuex";
-import API from "../service/api";
-import LineMatch from "../components/LineMatch";
+import { mapMutations } from 'vuex';
+import { mapGetters } from 'vuex';
+import API from '../service/api';
+import LineMatch from '../components/LineMatch';
 export default {
-    name: "Line",
+    name: 'Line',
     data: function() {
         return {
             champs: [],
@@ -71,76 +32,76 @@ export default {
             singleExpand: false,
             headers: [
                 {
-                    text: "Дата",
-                    value: "date"
+                    text: 'Дата',
+                    value: 'date'
                 },
                 {
-                    text: "Матч",
-                    value: "nameMatch"
+                    text: 'Матч',
+                    value: 'nameMatch'
                 },
                 {
-                    text: "+",
-                    value: "plus"
+                    text: '+',
+                    value: 'plus'
                 },
                 {
-                    text: "П1",
-                    value: "P1"
+                    text: 'П1',
+                    value: 'P1'
                 },
                 {
-                    text: "П2",
-                    value: "P2"
+                    text: 'П2',
+                    value: 'P2'
                 },
                 {
-                    text: "Б",
-                    value: "totalMore"
+                    text: 'Б',
+                    value: 'totalMore'
                 },
                 {
-                    text: "Тотал",
-                    value: "total"
+                    text: 'Тотал',
+                    value: 'total'
                 },
                 {
-                    text: "М",
-                    value: "totalLess"
+                    text: 'М',
+                    value: 'totalLess'
                 },
                 {
-                    text: "1",
-                    value: "forFirst"
+                    text: '1',
+                    value: 'forFirst'
                 },
                 {
-                    text: "Фора",
-                    value: "for"
+                    text: 'Фора',
+                    value: 'for'
                 },
                 {
-                    text: "2",
-                    value: "forSecond"
+                    text: '2',
+                    value: 'forSecond'
                 },
                 {
-                    text: "Б",
-                    value: "individualTotalFirstMore"
+                    text: 'Б',
+                    value: 'individualTotalFirstMore'
                 },
                 {
-                    text: "ИТ1",
-                    value: "individualTotalFirst"
+                    text: 'ИТ1',
+                    value: 'individualTotalFirst'
                 },
                 {
-                    text: "М",
-                    value: "individualTotalFirstLess"
+                    text: 'М',
+                    value: 'individualTotalFirstLess'
                 },
                 {
-                    text: "Б",
-                    value: "individualTotalSecondMore"
+                    text: 'Б',
+                    value: 'individualTotalSecondMore'
                 },
                 {
-                    text: "ИТ2",
-                    value: "individualTotalSecond"
+                    text: 'ИТ2',
+                    value: 'individualTotalSecond'
                 },
                 {
-                    text: "М",
-                    value: "individualTotalSecondLess"
+                    text: 'М',
+                    value: 'individualTotalSecondLess'
                 }
             ],
             loading: false,
-            timer: null
+            timer: null,
         };
     },
     components: {
@@ -154,13 +115,13 @@ export default {
         clearTimeout(this.timer);
     },
     computed: {
-        ...mapGetters(["getCurrentLineChamps"]),
+        ...mapGetters(['getCurrentLineChamps']),
         currentChampMatches() {
             return this.champs[this.getCurrentLineChamps];
         }
     },
     methods: {
-        ...mapMutations(["setLineChamps"]),
+        ...mapMutations(['setLineChamps']),
         getMatches: async function() {
             this.loading = true;
             const response = await API.getLineMatches();
@@ -180,7 +141,7 @@ export default {
             if (value) {
                 this.loading = true;
                 this.currentId = item.id;
-                const players = item.nameMatch.split("-");
+                const players = item.nameMatch.split('-');
                 const firstPlayer = players[0].trim();
                 const secondPlayer = players[1].trim();
                 const response = await API.searchBySportsmen({

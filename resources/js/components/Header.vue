@@ -2,36 +2,43 @@
     <div class="wrapper-header d-flex flex-column align-start">
         <v-app-bar app color="#313A46" dark class="app-header d-flex flex-row">
             <v-toolbar-title class="app-name">TABLE TENNIS</v-toolbar-title>
-            <HeaderForm @search="search"></HeaderForm>
+            <HeaderForm v-if="this.$route.path == '/'" @search="search"></HeaderForm>
         </v-app-bar>
         <div class="wrapper-header__navbar">
             <Navbar @search="search" />
         </div>
+        <v-snackbar absolute v-model="snackbar" color="success" left bottom>
+            Матчи успешно получены!
+            <v-btn text @click="snackbar = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-snackbar>
     </div>
 </template>
 
 <script>
-import API from "../service/api";
-import { mapActions } from "vuex";
-import { mapMutations } from "vuex";
-import { mapGetters } from "vuex";
-import HeaderForm from "./HeaderForm";
-import Navbar from "./Navbar";
+import API from '../service/api';
+import { mapActions } from 'vuex';
+import { mapMutations } from 'vuex';
+import { mapGetters } from 'vuex';
+import HeaderForm from './HeaderForm';
+import Navbar from './Navbar';
 export default {
-    name: "Header",
+    name: 'Header',
     components: {
         HeaderForm,
         Navbar
     },
     data: () => ({
-        historyMatches: null
+        historyMatches: null,
+        snackbar: false,
     }),
     computed: {
-        ...mapGetters(["getHistory"])
+        ...mapGetters(['getHistory'])
     },
     methods: {
-        ...mapActions(["setResponse"]),
-        ...mapMutations(["setHistory"]),
+        ...mapActions(['setResponse']),
+        ...mapMutations(['setHistory']),
         search: async function(data) {
             this.searchByData(data);
         },
@@ -58,14 +65,12 @@ export default {
                         }
                     ]
                 };
-                localStorage.setItem("historySearch", JSON.stringify([match]));
+                localStorage.setItem('historySearch', JSON.stringify([match]));
                 this.setHistory([match]);
             } else {
-                const currentDate = this.historyMatches.findIndex(
-                    (element, index, array) => {
-                        return element.date == fullNameDate;
-                    }
-                );
+                const currentDate = this.historyMatches.findIndex((element, index, array) => {
+                    return element.date == fullNameDate;
+                });
                 if (currentDate != -1) {
                     const currentMatch = this.historyMatches[currentDate].matches.filter(match => {
                         return (
@@ -79,58 +84,55 @@ export default {
                             ...data,
                             matchName
                         };
-                       this.historyMatches[currentDate].matches.push(historyMatch);
+                        this.historyMatches[currentDate].matches.push(historyMatch);
                     }
-                }
-                else {
-                     let newListDate = {
-                            date: fullNameDate,
-                            matches: [
-                                {
-                                    ...data,
-                                    matchName
-                                }
-                            ]
-                        };
-                        this.historyMatches.unshift(newListDate);
+                } else {
+                    let newListDate = {
+                        date: fullNameDate,
+                        matches: [
+                            {
+                                ...data,
+                                matchName
+                            }
+                        ]
+                    };
+                    this.historyMatches.unshift(newListDate);
                 }
                 this.setHistory(this.historyMatches);
-                localStorage.setItem(
-                    "historySearch",
-                    JSON.stringify(this.historyMatches)
-                );
+                localStorage.setItem('historySearch', JSON.stringify(this.historyMatches));
+                this.snackbar = true;
             }
         },
         getMatchName(player) {
-            const arrayName = player.split(" ");
+            const arrayName = player.split(' ');
             return `${arrayName[1]} ${arrayName[0][0]}.`;
         },
         getNameMonth(month) {
             switch (month) {
                 case 1:
-                    return "января";
+                    return 'января';
                 case 2:
-                    return "февраля";
+                    return 'февраля';
                 case 3:
-                    return "марта";
+                    return 'марта';
                 case 4:
-                    return "апреля";
+                    return 'апреля';
                 case 5:
-                    return "мая";
+                    return 'мая';
                 case 6:
-                    return "июня";
+                    return 'июня';
                 case 7:
-                    return "июля";
+                    return 'июля';
                 case 8:
-                    return "августа";
+                    return 'августа';
                 case 9:
-                    return "сентября";
+                    return 'сентября';
                 case 10:
-                    return "октября";
+                    return 'октября';
                 case 11:
-                    return "ноября";
+                    return 'ноября';
                 case 12:
-                    return "декабря";
+                    return 'декабря';
             }
         }
     }
@@ -158,7 +160,7 @@ export default {
         width: 100%;
     }
     .app-name {
-        font-family: "Gemunu Libre SemiBold";
+        font-family: 'Gemunu Libre SemiBold';
         font-style: normal;
         font-weight: 300;
         font-size: 24px;

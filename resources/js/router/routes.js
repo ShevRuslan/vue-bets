@@ -1,16 +1,16 @@
-import Home from '../pages/Home';
+
 import Line from '../pages/Line';
 import Search from '../pages/Search'
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Line,
+    component: Search,
   },
   {
-    path: '/line-match',
+    path: '/line',
     name: 'LineMatch',
-    component: Search,
+    component: Line,
   },
 ];
 

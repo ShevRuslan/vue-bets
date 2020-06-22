@@ -97,7 +97,7 @@ export default {
             const day = date.getDate();
             const year = date.getFullYear() - 2000;
             let month = date.getMonth() + 1;
-             if (parseInt(month) < 10) month = '0' + month;
+            if (parseInt(month) < 10) month = '0' + month;
             this.date = `${day}.${month}.${year}`;
 
             let matcher = this.match.scores.matchAll(this.regex);

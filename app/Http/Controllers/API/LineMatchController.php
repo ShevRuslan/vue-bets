@@ -9,157 +9,176 @@ use App\Http\Controllers\API\MatchController;
 
 class LineMatchController extends Controller
 {
-    public function __construct(MatchController $match){
+    public function __construct(MatchController $match)
+    {
         $this->match = $match;
     }
-    public function line (Request $request)
+    public function line(Request $request)
     {
         // https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true — получение чемпионатов
         // https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true — получение всех матчей
         //https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=50&tf=2200000&tz=6&antisports=188&mode=4&subGames=240546650&country=1&partner=51&getEmpty=true — subgames
-         $opts = array(
-                        'http' => array(
-                            'method' => "GET",
-                            'header' => "X—Requested—With: XMLHttpRequest"
-                        )
-         );
-         $context = stream_context_create($opts);
-         $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true", false, $context), true);
-         $matches = $url['Value'];
-         //return $matches;
-         $normallyArrayMatches = ['champs' => []];
+        $opts = array(
+            'http' => array(
+                'method' => "GET",
+                'header' => "X—Requested—With: XMLHttpRequest"
+            )
+        );
+        $context = stream_context_create($opts);
+        $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true", false, $context), true);
+        $matches = $url['Value'];
+        //return $matches;
+        $normallyArrayMatches = ['champs' => []];
 
-         foreach  ($matches as $match) {
-            $date = Carbon::parse($match['S'] )->timezone('Europe/Moscow')->format('d.m H:i');
+        foreach ($matches as $match) {
+            $date = Carbon::parse($match['S'])->timezone('Europe/Moscow')->format('d.m H:i');
             $normallyMatch = [];
             $currentChamp = $match['L'];
 
             $player1 = $match['O1'];
             $player2 = $match['O2'];
-            
+
             $normallyMatch['champName'] = $currentChamp;
             $normallyMatch['id'] = $match['I'];
             $normallyMatch['date'] =  $date ?? '—';
-            $normallyMatch['player1'] = $player1 ;
-            $normallyMatch['player2'] = $player2 ;
-            
+            $normallyMatch['player1'] = $player1;
+            $normallyMatch['player2'] = $player2;
+
             $totalArray = [];
-            $forArray = [];
+            $forArray = [
+                'firstPlayer' => [],
+                'secondPlayer' => [],
+            ];
             $individualTotalFirstArray = [];
             $individualTotalSecondArray = [];
 
-            if(!isset($normallyMatch['plus'] )) {
+            if (!isset($normallyMatch['plus'])) {
                 $normallyMatch['plus'] = '+' . $match['EC'] ?? '—';
             }
             $normallyMatch['P1'] = $match['E'][0]['C'] ?? '—';
             $normallyMatch['P2'] = $match['E'][1]['C'] ?? '—';
-            
-            //17 — total, 2— for, 15 — IT1, 62 — IT2,
-            if(isset($match['AE'][0]['G'])) {
-                if($match['AE'][0]['G'] == 17) {
-                    $totales = $match['AE'][0]['ME']; 
 
-                    foreach($totales as $total) {
+            //17 — total, 2— for, 15 — IT1, 62 — IT2,
+            if (isset($match['AE'][0]['G'])) {
+                if ($match['AE'][0]['G'] == 17) {
+                    $totales = $match['AE'][0]['ME'];
+
+                    foreach ($totales as $total) {
                         array_push($totalArray, $total['P']);
-                        if(isset($total['CE'])) {
-                            if(!isset($normallyMatch['totalMore'])) {
+                        if (isset($total['CE'])) {
+                            if (!isset($normallyMatch['totalMore'])) {
                                 $normallyMatch['totalMore'] = $total['C'] ?? '—';
                             }
-                            if(isset( $normallyMatch['totalMore'])) {
+                            if (isset($normallyMatch['totalMore'])) {
                                 $normallyMatch['totalLess'] = $total['C'] ?? '—';
                             }
-                            if(!isset($normallyMatch['total'])) {
+                            if (!isset($normallyMatch['total'])) {
                                 $normallyMatch['total'] = $total['P'] ?? '—';
                             }
                         }
                     }
-                    
-                    $fores = $match['AE'][1]['ME'] ?? null; 
-                    if(isset($fores)) {
-                        foreach($fores as $for) {
-                            if(isset($for['P'])) array_push($forArray, $for['P']);
-                            if(isset($for['CE'])) {
-                                if(!isset($normallyMatch['forFirst'] )) {
+
+                    $fores = $match['AE'][1]['ME'] ?? null;
+                    if (isset($fores)) {
+                        foreach ($fores as $for) {
+                            if ($for['T'] == 7) {
+                                if (isset($for['C']) && !isset($for['P'])) {
+                                    array_push($forArray['firstPlayer'], 0);
+                                } else {
+                                    array_push($forArray['firstPlayer'], $for['P']);
+                                }
+                            } else if ($for['T'] == 8) {
+                                if (!isset($for['P'])) {
+                                    array_push($forArray['secondPlayer'], '0');
+                                } else {
+                                    array_push($forArray['secondPlayer'], $for['P']);
+                                }
+                            }
+                            if (isset($for['CE'])) {
+                                if (!isset($normallyMatch['forFirst'])) {
                                     $normallyMatch['forFirst'] = $for['C'] ?? '—';
-                                    if($normallyMatch['forFirst'] != '—') {
-                                        if(!isset($normallyMatch['for'])) {
+                                    if ($normallyMatch['forFirst'] != '—') {
+                                        if (!isset($normallyMatch['for'])) {
                                             $normallyMatch['for'] = $for['P'];
-                                        }
-                                        else {
+                                        } else {
                                             $normallyMatch['for'] = 0;
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         $normallyMatch['for'] = '—';
                                     }
                                     $normallyMatch['for'] = $for['P'];
                                 }
-                                if(isset($normallyMatch['forFirst'])) {
+                                if (isset($normallyMatch['forFirst'])) {
                                     $normallyMatch['forSecond'] = $for['C'] ?? '—';
                                 }
                             }
-                        
                         }
-                    }
-                    else {
+                    } else {
                         $normallyMatch['for'] = '—';
                         $normallyMatch['forFirst'] = '—';
                         $normallyMatch['forSecond'] = '—';
                     }
-                }
-                else if($match['AE'][0]['G'] == 2) {
+                } else if ($match['AE'][0]['G'] == 2) {
                     $fores = $match['AE'][0]['ME'];
-                    if(isset($fores)) {
-                        foreach($fores as $for) {
-                            if(isset($for['P'])) array_push($forArray, $for['P']);
-                            if(isset($for['CE'])) {
-                                if(!isset($normallyMatch['forFirst'] )) {
+                    if (isset($fores)) {
+                        foreach ($fores as $for) {
+                            if ($for['T'] == 7) {
+                                if (isset($for['C']) && !isset($for['P'])) {
+                                    array_push($forArray['firstPlayer'], 0);
+                                } else {
+                                    array_push($forArray['firstPlayer'], $for['P']);
+                                }
+                            } else if ($for['T'] == 8) {
+                                if (!isset($for['P'])) {
+                                    array_push($forArray['secondPlayer'], '0');
+                                } else {
+                                    array_push($forArray['secondPlayer'], $for['P']);
+                                }
+                            }
+                            if (isset($for['CE'])) {
+                                if (!isset($normallyMatch['forFirst'])) {
                                     $normallyMatch['forFirst'] = $for['C'] ?? '—';
-                                    if($normallyMatch['forFirst'] != '—') {
-                                        if(!isset($normallyMatch['for'])) {
+                                    if ($normallyMatch['forFirst'] != '—') {
+                                        if (!isset($normallyMatch['for'])) {
                                             $normallyMatch['for'] = $for['P'];
-                                        }
-                                        else {
+                                        } else {
                                             $normallyMatch['for'] = 0;
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         $normallyMatch['for'] = '—';
                                     }
                                     $normallyMatch['for'] = $for['P'];
                                 }
-                                if(isset($normallyMatch['forFirst'])) {
+                                if (isset($normallyMatch['forFirst'])) {
                                     $normallyMatch['forSecond'] = $for['C'] ?? '—';
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         $normallyMatch['for'] = '—';
                         $normallyMatch['forFirst'] = '—';
                         $normallyMatch['forSecond'] = '—';
                     }
 
-                    $totales = $match['AE'][1]['ME'] ?? null; 
-                    if($totales) {
-                        foreach($totales as $total) {
+                    $totales = $match['AE'][1]['ME'] ?? null;
+                    if ($totales) {
+                        foreach ($totales as $total) {
                             array_push($totalArray, $total['P']);
-                            if(isset($total['CE'])) {
-                                if(!isset($normallyMatch['totalMore'])) {
+                            if (isset($total['CE'])) {
+                                if (!isset($normallyMatch['totalMore'])) {
                                     $normallyMatch['totalMore'] = $total['C'] ?? '—';
                                 }
-                                if(isset( $normallyMatch['totalMore'])) {
+                                if (isset($normallyMatch['totalMore'])) {
                                     $normallyMatch['totalLess'] = $total['C'] ?? '—';
                                 }
-                                if(!isset($normallyMatch['total'])) {
+                                if (!isset($normallyMatch['total'])) {
                                     $normallyMatch['total'] = $total['P'] ?? '—';
                                 }
                             }
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 $normallyMatch['totalMore'] = '—';
                 $normallyMatch['total'] = '—';
                 $normallyMatch['totalLess'] =  '—';
@@ -168,7 +187,7 @@ class LineMatchController extends Controller
                 $normallyMatch['for'] =  '—';
                 $normallyMatch['forSecond'] =  '—';
             }
-            
+
             $individualTotalFirst = null;
             $individualTotalFirstMore = null;
             $individualTotalFirstLess = null;
@@ -177,32 +196,30 @@ class LineMatchController extends Controller
             $individualTotalSecondLess = null;
             $drow = null;
 
-            if(count($match['E']) > 0) {
+            if (count($match['E']) > 0) {
                 $informations = $match['E'];
-                foreach($informations as $info) {
+                foreach ($informations as $info) {
 
-                    if($info['G'] == 15) {
-                        array_push($individualTotalFirstArray, $info['P'] );
+                    if ($info['G'] == 15) {
+                        array_push($individualTotalFirstArray, $info['P']);
                         $individualTotalFirst = $info['P'] ?? '—';
-                        if(!isset($individualTotalFirstMore)) {
+                        if (!isset($individualTotalFirstMore)) {
                             $individualTotalFirstMore = $info['C'] ?? '—';
-                        }
-                        else {
+                        } else {
                             $individualTotalFirstLess = $info['C'] ?? '—';
                         }
                     }
 
-                    if($info['G'] == 62) {
-                        array_push($individualTotalSecondArray, $info['P'] );
+                    if ($info['G'] == 62) {
+                        array_push($individualTotalSecondArray, $info['P']);
                         $individualTotalSecond = $info['P'] ?? '—';
-                        if(!isset($individualTotalSecondMore)) {
+                        if (!isset($individualTotalSecondMore)) {
                             $individualTotalSecondMore = $info['C'] ?? '—';
-                        }
-                        else {
+                        } else {
                             $individualTotalSecondLess = $info['C'] ?? '—';
                         }
                     }
-                    if($info['T'] == 2) {
+                    if ($info['T'] == 2) {
                         $drow = $info['C'];
                     }
                 }
@@ -216,21 +233,21 @@ class LineMatchController extends Controller
             $normallyMatch['individualTotalSecondMore'] = $individualTotalSecondMore ?? '—';
             $normallyMatch['individualTotalSecond'] =  $individualTotalSecond ?? '—';
             $normallyMatch['individualTotalSecondLess'] =  $individualTotalSecondLess ?? '—';
-            
+
             $normallyMatch['totalArray'] = $totalArray;
             $normallyMatch['forArray'] = $forArray;
             $normallyMatch['individualTotalFirstArray'] =  array_unique($individualTotalFirstArray);
             $normallyMatch['individualTotalSecondArray'] =  array_unique($individualTotalSecondArray);
 
-            if(!isset($normallyArrayMatches[$currentChamp])) {
+            if (!isset($normallyArrayMatches[$currentChamp])) {
                 $normallyArrayMatches[$currentChamp] = [];
                 array_push($normallyArrayMatches['champs'], $currentChamp);
             }
             array_push($normallyArrayMatches[$currentChamp], $normallyMatch);
-         }
-         return response()->json($normallyArrayMatches, 200);
+        }
+        return response()->json($normallyArrayMatches, 200);
     }
-    public function getLineChamps(Request $request) 
+    public function getLineChamps(Request $request)
     {
         $opts = array(
             'http' => array(
@@ -242,7 +259,7 @@ class LineMatchController extends Controller
         $response = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true ", false, $context), true);
         $champs = $response['Value'];
         $lineChamps = [];
-        foreach($champs as $champ) {
+        foreach ($champs as $champ) {
             $champArray = [
                 'champName' => $champ['L'],
                 'img' => $champ['CHIMG'] ?? $champ['CI'],
@@ -253,63 +270,119 @@ class LineMatchController extends Controller
         }
         return response()->json($lineChamps, 200);
     }
-    public function getBetsMatch (Request $request) {
+    public function getBetsMatch(Request $request)
+    {
+        $player = $request->player1;
         $totalArray = array_unique(json_decode($request->totalArray), SORT_NUMERIC);
+        $forArray = json_decode($request->forArray);
         $individualTotalFirstArray = json_decode($request->individualTotalFirstArray);
         $individualTotalSecondArray = json_decode($request->individualTotalSecondArray);
-        $response = [
-            'totalMore'=> [],
-            'totalLess'=> [],
-            'individualTotalFirstMore' => [],
-            'individualTotalFirstLess' => [],
-            'individualTotalSecondMore' => [],
-            'individualTotalSecondLess' => [],
-            'forFirst' => [],
-            'forSecond' => [],
-        ];
-        $coopMatch = app('App\Http\Controllers\API\MatchController')->getCooperativeMatches($request->player1, $request->player2, $request->champName);//TODO:Сделать отдельный класс для работы с матчами.
-        $coopMatches = $coopMatch['mergeGames'];
-        $regexTotal = "/[\(\,](?<before>\d+)[\:](?<after>\d+)/m";
-        $regexScore = "/^\s*(?<masterBefore>\d+)\:(?<masterAfter>\d+)\s*/m";
-        forEach($coopMatches as $match) {
 
-            $total = 0;
-            $matchesTotal = null;
-            preg_match_all($regexTotal, $match['scores'],$matchesTotal, PREG_SET_ORDER, 0);
-            forEach($matchesTotal as $mch) {
-                $total += $mch['before'] + $mch['after'];
+        $coopMatch = app('App\Http\Controllers\API\MatchController')->getCooperativeMatches($request->player1, $request->player2, $request->champName);
+        if (isset($coopMatch['mergeGames'])) {
+            $coopMatches = $coopMatch['mergeGames'];
+            $response = [
+                'total' => [],
+                'forFirst' => [],
+                'forSecond' => [],
+                'individualTotalFirst' => [],
+                'individualTotalSecond' => [],
+                'win1' => $coopMatch['win1'],
+                'win2' => $coopMatch['win2'],
+                'countGames' =>  $coopMatch['win1'] +  $coopMatch['win2']
+            ];
+            $totalMore = [];
+            $totalLess = [];
+            $individualTotalFirstMore = [];
+            $individualTotalFirstLess = [];
+            $individualTotalSecondMore = [];
+            $individualTotalSecondLess = [];
+            $forFirstArray = [];
+            $forSecondArray = [];
+
+            $regexTotal = "/[\(\,](?<before>\d+)[\:](?<after>\d+)/m";
+
+            foreach ($coopMatches as $match) {
+                $reverse = false;
+
+                $arrayNames = explode('-', $match['nameGame']);
+                $first = trim($arrayNames[0]);
+                if ($first !== $player) {
+                    $reverse = true;
+                } else {
+                    $reverse = false;
+                }
+
+                $total = 0;
+                $matchesTotal = null;
+                preg_match_all($regexTotal, $match['scores'], $matchesTotal, PREG_SET_ORDER, 0);
+                foreach ($matchesTotal as $mch) {
+                    $total += $mch['before'] + $mch['after'];
+                }
+                $passedTotalMore = $this->checkPassedTotalMore($totalArray, $total);
+                $passedTotalLess = $this->checkPassedTotalLess($totalArray, $total);
+                array_push($totalMore, $passedTotalMore);
+                array_push($totalLess, $passedTotalLess);
+
+                $scoreFirst = 0;
+                $scoreSecond = 0;
+                $matchesScoreFirst = null;
+                preg_match_all($regexTotal, $match['scores'], $matchesScoreFirst, PREG_SET_ORDER, 0);
+                foreach ($matchesScoreFirst as $mch) {
+                    if ($reverse) {
+                        $scoreFirst += $mch['after'];
+                        $scoreSecond += $mch['before'];
+                    } else {
+                        $scoreFirst += $mch['before'];
+                        $scoreSecond += $mch['after'];
+                    }
+                }
+
+                $forFirst = $scoreFirst - $scoreSecond;
+                $forSecond = $scoreSecond - $scoreFirst;
+                array_push($forFirstArray, $this->checkPassedFor($forArray->firstPlayer, $forFirst));
+                array_push($forSecondArray, $this->checkPassedFor($forArray->secondPlayer, $forSecond));
+                array_push($individualTotalFirstMore, $this->checkPassedTotalMore($individualTotalFirstArray, $scoreFirst));
+                array_push($individualTotalFirstLess, $this->checkPassedTotalLess($individualTotalFirstArray, $scoreFirst));
+
+                array_push($individualTotalSecondMore, $this->checkPassedTotalMore($individualTotalSecondArray, $scoreSecond));
+                array_push($individualTotalSecondLess, $this->checkPassedTotalLess($individualTotalSecondArray, $scoreSecond));
             }
-            $passedTotalMore = $this->checkPassedTotalMore($totalArray, $total);
-            $passedTotalLess = $this->checkPassedTotalLess($totalArray, $total);
-            array_push($response['totalMore'], $passedTotalMore);
-            array_push($response['totalLess'], $passedTotalLess);
 
-            $scoreFirst = 0;
-            $scoreSecond = 0;
-            $matchesScoreFirst = null;
-            preg_match_all($regexTotal, $match['scores'],$matchesScoreFirst, PREG_SET_ORDER, 0);
-            forEach($matchesScoreFirst as $mch) {
-                $scoreFirst += $mch['before'];
-                $scoreSecond += $mch['after'];
-            }
-            array_push(($response['individualTotalFirstMore']), $this->checkPassedTotalMore($individualTotalFirstArray, $scoreFirst));
-            array_push(($response['individualTotalFirstLess']), $this->checkPassedTotalLess($individualTotalFirstArray, $scoreFirst));
-
-            array_push(($response['individualTotalSecondMore']), $this->checkPassedTotalMore($individualTotalSecondArray, $scoreSecond));
-            array_push(($response['individualTotalSecondLess']), $this->checkPassedTotalLess($individualTotalSecondArray, $scoreSecond));
+            $response['total'] = $this->normallyView($totalMore, $totalLess);
+            $response['individualTotalFirst'] = $this->normallyView($individualTotalFirstMore, $individualTotalFirstLess);
+            $response['individualTotalSecond'] = $this->normallyView($individualTotalSecondMore, $individualTotalSecondLess);
+            $response['forFirst'] = $this->normallyViewFor($forFirstArray);
+            $response['forSecond'] = $this->normallyViewFor($forSecondArray);
+            return response()->json($response, 200);
         }
-        $response['totalMore'] = $this->normallyView($response['totalMore']);
-        $response['totalLess'] = $this->normallyView($response['totalLess']);
-        $response['individualTotalFirstMore'] = $this->normallyView($response['individualTotalFirstMore']);
-        $response['individualTotalFirstLess'] = $this->normallyView($response['individualTotalFirstLess']);
-        $response['individualTotalSecondMore'] = $this->normallyView($response['individualTotalSecondMore']);
-        $response['individualTotalSecondLess'] = $this->normallyView($response['individualTotalSecondLess']);
-        return response()->json($response, 200);
+        return response()->json([], 200); 
     }
-    private function checkPassedTotalMore($lineTotals, $total) 
+    private function checkPassedFor($lineFors, $for)
     {
         $response = [];
-        forEach($lineTotals as $lineTotal) {
+        foreach ($lineFors as $lineFor) {
+            $currentFor = $for;
+            if ($lineFor > 0) {
+                $currentFor += $lineFor;
+            } else if ($lineFor < 0) {
+                $currentFor -= $lineFor;
+            }
+
+            if ($currentFor > 0) {
+                $array = [
+                    'value' => $currentFor,
+                    'linetotal' => strval($lineFor)
+                ];
+                array_push($response, $array);
+            }
+        }
+        return $response;
+    }
+    private function checkPassedTotalMore($lineTotals, $total)
+    {
+        $response = [];
+        foreach ($lineTotals as $lineTotal) {
             $array = [
                 'value' => $total - $lineTotal,
                 'linetotal' => strval($lineTotal)
@@ -318,10 +391,10 @@ class LineMatchController extends Controller
         }
         return $response;
     }
-    private function checkPassedTotalLess($lineTotals, $total) 
+    private function checkPassedTotalLess($lineTotals, $total)
     {
         $response = [];
-        forEach($lineTotals as $lineTotal) {
+        foreach ($lineTotals as $lineTotal) {
             $array = [
                 'value' => $lineTotal - $total,
                 'linetotal' => strval($lineTotal)
@@ -330,22 +403,90 @@ class LineMatchController extends Controller
         }
         return $response;
     }
-    private function normallyView($array) 
+    private function checkArray($array, $name)
     {
-        $countMatches = count($array);
+        $response = false;
+        foreach ($array as $key => $value) {
+            if ($value['value'] == $name) {
+                $response = $key;
+                break;
+            } else {
+                $response = false;
+            }
+        }
+        return $response;
+    }
+    private function normallyViewFor($array)
+    {
         $normallyArray = [];
-        forEach($array as $match) {
-            forEach($match as $total) {
-                if($total['value'] > 0) {
-                    if(!isset($normallyArray[$total['linetotal']])) {
-                        $normallyArray[$total['linetotal']] = 0;
-                    }
-                    else {
-                        $normallyArray[$total['linetotal']] += 1;
+        foreach ($array as $match) {
+            foreach ($match as $total) {
+                if (isset($total['linetotal'])) {
+                    $exts = $this->checkArray($normallyArray, $total['linetotal']);
+                    if ($exts == false && is_bool($exts)) {
+                        $array = [
+                            'value' => $total['linetotal'],
+                            'number' => 0,
+                        ];
+                        if ($total['value'] > 0) {
+                            $array['number'] = 1;
+                        }
+                        array_push($normallyArray, $array);
+                    } else {
+                        if ($total['value'] > 0) {
+                            $normallyArray[$exts]['number']++;
+                        }
                     }
                 }
-
-
+            }
+        }
+        return $normallyArray;
+    }
+    private function normallyView($firstArray, $secondArray)
+    {
+        $normallyArray = [];
+        foreach ($firstArray as $match) {
+            foreach ($match as $total) {
+                if (isset($total['linetotal'])) {
+                    $exts = $this->checkArray($normallyArray, $total['linetotal']);
+                    if ($exts == false && is_bool($exts)) {
+                        $array = [
+                            'value' => $total['linetotal'],
+                            'first' => 0,
+                            'second' => 0,
+                        ];
+                        if ($total['value'] > 0) {
+                            $array['first'] = 1;
+                        }
+                        array_push($normallyArray, $array);
+                    } else {
+                        if ($total['value'] > 0) {
+                            $normallyArray[$exts]['first']++;
+                        }
+                    }
+                }
+            }
+        }
+        foreach ($secondArray as $match) {
+            foreach ($match as $total) {
+                $exts = $this->checkArray($normallyArray, $total['linetotal']);
+                if (isset($total['linetotal'])) {
+                    if ($exts == false && is_bool($exts)) {
+                        $array = [
+                            'value' => $total['linetotal'],
+                            'first' => 0,
+                            'second' => 0,
+                        ];
+                        if ($total['value'] > 0) {
+                            $array['second'] = 1;
+                        }
+                        array_push($normallyArray, $array);
+                    } else {
+                        if ($total['value'] > 0) {
+                            $normallyArray[$exts]['second']++;
+                        }
+                    }
+                }
             }
         }
         return $normallyArray;

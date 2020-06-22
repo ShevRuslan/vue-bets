@@ -59,7 +59,7 @@
                     <v-list-item-title>Линия</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-menu offset-y content-class="menu elevation-1" z-index="0">
+            <v-menu v-if="this.$route.path == '/'" offset-y content-class="menu elevation-1" z-index="0">
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item class="navbar-item" color="false">
                         <v-list-item-icon v-on="on" v-bind="attrs">
@@ -137,7 +137,7 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-menu offset-y content-class="menu elevation-1" z-index="0">
+            <v-menu v-if="this.$route.path == '/line'" offset-y content-class="menu elevation-1" z-index="0">
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item class="navbar-item" color="#fff">
                         <v-list-item-icon>
@@ -300,6 +300,7 @@ export default {
     max-height: 350px;
     overflow-y: auto;
     top: 125px !important;
+    padding-bottom: 24px;
     .menu__content {
         padding: 24px;
         padding-bottom: 0px;

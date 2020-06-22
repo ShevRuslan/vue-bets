@@ -143,7 +143,7 @@
                                 </div>
                             </div>
                             <div class="wrapper-bets">
-                                <div class="current-champ pb-10 ">
+                                <div class="current-champ pb-10 pa-10 ">
                                     Таблица ставок
                                 </div>
                                 <div class="tables-bets">
@@ -153,7 +153,7 @@
                                                 Победа 1
                                             </v-chip>
                                             <v-chip class="win-number win-item" small label>
-                                                11/20
+                                                {{ bets['win1'] }} / {{ bets['countGames'] }}
                                             </v-chip>
                                         </div>
                                         <div class="win">
@@ -161,85 +161,16 @@
                                                 Победа 2
                                             </v-chip>
                                             <v-chip class="win-number win-item" small label>
-                                                9/20
+                                                {{ bets['win2'] }} / {{ bets['countGames'] }}
                                             </v-chip>
                                         </div>
                                     </div>
-                                    <div class="wrapper-tables">
-                                        <div class="table-bet" v-for="n in 4" :key="n">
-                                            <v-simple-table class="table">
-                                                <template v-slot:default>
-                                                    <thead class="table-header">
-                                                        <tr>
-                                                            <th class="text-center"></th>
-                                                            <th class="text-center">
-                                                                ТБ
-                                                            </th>
-                                                            <th class="text-center">
-                                                                ТМ
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="table-content">
-                                                        <tr>
-                                                            <td class="text-center wrapper-left-number">
-                                                                <div class="left-number">
-                                                                    109,5
-                                                                </div>
-                                                            </td>
-                                                            <td
-                                                                class="text-center wrapper-color-block wrapper-more-green "
-                                                            >
-                                                                <div class="more-green">
-                                                                    19/20
-                                                                </div>
-                                                            </td>
-                                                            <td
-                                                                class="text-center wrapper-color-block wrapper-not-green"
-                                                            >
-                                                                <div class="not-green">
-                                                                    1/20
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center wrapper-left-number">
-                                                                <div class="left-number">
-                                                                    109,5
-                                                                </div>
-                                                            </td>
-                                                            <td
-                                                                class="text-center wrapper-color-block wrapper-not-green"
-                                                            >
-                                                                <div class="not-green">
-                                                                    8/20
-                                                                </div>
-                                                            </td>
-                                                            <td
-                                                                class="text-center wrapper-color-block wrapper-less-green"
-                                                            >
-                                                                <div class="less-green">
-                                                                    12/20
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-center wrapper-left-number">
-                                                                <div class="left-number">
-                                                                    109,5
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                19/20
-                                                            </td>
-                                                            <td class="text-center">
-                                                                1/20
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </template>
-                                            </v-simple-table>
-                                        </div>
+                                    <div class="wrapper-tables" v-if="bets.length != 0">
+                                        <BetTable :items="bets.total" />
+                                        <BetTable :items="bets.individualTotalFirst" />
+                                        <BetTable :items="bets.individualTotalSecond" />
+                                        <BetTable :items="bets.forFirst" isFor headerFor="Δ1" />
+                                        <BetTable :items="bets.forSecond" isFor headerFor="Δ2" />
                                     </div>
                                 </div>
                             </div>
@@ -249,6 +180,12 @@
             </v-card>
         </v-dialog>
         <v-overlay :value="dialog" opacity="0.4"></v-overlay>
+        <v-snackbar absolute v-model="snackbar" color="primary" left bottom>
+            Начался запрос на получение статистики!
+            <v-btn text @click="snackbar = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-snackbar>
     </div>
 </template>
 
@@ -256,22 +193,27 @@
 import API from '../service/api';
 import CooperativeMatch from '../components/CooperativeMatch';
 import CardMatches from '../components/CardMatches';
+import BetTable from '../components/BetTable';
 import { mapActions } from 'vuex';
 import { mapMutations } from 'vuex';
 import { mapGetters } from 'vuex';
+
 export default {
     props: {
         matches: Array
     },
     components: {
         CooperativeMatch,
-        CardMatches
+        CardMatches,
+        BetTable
     },
     data() {
         return {
             currentStatics: [],
             bets: [],
             dialog: false,
+            snackbar: false,
+            snackbarStatics: false,
         };
     },
     methods: {
@@ -283,24 +225,24 @@ export default {
                 player2: item.player2,
                 champName: item.champName,
                 countMatches: 10
-            } 
-            await this.search(data);
-            console.log(item);
+            };
+            this.search(data);
             this.bets = await API.getBetsMatch({
                 ...data,
-                totalArray:JSON.stringify(item.totalArray),
+                totalArray: JSON.stringify(item.totalArray),
                 forArray: JSON.stringify(item.forArray),
                 individualTotalFirstArray: JSON.stringify(item.individualTotalFirstArray),
                 individualTotalSecondArray: JSON.stringify(item.individualTotalSecondArray)
-
             });
-            this.dialog = true
+            this.dialog = true;
         },
         search: async function(data) {
+            this.snackbar = true;
             this.searchByData(data);
         },
         searchByData: async function(data) {
-            this.currentStatics = await API.searchBySportsmen(data);;
+            this.currentStatics = await API.searchBySportsmen(data);
+            this.snackbar = false;
         },
         getMatchName(player) {
             const arrayName = player.split(' ');
@@ -537,7 +479,7 @@ export default {
             display: flex;
             justify-content: space-between;
             .table-bet {
-                width: 24%;
+                width: 19%;
                 table {
                     border: 1px solid #dde2f0;
                     .table-header {

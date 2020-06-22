@@ -74,21 +74,6 @@
                                                 >
                                                     Получить информацию
                                                 </v-btn>
-                                                <v-snackbar
-                                                    v-model="snackbar"
-                                                    color="success"
-                                                    left
-                                                    bottom
-                                                >
-                                                    Матчи успешно получены!
-                                                    <v-btn
-                                                        text
-                                                        @click="snackbar = false"
-                                                    >
-                                                        <v-icon>mdi-close</v-icon
-                                                        >
-                                                    </v-btn>
-                                                </v-snackbar>
                                             </div>
 
                                             <div class="button">

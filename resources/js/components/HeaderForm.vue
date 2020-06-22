@@ -75,12 +75,6 @@
             >
                 Поиск
             </v-btn>
-            <v-snackbar v-model="snackbar" color="success" left bottom>
-                Матчи успешно получены!
-                <v-btn text @click="snackbar = false">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-snackbar>
         </div>
         <!-- <div class="wrapper-slider d-flex flex-row">
             <v-slider
@@ -145,7 +139,6 @@ export default {
             count: "",
             lastUpdateDate: "",
             loadingMatches: false,
-            snackbar: false,
             numbers: [
                 0,
                 1,

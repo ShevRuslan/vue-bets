@@ -49,6 +49,9 @@ class MatchController extends Controller
         if(is_string($player2)) {
             $player2 = $this->player->where('name', $player2)->first();
         }
+        if(!isset($player1) || !isset($player2)) {
+            return array();
+        }
         $game1 = [];
         $game2 = [];
         if($champName !== 'null') {
