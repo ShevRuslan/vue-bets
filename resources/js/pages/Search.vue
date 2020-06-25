@@ -14,16 +14,10 @@
                             ></CooperativeMatch>
                         </div>
                         <div class="wrapper-firstplayer-matches">
-                            <CardMatches
-                                :name="firstPlayer.name"
-                                :matches="firstPlayer.matches"
-                            ></CardMatches>
+                            <CardMatches :name="firstPlayer.name" :matches="firstPlayer.matches"></CardMatches>
                         </div>
                         <div class="wrapper-secondplayer-matches">
-                            <CardMatches
-                                :name="secondPlayer.name"
-                                :matches="secondPlayer.matches"
-                            ></CardMatches>
+                            <CardMatches :name="secondPlayer.name" :matches="secondPlayer.matches"></CardMatches>
                         </div>
                     </div>
                 </v-col>
@@ -33,11 +27,11 @@
 </template>
 
 <script>
-import CooperativeMatch from "../components/CooperativeMatch";
-import CardMatches from "../components/CardMatches";
+import CooperativeMatch from '../components/CooperativeMatch';
+import CardMatches from '../components/CardMatches';
 import { mapGetters } from 'vuex';
 export default {
-    name: "Search",
+    name: 'Search',
     components: {
         CooperativeMatch,
         CardMatches
@@ -46,7 +40,7 @@ export default {
         return {};
     },
     computed: {
-        ...mapGetters(["getMatches"]),
+        ...mapGetters(['getMatches']),
         firstPlayer() {
             return this.getMatches[0];
         },

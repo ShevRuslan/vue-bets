@@ -54,7 +54,11 @@
                         <div class="content-item__group-item">
                             {{ getTime(match.date) }}
                         </div>
-                        <div class="content-item__group-item name-match">
+                        <div
+                            class="content-item__group-item name-match"
+                            :class="{ check: check[match.id] ? true : false }"
+                            @click="getInfo(match)"
+                        >
                             <span>{{ match.player1 }}</span>
                             <br />
                             <span>{{ match.player2 }}</span>
@@ -111,9 +115,9 @@
                 </div>
             </div>
         </div>
-        <v-dialog fullscreen v-model="dialog" hide-overlay transition="dialog-bottom-transition" class="modal-statics">
+        <v-dialog v-model="dialog" transition="dialog-bottom-transition" class="modal-statics">
             <v-card class="wrapper-dialog">
-                <v-btn class="btn-close" dark icon absolute @click="dialog = false">
+                <v-btn class="btn-close" dark icon absolute @click="dialog = false" color="#000">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-container fluid class="fill-height align-start wrapper-page-search">
@@ -166,11 +170,55 @@
                                         </div>
                                     </div>
                                     <div class="wrapper-tables" v-if="bets.length != 0">
-                                        <BetTable :items="bets.total" />
-                                        <BetTable :items="bets.individualTotalFirst" />
-                                        <BetTable :items="bets.individualTotalSecond" />
-                                        <BetTable :items="bets.forFirst" isFor headerFor="Δ1" />
-                                        <BetTable :items="bets.forSecond" isFor headerFor="Δ2" />
+                                        <BetTable :items="bets.total" :countGames="bets['countGames']">
+                                            <tr>
+                                                <th class="text-center"></th>
+                                                <th class="text-center">
+                                                    ТБ
+                                                </th>
+                                                <th class="text-center">
+                                                    ТМ
+                                                </th>
+                                            </tr>
+                                        </BetTable>
+
+                                        <BetTable :items="bets.individualTotalFirst" :countGames="bets['countGames']">
+                                            <tr>
+                                                <th class="text-center"></th>
+                                                <th class="text-center">
+                                                    ИТБ1
+                                                </th>
+                                                <th class="text-center">
+                                                    ИТМ1
+                                                </th>
+                                            </tr>
+                                        </BetTable>
+
+                                        <BetTable :items="bets.individualTotalSecond" :countGames="bets['countGames']">
+                                            <tr>
+                                                <th class="text-center"></th>
+                                                <th class="text-center">
+                                                    ИТБ2
+                                                </th>
+                                                <th class="text-center">
+                                                    ИТМ2
+                                                </th>
+                                            </tr>
+                                        </BetTable>
+
+                                        <BetTable
+                                            :items="bets.forFirst"
+                                            isFor
+                                            headerFor="Δ1"
+                                            :countGames="bets['countGames']"
+                                        />
+                                        <BetTable
+                                            :items="bets.forSecond"
+                                            isFor
+                                            headerFor="Δ2"
+                                            :countGames="bets['countGames']"
+                                            reverseArray
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +227,7 @@
                 </v-container>
             </v-card>
         </v-dialog>
-        <v-overlay :value="dialog" opacity="0.4"></v-overlay>
+        <v-overlay v-model="dialog"></v-overlay>
         <v-snackbar absolute v-model="snackbar" color="primary" left bottom>
             Начался запрос на получение статистики!
             <v-btn text @click="snackbar = false">
@@ -214,17 +262,24 @@ export default {
             dialog: false,
             snackbar: false,
             snackbarStatics: false,
+            check: {}
         };
+    },
+    computed: {
+        ...mapGetters(['getCountLineMatches'])
     },
     methods: {
         ...mapActions(['setResponse']),
         ...mapMutations(['setHistory']),
         async getInfo(item) {
+            this.check[item.id] = true;
             const data = {
                 player1: item.player1,
                 player2: item.player2,
                 champName: item.champName,
-                countMatches: 10
+                countMatches: this.getCountLineMatches,
+                coopChamps: false,
+                line: true,
             };
             this.search(data);
             this.bets = await API.getBetsMatch({
@@ -241,6 +296,7 @@ export default {
             this.searchByData(data);
         },
         searchByData: async function(data) {
+            this.currentStatics = [];
             this.currentStatics = await API.searchBySportsmen(data);
             this.snackbar = false;
         },
@@ -310,17 +366,16 @@ export default {
 </script>
 
 <style lang="scss">
+.check {
+    font-weight: normal !important;
+}
 .wrapper-dialog {
     position: relative;
     .btn-close {
         position: absolute;
-        right: -26px;
-        top: -24px;
+        right: 0px;
+        z-index: 10;
     }
-}
-.v-dialog--fullscreen {
-    padding: 28px;
-    padding-top: 126px;
 }
 .wrapper_table-line {
     display: flex;
@@ -407,6 +462,11 @@ export default {
                         width: auto;
                         margin-left: 40px;
                         text-align: left;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+                    .check-match {
+                        font-weight: normal;
                     }
                 }
                 .action-block {
@@ -516,15 +576,6 @@ export default {
                             .not-green {
                                 padding: 8px 14px;
                             }
-                        }
-                        .wrapper-not-green {
-                            background: #ffffff;
-                        }
-                        .wrapper-less-green {
-                            background: #ecf9e9;
-                        }
-                        .wrapper-more-green {
-                            background: #cbeec2;
                         }
                     }
                 }

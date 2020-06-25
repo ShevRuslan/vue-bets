@@ -3,13 +3,7 @@
         <v-list-item-group class="wrapper-navbar__items">
             <v-list-item class="navbar-item" to="/" color="false">
                 <v-list-item-icon>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path
                             id="Vector"
                             fill-rule="evenodd"
@@ -26,13 +20,7 @@
             </v-list-item>
             <v-list-item class="navbar-item" to="/line" color="#fff">
                 <v-list-item-icon>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="16"
-                        viewBox="0 0 18 16"
-                        fill="none"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 18 16" fill="none">
                         <g clip-path="url(#clip0)">
                             <path
                                 d="M9.05039 0.00391745C11.9575 0.00391745 14.8645 0.00548638 17.7716 0.00077958C17.9387 0.000387346 18.0024 0.028236 18.0008 0.219254C17.9907 1.42184 17.9919 2.62443 17.9989 3.82702C18.0001 3.99333 17.9527 4.02941 17.7937 4.02941C11.954 4.02549 6.11379 4.02588 0.274008 4.0298C0.133356 4.0298 0.0890625 4.00196 0.0898396 3.84977C0.0968334 2.63424 0.0968334 1.41831 0.0898396 0.20278C0.0890625 0.0411797 0.128694 -0.000397122 0.290716 -4.88801e-06C3.21061 0.00548638 6.1305 0.00391745 9.05039 0.00391745Z"
@@ -82,30 +70,17 @@
                                 </g>
                                 <defs>
                                     <clipPath id="clip0">
-                                        <rect
-                                            width="18.6731"
-                                            height="16"
-                                            fill="white"
-                                        />
+                                        <rect width="18.6731" height="16" fill="white" />
                                     </clipPath>
                                 </defs>
                             </svg>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title
-                                class="ma-0"
-                                v-on="on"
-                                v-bind="attrs"
-                                >История</v-list-item-title
-                            >
+                            <v-list-item-title class="ma-0" v-on="on" v-bind="attrs">История</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </template>
-                <v-list
-                    v-for="(item, index) in getHistory"
-                    :key="index"
-                    class="menu__content"
-                >
+                <v-list v-for="(item, index) in getHistory" :key="index" class="menu__content">
                     <span class="menu__content-date">
                         {{ item.date }}
                         <v-btn
@@ -130,9 +105,7 @@
                             <span class="match-name">
                                 {{ match.matchName }}
                             </span>
-                            <span class="match-champ">{{
-                                match.champName
-                            }}</span>
+                            <span class="match-champ">{{ match.champName }}</span>
                         </v-list-item-title>
                     </v-list-item>
                 </v-list>
@@ -156,20 +129,14 @@
                                 </g>
                                 <defs>
                                     <clipPath id="clip0">
-                                        <rect
-                                            width="16.2571"
-                                            height="16"
-                                            fill="white"
-                                        />
+                                        <rect width="16.2571" height="16" fill="white" />
                                     </clipPath>
                                 </defs>
                             </svg>
                         </v-list-item-icon>
 
                         <v-list-item-content>
-                            <v-list-item-title v-on="on" v-bind="attrs"
-                                >Турниры</v-list-item-title
-                            >
+                            <v-list-item-title v-on="on" v-bind="attrs">Турниры</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </template>
@@ -185,26 +152,23 @@
                             <template v-if="typeof champ.img == 'string'">
                                 <img
                                     class="champ-img"
-                                    :src="
-                                        'https://cdn.1xstavka.ru/genfiles/logo-champ/' +
-                                            champ.img
-                                    "
+                                    :src="'https://cdn.1xstavka.ru/genfiles/logo-champ/' + champ.img"
                                 />
                             </template>
                             <template v-else-if="champ.img == 1">
-                                <img class="champ-img" src="img/ru.png" />
+                                <img class="champ-img" src="public/img/ru.png" />
                             </template>
                             <template v-else-if="champ.img == 2">
-                                <img class="champ-img" src="img/uk.png" />
+                                <img class="champ-img" src="public/img/uk.png" />
                             </template>
                             <template v-else-if="champ.img == 15">
-                                <img class="champ-img" src="img/ar.png" />
+                                <img class="champ-img" src="public/img/ar.png" />
                             </template>
                             <template v-else-if="champ.img == 204">
-                                <img class="champ-img" src="img/cz.png" />
+                                <img class="champ-img" src="public/img/cz.png" />
                             </template>
                             <template v-else-if="champ.img == 53">
-                                <img class="champ-img" src="img/ge.png" />
+                                <img class="champ-img" src="public/img/ge.png" />
                             </template>
                         </v-list-item-icon>
                         <v-list-item-title class="wrapper__item-champ">
@@ -218,38 +182,79 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
+            <v-list-item v-if="this.$route.path == '/line'" class="navbar-item" @click="openModalNumberLine">
+                <v-list-item-icon>
+                    <v-icon class="mdi-icon-menu">mdi-account-group</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                    <v-list-item-title>Количество</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-dialog v-model="dialog" scrollable max-width="500px" class="modal-number-line">
+                <v-card>
+                    <v-card-title>Количество матчей</v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-slider
+                            class="pt-10"
+                            v-model="slider"
+                            thumb-label="always"
+                            label="Количество"
+                            hide-details
+                            min="10"
+                            max="100"
+                            dense
+                        ></v-slider>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="blue darken-1" text @click="changeCountLineMatches">Сохранить</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-list-item-group>
     </v-list>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { mapMutations } from "vuex";
+import { mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 export default {
-    name: "Navbar",
-    data: () => ({}),
+    name: 'Navbar',
+    data: () => ({
+        dialog: false,
+        slider: 10
+    }),
     methods: {
-        ...mapMutations(["setHistory", "setCurrentLineChamps"]),
+        ...mapMutations(['setHistory', 'setCurrentLineChamps', 'setCountLineMatches']),
         getMatch(item) {
             const data = {
                 player1: item.player1,
                 player2: item.player2,
                 champName: item.champName,
-                countMatches: item.countMatches
+                countMatches: item.countMatches,
+                coopChamps: true,
             };
             console.log(item);
-            this.$emit("search", data);
+            this.$emit('search', data);
+        },
+        openModalNumberLine() {
+            this.dialog = true;
         },
         clearHistorySearch() {
             localStorage.clear();
             this.setHistory([]);
         },
-        changeLineChamp({champName}) {
+        changeCountLineMatches() {
+            this.setCountLineMatches(this.slider);
+            this.dialog = false;
+        },
+        changeLineChamp({ champName }) {
             this.setCurrentLineChamps(champName);
         }
     },
     computed: {
-        ...mapGetters(["getHistory", "getLineChamps"])
+        ...mapGetters(['getHistory', 'getLineChamps'])
     }
 };
 </script>
@@ -277,6 +282,9 @@ export default {
                 align-items: center;
                 margin-right: 5px;
             }
+            .mdi-icon-menu {
+                color: #919ca7 !important;
+            }
         }
         .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
             color: transparent !important;
@@ -300,10 +308,10 @@ export default {
     max-height: 350px;
     overflow-y: auto;
     top: 125px !important;
-    padding-bottom: 24px;
     .menu__content {
         padding: 24px;
         padding-bottom: 0px;
+        padding-bottom: 24px;
         .menu__content-date:first-child {
             display: flex;
             justify-content: space-between;
@@ -325,17 +333,23 @@ export default {
             padding: 0px;
             min-height: 30px;
             padding-right: 10px;
+            .v-list-item__title {
+                display: flex;
+            }
             .match-name {
                 font-size: 14px;
                 font-weight: 500;
                 line-height: 14px;
                 color: #474d56;
+                display: block;
             }
             .match-champ {
                 line-height: 13px;
                 color: #f0ac0e;
                 padding-left: 10px;
+                padding-right: 15px;
                 line-height: 15px;
+                display: block;
             }
             .wrapper__champ-img {
                 margin-right: 12px;
@@ -353,6 +367,8 @@ export default {
                     line-height: 16px;
                     color: #919ca7;
                     margin-left: 6px;
+                    width: 40px;
+                    text-align: right;
                 }
             }
         }

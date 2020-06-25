@@ -4,15 +4,7 @@
             <template v-slot:default>
                 <thead class="table-header">
                     <template v-if="!isFor">
-                        <tr>
-                            <th class="text-center"></th>
-                            <th class="text-center">
-                                ТБ
-                            </th>
-                            <th class="text-center">
-                                ТМ
-                            </th>
-                        </tr>
+                        <slot></slot>
                     </template>
                     <template v-else>
                         <tr>
@@ -32,46 +24,19 @@
                                 </div>
                             </td>
 
-                            <template v-if="total.first > 18">
-                                <td class="text-center wrapper-color-block wrapper-more-green ">
-                                    <div class="more-green">
-                                        {{ total.first }}
-                                    </div>
-                                </td>
-                            </template>
-                            <template v-else-if="total.first < 18 && total.first > 12">
-                                <td class="text-center wrapper-color-block wrapper-less-green ">
-                                    <div class="less-green">
-                                        {{ total.first }}
-                                    </div>
-                                </td>
-                            </template>
-                            <template v-else>
+                            <template>
                                 <td class="text-center wrapper-color-block wrapper-not-green ">
                                     <div class="not-green">
-                                        {{ total.first }}
+                                        {{ total.first }} / {{countGames}}
                                     </div>
                                 </td>
                             </template>
 
-                            <template v-if="total.second > 18">
-                                <td class="text-center wrapper-color-block wrapper-more-green ">
-                                    <div class="more-green">
-                                        {{ total.second }}
-                                    </div>
-                                </td>
-                            </template>
-                            <template v-else-if="total.second < 18 && total.second > 12">
-                                <td class="text-center wrapper-color-block wrapper-less-green ">
-                                    <div class="less-green">
-                                        {{ total.second }}
-                                    </div>
-                                </td>
-                            </template>
-                            <template v-else>
+
+                            <template>
                                 <td class="text-center wrapper-color-block wrapper-not-green ">
                                     <div class="not-green">
-                                        {{ total.second }}
+                                        {{ total.second }} / {{countGames}}
                                     </div>
                                 </td>
                             </template>
@@ -84,24 +49,10 @@
                                     {{ total.value }}
                                 </div>
                             </td>
-                            <template v-if="total.number > 18">
-                                <td class="text-center wrapper-color-block wrapper-more-green ">
-                                    <div class="more-green">
-                                        {{ total.number }}
-                                    </div>
-                                </td>
-                            </template>
-                            <template v-else-if="total.number < 18 && total.number > 12">
-                                <td class="text-center wrapper-color-block wrapper-less-green ">
-                                    <div class="less-green">
-                                        {{ total.number }}
-                                    </div>
-                                </td>
-                            </template>
-                            <template v-else>
+                            <template>
                                 <td class="text-center wrapper-color-block wrapper-not-green ">
                                     <div class="not-green">
-                                        {{ total.number }}
+                                       {{ total.number }} / {{countGames}}
                                     </div>
                                 </td>
                             </template>
@@ -118,11 +69,18 @@ export default {
     props: {
         items: Array,
         isFor: Boolean,
-        headerFor: String
+        headerFor: String,
+        countGames: Number,
+        reverseArray: Boolean
     },
     created() {
-        if (this.isFor) {
+        if (this.isFor && this.reverseArray) {
             this.items.sort((a, b) => {
+                if (parseFloat(a.value) < parseFloat(b.value)) return 1;
+                else return -1;
+            });
+        } else {
+             this.items.sort((a, b) => {
                 if (parseFloat(a.value) > parseFloat(b.value)) return 1;
                 else return -1;
             });
@@ -131,4 +89,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

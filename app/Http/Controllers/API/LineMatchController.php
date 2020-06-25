@@ -18,6 +18,8 @@ class LineMatchController extends Controller
         // https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true — получение чемпионатов
         // https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true — получение всех матчей
         //https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=50&tf=2200000&tz=6&antisports=188&mode=4&subGames=240546650&country=1&partner=51&getEmpty=true — subgames
+        //"http://1xbet.com/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&virtualSports=true " - 1xbet champs
+        //https://1xbet.com/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&getEmpty=true - line 1xbet
         $opts = array(
             'http' => array(
                 'method' => "GET",
@@ -25,7 +27,7 @@ class LineMatchController extends Controller
             )
         );
         $context = stream_context_create($opts);
-        $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true", false, $context), true);
+        $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&getEmpty=true", false, $context), true);
         $matches = $url['Value'];
         //return $matches;
         $normallyArrayMatches = ['champs' => []];
@@ -53,7 +55,7 @@ class LineMatchController extends Controller
             $individualTotalSecondArray = [];
 
             if (!isset($normallyMatch['plus'])) {
-                $normallyMatch['plus'] = '+' . $match['EC'] ?? '—';
+                if (isset($match['EC'])) $normallyMatch['plus'] = '+' . $match['EC'] ?? '—';
             }
             $normallyMatch['P1'] = $match['E'][0]['C'] ?? '—';
             $normallyMatch['P2'] = $match['E'][1]['C'] ?? '—';
@@ -256,7 +258,7 @@ class LineMatchController extends Controller
             )
         );
         $context = stream_context_create($opts);
-        $response = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true ", false, $context), true);
+        $response = json_decode(file_get_contents("http://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&virtualSports=true  ", false, $context), true);
         $champs = $response['Value'];
         $lineChamps = [];
         foreach ($champs as $champ) {
@@ -277,8 +279,12 @@ class LineMatchController extends Controller
         $forArray = json_decode($request->forArray);
         $individualTotalFirstArray = json_decode($request->individualTotalFirstArray);
         $individualTotalSecondArray = json_decode($request->individualTotalSecondArray);
-
-        $coopMatch = app('App\Http\Controllers\API\MatchController')->getCooperativeMatches($request->player1, $request->player2, $request->champName);
+        $champName = $request->champName;
+        if ($champName == 'Mini Table Tennis. Женщины' || $champName == 'Mini Table Tennis') {
+            $coopMatch = app('App\Http\Controllers\API\MatchController')->getCooperativeMatches($request->player1, $request->player2, $champName, $request->countMatches, true);
+        } else {
+            $coopMatch = app('App\Http\Controllers\API\MatchController')->getCooperativeMatches($request->player1, $request->player2, null, $request->countMatches, true);
+        }
         if (isset($coopMatch['mergeGames'])) {
             $coopMatches = $coopMatch['mergeGames'];
             $response = [
@@ -348,7 +354,6 @@ class LineMatchController extends Controller
                 array_push($individualTotalSecondMore, $this->checkPassedTotalMore($individualTotalSecondArray, $scoreSecond));
                 array_push($individualTotalSecondLess, $this->checkPassedTotalLess($individualTotalSecondArray, $scoreSecond));
             }
-
             $response['total'] = $this->normallyView($totalMore, $totalLess);
             $response['individualTotalFirst'] = $this->normallyView($individualTotalFirstMore, $individualTotalFirstLess);
             $response['individualTotalSecond'] = $this->normallyView($individualTotalSecondMore, $individualTotalSecondLess);
@@ -356,7 +361,7 @@ class LineMatchController extends Controller
             $response['forSecond'] = $this->normallyViewFor($forSecondArray);
             return response()->json($response, 200);
         }
-        return response()->json([], 200); 
+        return response()->json([], 200);
     }
     private function checkPassedFor($lineFors, $for)
     {
@@ -366,16 +371,16 @@ class LineMatchController extends Controller
             if ($lineFor > 0) {
                 $currentFor += $lineFor;
             } else if ($lineFor < 0) {
-                $currentFor -= $lineFor;
+                $currentFor += $lineFor;
+            } else if ($lineFor == 0) {
+                $currentFor += $lineFor;
             }
 
-            if ($currentFor > 0) {
-                $array = [
-                    'value' => $currentFor,
-                    'linetotal' => strval($lineFor)
-                ];
-                array_push($response, $array);
-            }
+            $array = [
+                'value' => $currentFor,
+                'linetotal' => strval($lineFor)
+            ];
+            array_push($response, $array);
         }
         return $response;
     }

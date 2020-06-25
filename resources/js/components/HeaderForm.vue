@@ -17,6 +17,7 @@
                 background-color="#3C4655"
                 append-icon=""
                 class="firstSportsmen"
+                clearable
             />
             <v-autocomplete
                 v-model.trim="player2"
@@ -34,6 +35,7 @@
                 background-color="#3C4655"
                 append-icon=""
                 class="secondSportsmen"
+                clearable
             />
             <v-autocomplete
                 v-model.trim="tourney"
@@ -49,6 +51,7 @@
                 append-icon=""
                 background-color="#3C4655"
                 class="champ"
+                clearable
             />
             <v-autocomplete
                 v-model.trim="count"
@@ -63,6 +66,7 @@
                 dense
                 background-color="#3C4655"
                 class="count"
+                clearable
             />
             <v-btn
                 :loading="loadingMatches"
@@ -125,7 +129,7 @@ export default {
     data() {
         return {
             ticksLabels: ["10", "20", "30", "40"],
-            tourney: null,
+            tourney: undefined,
             isLoading1: false,
             isLoading2: false,
             player1: null,
@@ -136,117 +140,26 @@ export default {
             searchSportsmen2: null,
             matches: [],
             champs: [],
-            count: "",
+            count: 10,
             lastUpdateDate: "",
             loadingMatches: false,
             numbers: [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27,
-                28,
-                29,
-                30,
-                31,
-                32,
-                33,
-                34,
-                35,
-                36,
-                37,
-                38,
-                39,
-                40,
-                41,
-                42,
-                43,
-                44,
-                45,
-                46,
-                47,
-                48,
-                49,
-                50,
-                51,
-                52,
-                53,
-                54,
-                55,
-                56,
-                57,
-                58,
-                59,
-                60,
-                61,
-                62,
-                63,
-                64,
-                65,
-                66,
-                67,
-                68,
-                69,
-                70,
-                71,
-                72,
-                73,
-                74,
-                75,
-                76,
-                77,
-                78,
-                79,
-                80,
-                81,
-                82,
-                83,
-                84,
-                85,
-                86,
-                87,
-                88,
-                89,
-                90,
-                91,
-                92,
-                93,
-                94,
-                95,
-                96,
-                97,
-                98,
-                99,
-                100
+               10,
+               15,
+               20,
+               25,
+               30,
+               35,
+               40,
+               45,
+               50
             ],
             historyMatches: null
         };
     },
     async created() {
-        this.champs = await API.getAllChamps();
+        let response = await API.getAllChamps();
+        this.champs = Object.values(response);
         const saveHistorySearch = JSON.parse(
             localStorage.getItem("historySearch")
         );
@@ -261,7 +174,8 @@ export default {
                 player1: this.player1.name,
                 player2: this.player2.name,
                 champName: this.tourney,
-                countMatches: this.count
+                countMatches: this.count,
+                coopChamps: true,
             };
             this.$emit('search', data);
         },

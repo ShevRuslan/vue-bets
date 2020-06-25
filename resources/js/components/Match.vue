@@ -8,7 +8,7 @@
                             </div>
                             <span class="champ-name">{{ match.champName }}</span>
                         </div>
-                        <div>
+                        <div class="match-player">
                             {{ this.nameMatch }}
                         </div>
         </div>
@@ -86,9 +86,17 @@ export default {
                 let second = arrayPlayers[1].trim();
                 if (first !== this.player.trim()) {
                     this.reverse = true;
-                    this.nameMatch = `${first}`;
+                    let nameMatchArray = first.split(' ');
+                    let family = nameMatchArray[1];
+                    let name = nameMatchArray[0];
+                    let country = nameMatchArray[2];
+                    this.nameMatch = `${family} ${name} ${country}`;
                 } else {
-                    this.nameMatch = `${second}`;
+                    let nameMatchArray = second.split(' ');
+                    let family = nameMatchArray[1];
+                    let name = nameMatchArray[0];
+                    let country = nameMatchArray[2];
+                    this.nameMatch = `${family} ${name} ${country}`
                 }
             }
 
@@ -164,7 +172,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .number-info {
     font-size: 15px;
     padding: 0 5px;
@@ -185,12 +193,10 @@ export default {
 .scores-match p {
     margin-bottom: 0px;
 }
-.name-match {
-    padding-right: 5px;
-    width: 1%;
-    white-space: nowrap;
-    font-size: 14px;
-}
+
+.match-player {
+        font-weight:  bold;
+    }
 @media screen and (max-width: 600px) {
     .v-list .v-list-item__action .title {
         font-size: 12px !important;

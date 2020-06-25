@@ -3,6 +3,18 @@
         <v-app-bar app color="#313A46" dark class="app-header d-flex flex-row">
             <v-toolbar-title class="app-name">TABLE TENNIS</v-toolbar-title>
             <HeaderForm v-if="this.$route.path == '/'" @search="search"></HeaderForm>
+            <v-menu offset-y content-class="elevation-1 pt-4 pb-0" z-index="0">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn class="ml-2" @click="getLastUpdateDate" v-on="on" v-bind="attrs" text>
+                        <v-icon>mdi-cog-outline</v-icon>
+                    </v-btn>
+                </template>
+                <v-list class="pb-0">
+                    <v-list-item>
+                        <v-list-item-title> Актуальность: {{ updateDate }} </v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-app-bar>
         <div class="wrapper-header__navbar">
             <Navbar @search="search" />
@@ -32,13 +44,20 @@ export default {
     data: () => ({
         historyMatches: null,
         snackbar: false,
+        updateDate: '',
     }),
+    async created () {
+        this.updateDate = await API.getLastUpdateDate();
+    },
     computed: {
         ...mapGetters(['getHistory'])
     },
     methods: {
         ...mapActions(['setResponse']),
         ...mapMutations(['setHistory']),
+        async getLastUpdateDate() {
+            this.updateDate = await API.getLastUpdateDate();
+        },
         search: async function(data) {
             this.searchByData(data);
         },
@@ -163,11 +182,11 @@ export default {
         font-family: 'Gemunu Libre SemiBold';
         font-style: normal;
         font-weight: 300;
-        font-size: 24px;
+        font-size: 16px;
         line-height: 26px;
         text-transform: uppercase;
         display: block;
-        width: 15%;
+        white-space: normal;
     }
 }
 </style>

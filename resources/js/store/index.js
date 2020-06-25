@@ -4,10 +4,11 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        response: [],
-        history: null,
-        lineChamps: null,
-        currentLineChamps: null,
+        response: [],//ответ для страницы ПОИСК
+        history: null,// история поиска
+        lineChamps: null,//чемпионаты из линии
+        currentLineChamps: null,//текущий чемпионат из линии
+        countLineMatches: 10,//количество матчей для получение в модалке
     },
     getters: {
         getMatches(state) {
@@ -21,6 +22,9 @@ const store = new Vuex.Store({
         },
         getCurrentLineChamps(state) {
             return state.currentLineChamps;
+        },
+        getCountLineMatches(state) {
+            return state.countLineMatches;
         }
     },
     mutations: {
@@ -35,6 +39,9 @@ const store = new Vuex.Store({
         },
         setCurrentLineChamps(state, payload) {
             state.currentLineChamps = payload;
+        },
+        setCountLineMatches(state, payload) {
+            state.countLineMatches = payload;
         }
     },
     actions: {
