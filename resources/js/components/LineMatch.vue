@@ -261,7 +261,6 @@ export default {
             bets: [],
             dialog: false,
             snackbar: false,
-            snackbarStatics: false,
             check: {}
         };
     },
@@ -279,7 +278,7 @@ export default {
                 champName: item.champName,
                 countMatches: this.getCountLineMatches,
                 coopChamps: false,
-                line: true,
+                line: true
             };
             this.search(data);
             this.bets = await API.getBetsMatch({
@@ -300,6 +299,7 @@ export default {
             this.currentStatics = await API.searchBySportsmen(data);
             this.snackbar = false;
         },
+        //получение текущего названия матча
         getMatchName(player) {
             const arrayName = player.split(' ');
             return `${arrayName[1]} ${arrayName[0][0]}.`;
@@ -321,10 +321,12 @@ export default {
                 }
             }
         },
+        //получить время
         getTime(date) {
             const oldDateArray = date.split(' ');
             return oldDateArray[1];
         },
+        //формирование даты
         getDate(date) {
             const oldDateArray = date.split(' ');
             const oldDateDayAndMonth = oldDateArray[0].split('.');
@@ -333,6 +335,7 @@ export default {
             const month = this.getNameMonth(parseInt(oldDateMonth));
             return `${oldDateDay} ${month}`;
         },
+        //получение месяца по числу
         getNameMonth(month) {
             switch (month) {
                 case 1:

@@ -80,55 +80,18 @@
                 Поиск
             </v-btn>
         </div>
-        <!-- <div class="wrapper-slider d-flex flex-row">
-            <v-slider
-                v-model="count"
-                label="Количество"
-                hide-details
-                track-color="#F1F3FA"
-                thumb-size="4"
-                class="wrapper-slider__slider"
-                color="#3688FC"
-                ticks="always"
-                tick-size="12"
-                :tick-labels="ticksLabels"
-                :min="10"
-                :max="40"
-                step="10"
-            ></v-slider>
-        </div> -->
-        <!-- <div class="wrapper-button-search d-flex flex-row">
-            <v-btn
-                :loading="loadingMatches"
-                color="#3688FC"
-                dense
-                @click="search"
-                height="100%"
-                width="104"
-                class="text-capitalize"
-            >
-                Поиск
-            </v-btn>
-            <v-snackbar v-model="snackbar" color="success" left bottom>
-                Матчи успешно получены!
-                <v-btn text @click="snackbar = false">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-snackbar>
-        </div> -->
     </div>
 </template>
 
 <script>
-import API from "../service/api";
-import { mapActions } from "vuex";
-import { mapMutations } from "vuex";
-import { mapGetters } from "vuex";
+import API from '../service/api';
+import { mapActions } from 'vuex';
+import { mapMutations } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
-    name: "HeaderForm",
+    name: 'HeaderForm',
     data() {
         return {
-            ticksLabels: ["10", "20", "30", "40"],
             tourney: undefined,
             isLoading1: false,
             isLoading2: false,
@@ -138,52 +101,32 @@ export default {
             entries2: [],
             searchSportsmen1: null,
             searchSportsmen2: null,
-            matches: [],
             champs: [],
             count: 10,
-            lastUpdateDate: "",
+            lastUpdateDate: '',
             loadingMatches: false,
-            numbers: [
-               10,
-               15,
-               20,
-               25,
-               30,
-               35,
-               40,
-               45,
-               50
-            ],
-            historyMatches: null
+            numbers: [10, 15, 20, 25, 30, 35, 40, 45, 50]
         };
     },
     async created() {
         let response = await API.getAllChamps();
         this.champs = Object.values(response);
-        const saveHistorySearch = JSON.parse(
-            localStorage.getItem("historySearch")
-        );
+        const saveHistorySearch = JSON.parse(localStorage.getItem('historySearch'));
         if (saveHistorySearch) {
             this.setHistory(saveHistorySearch);
         }
     },
     methods: {
-        ...mapMutations(["setHistory"]),
+        ...mapMutations(['setHistory']),
         search: async function() {
             const data = {
                 player1: this.player1.name,
                 player2: this.player2.name,
                 champName: this.tourney,
                 countMatches: this.count,
-                coopChamps: true,
+                coopChamps: true
             };
             this.$emit('search', data);
-        },
-        getLastUpdateDate: async function() {
-            this.loadingLastDate = true;
-            this.lastUpdateDate = await API.getLastUpdateDate();
-            this.dialog = true;
-            this.loadingLastDate = false;
         }
     },
     watch: {

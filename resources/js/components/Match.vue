@@ -2,35 +2,31 @@
     <tr>
         <td>
             <div class="slot-name-match">
-                        <div class="slot-date-champ">
-                            <div class="date">
-                                {{ this.date }}
-                            </div>
-                            <span class="champ-name">{{ match.champName }}</span>
-                        </div>
-                        <div class="match-player">
-                            {{ this.nameMatch }}
-                        </div>
-        </div>
+                <div class="slot-date-champ">
+                    <div class="date">
+                        {{ this.date }}
+                    </div>
+                    <span class="champ-name">{{ match.champName }}</span>
+                </div>
+                <div class="match-player">
+                    {{ this.nameMatch }}
+                </div>
+            </div>
         </td>
         <td class="text-left number-info">
             <template v-if="scoreFirst > scoreSecond">
                 <div class="scores-match">
-                    <p style="color:#33CC33">
-                        {{ this.scoreFirst }}:{{ this.scoreSecond }}
-                    </p>
+                    <p style="color:#33CC33">{{ this.scoreFirst }}:{{ this.scoreSecond }}</p>
                 </div>
             </template>
             <template v-else>
                 <div class="scores-match ">
-                    <p style="color:#FF0000">
-                        {{ this.scoreFirst }}:{{ this.scoreSecond }}
-                    </p>
+                    <p style="color:#FF0000">{{ this.scoreFirst }}:{{ this.scoreSecond }}</p>
                 </div>
             </template>
         </td>
         <td class="text-left number-info">{{ this.forFirst }}</td>
-        <td class="text-left number-info">{{ this.totalFirst }}:{{ this.totalSecond}}</td>
+        <td class="text-left number-info">{{ this.totalFirst }}:{{ this.totalSecond }}</td>
         <td class="text-left number-info">{{ this.forSecond }}</td>
         <td class="text-left number-info">{{ this.total }}</td>
     </tr>
@@ -41,7 +37,7 @@ export default {
     props: {
         name: String,
         match: Object,
-        player: String,
+        player: String
     },
     name: 'Match',
     data() {
@@ -53,12 +49,12 @@ export default {
             totalSecond: 0,
             forFirst: 0,
             forSecond: 0,
-            info: "",
-            date: "",
+            info: '',
+            date: '',
             reverse: false,
-            nameMatch: "",
-            scoreFirst: "",
-            scoreSecond: "",
+            nameMatch: '',
+            scoreFirst: '',
+            scoreSecond: ''
         };
     },
     watch: {
@@ -66,22 +62,22 @@ export default {
             handler() {
                 this.createMatch();
             },
-            immediate: true,
+            immediate: true
         },
         match: {
             handler() {
                 this.createMatch();
             },
             immediate: true,
-            deep: true,
+            deep: true
         }
     },
     methods: {
         createMatch() {
             this.clearInfo();
-            
+
             if (this.player != undefined) {
-                const arrayPlayers = this.match.nameGame.split("-");
+                const arrayPlayers = this.match.nameGame.split('-');
                 let first = arrayPlayers[0].trim();
                 let second = arrayPlayers[1].trim();
                 if (first !== this.player.trim()) {
@@ -96,7 +92,7 @@ export default {
                     let family = nameMatchArray[1];
                     let name = nameMatchArray[0];
                     let country = nameMatchArray[2];
-                    this.nameMatch = `${family} ${name} ${country}`
+                    this.nameMatch = `${family} ${name} ${country}`;
                 }
             }
 
@@ -138,16 +134,16 @@ export default {
             this.forFirst = this.totalFirst - this.totalSecond;
             this.forSecond = this.totalSecond - this.totalFirst;
 
-            if(this.forFirst > 0)  this.forFirst = '+' + this.forFirst;
+            if (this.forFirst > 0) this.forFirst = '+' + this.forFirst;
 
-            if(this.forSecond > 0)  this.forSecond = '+' + this.forSecond;
+            if (this.forSecond > 0) this.forSecond = '+' + this.forSecond;
 
             if (this.match.add_info != null) {
-                if (this.match.add_info.trim() != "") {
+                if (this.match.add_info.trim() != '') {
                     try {
                         let arrayInfo = JSON.parse(this.match.add_info);
                         arrayInfo.forEach(info => {
-                            this.info += Object.values(info)[0] + " .";
+                            this.info += Object.values(info)[0] + ' .';
                         });
                     } catch (e) {
                         this.info = this.match.add_info;
@@ -156,17 +152,17 @@ export default {
             }
         },
         clearInfo() {
-            this.total= 0;
-            this.totalFirst= 0;
-            this.totalSecond= 0;
-            this.forFirst= 0;
-            this.forSecond= 0;
-            this.info= "";
-            this.date= "";
-            this.reverse= false;
-            this.nameMatch= "";
-            this.scoreFirst= "";
-            this.scoreSecond= "";
+            this.total = 0;
+            this.totalFirst = 0;
+            this.totalSecond = 0;
+            this.forFirst = 0;
+            this.forSecond = 0;
+            this.info = '';
+            this.date = '';
+            this.reverse = false;
+            this.nameMatch = '';
+            this.scoreFirst = '';
+            this.scoreSecond = '';
         }
     }
 };
@@ -195,8 +191,8 @@ export default {
 }
 
 .match-player {
-        font-weight:  bold;
-    }
+    font-weight: bold;
+}
 @media screen and (max-width: 600px) {
     .v-list .v-list-item__action .title {
         font-size: 12px !important;

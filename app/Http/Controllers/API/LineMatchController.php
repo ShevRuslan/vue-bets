@@ -13,6 +13,7 @@ class LineMatchController extends Controller
     {
         $this->match = $match;
     }
+    //получение матчей с линии и формирование данных в нормальный вид из непонятонго жсона
     public function line(Request $request)
     {
         // https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true — получение чемпионатов
@@ -249,6 +250,7 @@ class LineMatchController extends Controller
         }
         return response()->json($normallyArrayMatches, 200);
     }
+    //получение всех чемпионатов с линии
     public function getLineChamps(Request $request)
     {
         $opts = array(
@@ -272,6 +274,7 @@ class LineMatchController extends Controller
         }
         return response()->json($lineChamps, 200);
     }
+    //получение и формирование таблицы ставок на основе совместных матчей
     public function getBetsMatch(Request $request)
     {
         $player = $request->player1;
@@ -363,6 +366,7 @@ class LineMatchController extends Controller
         }
         return response()->json([], 200);
     }
+    //формирование фора
     private function checkPassedFor($lineFors, $for)
     {
         $response = [];
@@ -384,6 +388,7 @@ class LineMatchController extends Controller
         }
         return $response;
     }
+    //формирования тотала больше
     private function checkPassedTotalMore($lineTotals, $total)
     {
         $response = [];
@@ -396,6 +401,7 @@ class LineMatchController extends Controller
         }
         return $response;
     }
+    //формирование тотала меньше
     private function checkPassedTotalLess($lineTotals, $total)
     {
         $response = [];
@@ -408,6 +414,7 @@ class LineMatchController extends Controller
         }
         return $response;
     }
+    //проверка массива значение
     private function checkArray($array, $name)
     {
         $response = false;
@@ -421,6 +428,7 @@ class LineMatchController extends Controller
         }
         return $response;
     }
+    //нормализация вида фора
     private function normallyViewFor($array)
     {
         $normallyArray = [];
@@ -447,6 +455,7 @@ class LineMatchController extends Controller
         }
         return $normallyArray;
     }
+    //нормализация вида остальных данных
     private function normallyView($firstArray, $secondArray)
     {
         $normallyArray = [];

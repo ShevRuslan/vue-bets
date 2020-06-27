@@ -6,23 +6,17 @@
         <td class="text-left number-info">
             <template v-if="scoreFirst > scoreSecond">
                 <div class="scores-match">
-                    <p style="color:#33CC33">
-                        {{ this.scoreFirst }}:{{ this.scoreSecond }}
-                    </p>
+                    <p style="color:#33CC33">{{ this.scoreFirst }}:{{ this.scoreSecond }}</p>
                 </div>
             </template>
             <template v-else>
                 <div class="scores-match ">
-                    <p style="color:#FF0000">
-                        {{ this.scoreFirst }}:{{ this.scoreSecond }}
-                    </p>
+                    <p style="color:#FF0000">{{ this.scoreFirst }}:{{ this.scoreSecond }}</p>
                 </div>
             </template>
         </td>
         <td class="text-left number-info">{{ this.forFirst }}</td>
-        <td class="text-left number-info">
-            {{ this.totalFirst }}:{{ this.totalSecond }}
-        </td>
+        <td class="text-left number-info">{{ this.totalFirst }}:{{ this.totalSecond }}</td>
         <td class="text-left number-info">{{ this.forSecond }}</td>
         <td class="text-left number-info">{{ this.total }}</td>
         <td class="text-left string-info">{{ match.champName }}</td>
@@ -31,7 +25,7 @@
 
 <script>
 export default {
-    name: "CoopMatch",
+    name: 'CoopMatch',
     props: {
         name: String,
         match: Object,
@@ -46,12 +40,12 @@ export default {
             totalSecond: 0,
             forFirst: 0,
             forSecond: 0,
-            info: "",
-            date: "",
+            info: '',
+            date: '',
             reverse: false,
-            nameMatch: "",
-            scoreFirst: "",
-            scoreSecond: ""
+            nameMatch: '',
+            scoreFirst: '',
+            scoreSecond: ''
         };
     },
     watch: {
@@ -74,7 +68,7 @@ export default {
             this.clearInfo();
 
             if (this.player != undefined) {
-                const arrayPlayers = this.match.nameGame.split("-");
+                const arrayPlayers = this.match.nameGame.split('-');
                 let first = arrayPlayers[0].trim();
                 let second = arrayPlayers[1].trim();
                 if (first !== this.player.trim()) {
@@ -123,16 +117,16 @@ export default {
             this.forFirst = this.totalFirst - this.totalSecond;
             this.forSecond = this.totalSecond - this.totalFirst;
 
-            if (this.forFirst > 0) this.forFirst = "+" + this.forFirst;
+            if (this.forFirst > 0) this.forFirst = '+' + this.forFirst;
 
-            if (this.forSecond > 0) this.forSecond = "+" + this.forSecond;
+            if (this.forSecond > 0) this.forSecond = '+' + this.forSecond;
 
             if (this.match.add_info != null) {
-                if (this.match.add_info.trim() != "") {
+                if (this.match.add_info.trim() != '') {
                     try {
                         let arrayInfo = JSON.parse(this.match.add_info);
                         arrayInfo.forEach(info => {
-                            this.info += Object.values(info)[0] + " .";
+                            this.info += Object.values(info)[0] + ' .';
                         });
                     } catch (e) {
                         this.info = this.match.add_info;
@@ -146,12 +140,12 @@ export default {
             this.totalSecond = 0;
             this.forFirst = 0;
             this.forSecond = 0;
-            this.info = "";
-            this.date = "";
+            this.info = '';
+            this.date = '';
             this.reverse = false;
-            this.nameMatch = "";
-            this.scoreFirst = "";
-            this.scoreSecond = "";
+            this.nameMatch = '';
+            this.scoreFirst = '';
+            this.scoreSecond = '';
         }
     }
 };

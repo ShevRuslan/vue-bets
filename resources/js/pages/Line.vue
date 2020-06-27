@@ -35,7 +35,7 @@ export default {
     },
     async created() {
         //получение матчей с линии
-        this.getLineMatches();
+        this.getLineTourneys();
         //создание таймера на каждую минуту для получение линии
         this.getMatches();
     },
@@ -51,31 +51,22 @@ export default {
     },
     methods: {
         ...mapMutations(['setLineChamps']),
-
+        //получение линии раз в минуту
         getMatches: async function() {
             this.loading = true;
-            const response = await API.getLineMatches();
+            const response = await API.getLineMatches(); //получение матчей с линии
             if (!response.error) {
                 this.champs = response;
                 this.loading = false;
             }
-            this.getLineMatches();
+            this.getLineTourneys();
             this.timer = setTimeout(this.getMatches, 60000);
         },
-        async getLineMatches() {
+        //получение чемпионатов с линии
+        async getLineTourneys() {
             const response = await API.getLineChamps();
             if (!response.error) this.setLineChamps(response);
         },
-        changeChamp() {
-            this.matches = this.champs[this.currentChamp];
-        },
-        exsistMatch(id) {
-            let exsist = null;
-            this.fetchMatches.forEach((element, index) => {
-                if (element.id == id) exsist = index;
-            });
-            return exsist;
-        }
     }
 };
 </script>

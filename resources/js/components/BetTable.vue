@@ -26,18 +26,13 @@
 
                             <template>
                                 <td class="text-center wrapper-color-block wrapper-not-green ">
-                                    <div class="not-green">
-                                        {{ total.first }} / {{countGames}}
-                                    </div>
+                                    <div class="not-green">{{ total.first }} / {{ countGames }}</div>
                                 </td>
                             </template>
 
-
                             <template>
                                 <td class="text-center wrapper-color-block wrapper-not-green ">
-                                    <div class="not-green">
-                                        {{ total.second }} / {{countGames}}
-                                    </div>
+                                    <div class="not-green">{{ total.second }} / {{ countGames }}</div>
                                 </td>
                             </template>
                         </tr>
@@ -51,9 +46,7 @@
                             </td>
                             <template>
                                 <td class="text-center wrapper-color-block wrapper-not-green ">
-                                    <div class="not-green">
-                                       {{ total.number }} / {{countGames}}
-                                    </div>
+                                    <div class="not-green">{{ total.number }} / {{ countGames }}</div>
                                 </td>
                             </template>
                         </tr>
@@ -80,7 +73,7 @@ export default {
                 else return -1;
             });
         } else {
-             this.items.sort((a, b) => {
+            this.items.sort((a, b) => {
                 if (parseFloat(a.value) > parseFloat(b.value)) return 1;
                 else return -1;
             });
@@ -89,5 +82,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

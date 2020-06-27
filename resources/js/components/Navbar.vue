@@ -233,7 +233,7 @@ export default {
                 player2: item.player2,
                 champName: item.champName,
                 countMatches: item.countMatches,
-                coopChamps: true,
+                coopChamps: true
             };
             console.log(item);
             this.$emit('search', data);
