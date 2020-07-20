@@ -9,6 +9,7 @@ use App\Models\Match;
 use App\Models\Champ;
 use App\Models\Player;
 use Carbon\Carbon;
+use Exception;
 
 class Kernel extends ConsoleKernel
 {
@@ -47,8 +48,20 @@ class Kernel extends ConsoleKernel
                 )
             );
             $context = stream_context_create($opts);
-            $url = json_decode(file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context), true);
-            $response = $url['results'];
+            $response = null;
+            $countRequest = 0;
+            while(true) {
+                try {
+                    $url = json_decode(file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context), true);
+                    $response = $url['results'];
+                    break;
+                }
+                catch (Exception $e) {
+                    $countRequest++;
+                    if($countRequest == 10) break;
+                    continue;
+                }
+            }
             
             if(isset($response)) {
             

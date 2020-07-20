@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;;
+namespace App\Http\Controllers\API;
 
 use App\Models\Champ;
 use App\Http\Controllers\Controller;
@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Match;
 use App\Models\Player;
 use App\Models\Date;
+use Exception;
 
 class MatchController extends Controller
 {
@@ -261,6 +262,7 @@ class MatchController extends Controller
     //получение последней даты обновления
     public function getLastUpdateDate(Request $request)
     {
+
         $lastDateObject = $this->date->first();
         return $lastDateObject->date;
     }
