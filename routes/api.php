@@ -28,3 +28,5 @@ Route::get('/line', 'API\LineMatchController@line');
 Route::get('/getLineChamps', 'API\LineMatchController@getLineChamps');
 //Получение данных для таблицы ставок 
 Route::get('/getBetsMatch', 'API\LineMatchController@getBetsMatch');
+//Получение общих соперников и матчей с ними
+Route::get('/getCommonRivals', 'API\MatchController@getCommonRivals');

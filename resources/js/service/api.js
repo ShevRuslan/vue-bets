@@ -73,5 +73,10 @@ class Api {
     const response = await this.getResource(url, null, 'GET');
     return response;
   }
+  getRivalsMatch = async (data) => {
+    let url = 'getCommonRivals?' + this.createGetParams(data);
+    const response = await this.getResource(url, null, 'GET');
+    return response;
+  }
 }
 export default new Api();

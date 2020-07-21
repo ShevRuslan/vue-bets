@@ -63,6 +63,8 @@ export default {
         },
         searchByData: async function(data) {
             const matches = await API.searchBySportsmen(data);
+            const rivalsMatches = await API.getRivalsMatch(data);
+            matches[3] = rivalsMatches;
             this.setResponse(matches);
             let date = new Date();
             let month = date.getMonth() + 1;

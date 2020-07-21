@@ -9,7 +9,6 @@ use App\Models\Match;
 use App\Models\Champ;
 use App\Models\Player;
 use Carbon\Carbon;
-use Exception;
 
 class Kernel extends ConsoleKernel
 {
@@ -56,9 +55,22 @@ class Kernel extends ConsoleKernel
                     $response = $url['results'];
                     break;
                 }
-                catch (Exception $e) {
+                catch (Throwable  $e) {
                     $countRequest++;
-                    if($countRequest == 10) break;
+                    if($countRequest == 50) break;
+                    sleep(5);
+                    continue;
+                }
+                catch (Error  $e) {
+                    $countRequest++;
+                    if($countRequest == 50) break;
+                    sleep(5);
+                    continue;
+                }
+                catch (Exception  $e) {
+                    $countRequest++;
+                    if($countRequest == 50) break;
+                    sleep(5);
                     continue;
                 }
             }

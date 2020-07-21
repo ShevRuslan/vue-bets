@@ -1,10 +1,12 @@
 <template>
     <div>
         <div class="header">
-            <div class="header__title" v-if="nameCard == ''">
-                {{ getNameCard(firstPlayer) }}-{{ getNameCard(secondPlayer) }}
-            </div>
-            <div class="header__title" v-if="nameCard != ''">{{ nameCard }}</div>
+            <template v-if="existName">
+                <div class="header__title" v-if="nameCard == ''">
+                    {{ getNameCard(firstPlayer) }}-{{ getNameCard(secondPlayer) }}
+                </div>
+                <div class="header__title" v-if="nameCard != ''">{{ nameCard }}</div>
+            </template>
             <div class="header__score">
                 <template v-if="winFirst < winSecond">
                     <v-chip color="#FF0000" text-color="white" class="score__chip">
@@ -75,6 +77,10 @@ export default {
         winFirst: Number,
         winSecond: Number,
         matches: Array,
+        existName: {
+            type: Boolean,
+            default: true
+        },
         nameCard: {
             type: String,
             default: ''
