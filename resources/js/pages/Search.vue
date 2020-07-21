@@ -3,21 +3,30 @@
         <v-container fluid class="fill-height align-start wrapper-page-search">
             <v-row justify="center" align="center">
                 <v-col class="pa-0">
-                    <div class="wrapper-tables" v-if="getMatches.length > 0">
-                        <div class="wrapper-coop-matches">
-                            <CooperativeMatch
-                                :firstPlayer="cooperativePlayers.player1"
-                                :secondPlayer="cooperativePlayers.player2"
-                                :winFirst="cooperativePlayers.win1"
-                                :winSecond="cooperativePlayers.win2"
-                                :matches="cooperativePlayers.mergeGames"
-                            ></CooperativeMatch>
+                    <div class="wrapper" v-if="getMatches.length > 0">
+                        <div class="wrapper-tables">
+                            <div class="wrapper-coop-matches">
+                                <CooperativeMatch
+                                    :firstPlayer="cooperativePlayers.player1"
+                                    :secondPlayer="cooperativePlayers.player2"
+                                    :winFirst="cooperativePlayers.win1"
+                                    :winSecond="cooperativePlayers.win2"
+                                    :matches="cooperativePlayers.mergeGames"
+                                ></CooperativeMatch>
+                            </div>
+                            <div class="wrapper-firstplayer-matches">
+                                <CardMatches :name="firstPlayer.name" :matches="firstPlayer.matches"></CardMatches>
+                            </div>
+                            <div class="wrapper-secondplayer-matches">
+                                <CardMatches :name="secondPlayer.name" :matches="secondPlayer.matches"></CardMatches>
+                            </div>
                         </div>
-                        <div class="wrapper-firstplayer-matches">
-                            <CardMatches :name="firstPlayer.name" :matches="firstPlayer.matches"></CardMatches>
-                        </div>
-                        <div class="wrapper-secondplayer-matches">
-                            <CardMatches :name="secondPlayer.name" :matches="secondPlayer.matches"></CardMatches>
+                        <div class="wrapper-common-rivals mt-10">
+                            <CommonRivals
+                                :matches="commonRivals"
+                                :firstPlayer="firstPlayer.name"
+                                :secondPlayer="secondPlayer.name"
+                            ></CommonRivals>
                         </div>
                     </div>
                 </v-col>
@@ -29,12 +38,14 @@
 <script>
 import CooperativeMatch from '../components/CooperativeMatch';
 import CardMatches from '../components/CardMatches';
+import CommonRivals from '../components/CommonRivals';
 import { mapGetters } from 'vuex';
 export default {
     name: 'Search',
     components: {
         CooperativeMatch,
-        CardMatches
+        CardMatches,
+        CommonRivals
     },
     data() {
         return {};
@@ -49,6 +60,9 @@ export default {
         },
         cooperativePlayers() {
             return this.getMatches[2];
+        },
+        commonRivals() {
+            return this.getMatches[3];
         }
     }
 };
@@ -66,6 +80,7 @@ export default {
             margin: 0px;
         }
     }
+    .wrapper-common-rivals,
     .wrapper-tables {
         display: flex;
         justify-content: space-between;

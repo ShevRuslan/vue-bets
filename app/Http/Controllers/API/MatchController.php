@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Match;
 use App\Models\Player;
 use App\Models\Date;
-use Exception;
 
 class MatchController extends Controller
 {
@@ -32,19 +31,21 @@ class MatchController extends Controller
         $player = $this->player->where('name', 'like', '%' . $name . '%')->get();
         return response()->json($player, 200);
     }
+    //Запрос на поиск матчей с другими соперниками и совместные матчи
     public function commonMatch(Request $request)
     {
-        $countMatches = $request->countMatches;
-        $champName = $request->champName;
-        $coopChamps = $request->coopChamps;
-        $line = $request->line ?? false;
+        $countMatches = $request->countMatches; //Количество матчей 
+        $champName = $request->champName;  //Чемпионат
+        $coopChamps = $request->coopChamps;  //
+        $line = $request->line ?? false; // Флаг на матч из линии
         $array = $this->getMatchesSportsmen($request->player1, $request->player2, $champName, $countMatches, $coopChamps, $line);
         return response()->json($array, 200);
     }
     //получение совместных игр
     public function getCooperativeMatches($player1, $player2, $champName, $count, $line)
     {
-        $count = $count / 2;
+        $count = $count / 2; //количество матчей
+
         //Если передано имя игроков, а не объект с базы
         if (is_string($player1)) {
             $player1 = $this->player->where('name', $player1)->first();
@@ -52,6 +53,7 @@ class MatchController extends Controller
         if (is_string($player2)) {
             $player2 = $this->player->where('name', $player2)->first();
         }
+        //Если игроков нет - возращаем пустой массив
         if (!isset($player1) || !isset($player2)) {
             return array();
         }
@@ -169,19 +171,34 @@ class MatchController extends Controller
         $player2 = $this->player->where('name', $player2)->first();
         $last1 = [];
         $last2 = [];
-        if ($champName !== 'null' && $champName !== "undefined" && $coopChamps == 'true') {
-            if ($line) {
+
+        if($line) {
+            if ($champName == 'Mini Table Tennis. Женщины' || $champName == 'Mini Table Tennis') {
                 if (isset($player1)) {
-                    $last1  = $this->match->where('champName', $champName)->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player1) {
+                    $last1  = $this->match->where('champName', $champName)->where(function ($query) use ($player1) {
                         $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
                     })->orderBy('date', 'desc')->take($countMatches)->get();
                 }
                 if (isset($player2)) {
-                    $last2  = $this->match->where('champName', $champName)->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player2) {
+                    $last2  = $this->match->where('champName', $champName)->where(function ($query) use ($player2) {
                         $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
                     })->orderBy('date', 'desc')->take($countMatches)->get();
                 }
             } else {
+                if (isset($player1)) {
+                    $last1  = $this->match->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player1) {
+                        $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+                    })->orderBy('date', 'desc')->take($countMatches)->get();
+                }
+                if (isset($player2)) {
+                    $last2  = $this->match->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player2) {
+                        $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+                    })->orderBy('date', 'desc')->take($countMatches)->get();
+                }
+            }
+        }
+        else {
+            if ($champName !== 'null' && $champName !== "undefined" ) {
                 if (isset($player1)) {
                     $last1  = $this->match->where('champName', $champName)->where(function ($query) use ($player1) {
                         $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
@@ -193,32 +210,7 @@ class MatchController extends Controller
                     })->orderBy('date', 'desc')->take($countMatches)->get();
                 }
             }
-        } else {
-            if ($line) {
-                if ($champName == 'Mini Table Tennis. Женщины' || $champName == 'Mini Table Tennis') {
-                    if (isset($player1)) {
-                        $last1  = $this->match->where('champName', $champName)->where(function ($query) use ($player1) {
-                            $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
-                        })->orderBy('date', 'desc')->take($countMatches)->get();
-                    }
-                    if (isset($player2)) {
-                        $last2  = $this->match->where('champName', $champName)->where(function ($query) use ($player2) {
-                            $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
-                        })->orderBy('date', 'desc')->take($countMatches)->get();
-                    }
-                } else {
-                    if (isset($player1)) {
-                        $last1  = $this->match->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player1) {
-                            $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
-                        })->orderBy('date', 'desc')->take($countMatches)->get();
-                    }
-                    if (isset($player2)) {
-                        $last2  = $this->match->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player2) {
-                            $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
-                        })->orderBy('date', 'desc')->take($countMatches)->get();
-                    }
-                }
-            } else {
+            else {
                 if (isset($player1)) {
                     $last1  = $this->match->where(function ($query) use ($player1) {
                         $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
@@ -231,6 +223,56 @@ class MatchController extends Controller
                 }
             }
         }
+
+        // if ($champName !== 'null' && $champName !== "undefined" && $coopChamps == 'true') {
+        //     if (isset($player1)) {
+        //         $last1  = $this->match->where('champName', $champName)->where(function ($query) use ($player1) {
+        //             $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+        //         })->orderBy('date', 'desc')->take($countMatches)->get();
+        //     }
+        //     if (isset($player2)) {
+        //         $last2  = $this->match->where('champName', $champName)->where(function ($query) use ($player2) {
+        //             $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+        //         })->orderBy('date', 'desc')->take($countMatches)->get();
+        //     }
+        // } else {
+        //     if ($line) {
+        //         if ($champName == 'Mini Table Tennis. Женщины' || $champName == 'Mini Table Tennis') {
+        //             if (isset($player1)) {
+        //                 $last1  = $this->match->where('champName', $champName)->where(function ($query) use ($player1) {
+        //                     $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+        //                 })->orderBy('date', 'desc')->take($countMatches)->get();
+        //             }
+        //             if (isset($player2)) {
+        //                 $last2  = $this->match->where('champName', $champName)->where(function ($query) use ($player2) {
+        //                     $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+        //                 })->orderBy('date', 'desc')->take($countMatches)->get();
+        //             }
+        //         } else {
+        //             if (isset($player1)) {
+        //                 $last1  = $this->match->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player1) {
+        //                     $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+        //                 })->orderBy('date', 'desc')->take($countMatches)->get();
+        //             }
+        //             if (isset($player2)) {
+        //                 $last2  = $this->match->where('champName', '!=', 'Mini Table Tennis. Женщины')->where('champName', '!=', 'Mini Table Tennis')->where(function ($query) use ($player2) {
+        //                     $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+        //                 })->orderBy('date', 'desc')->take($countMatches)->get();
+        //             }
+        //         }
+        //     } else {
+        //         if (isset($player1)) {
+        //             $last1  = $this->match->where(function ($query) use ($player1) {
+        //                 $query->where('opp1', $player1->id)->orWhere('opp2', $player1->id);
+        //             })->orderBy('date', 'desc')->take($countMatches)->get();
+        //         }
+        //         if (isset($player2)) {
+        //             $last2  = $this->match->where(function ($query) use ($player2) {
+        //                 $query->where('opp1', $player2->id)->orWhere('opp2', $player2->id);
+        //             })->orderBy('date', 'desc')->take($countMatches)->get();
+        //         }
+        //     }
+        // }
         $firstPlayerArray = [];
         $secondPlayerArray = [];
         $mergePlayersArray = $this->getCooperativeMatches($player1, $player2, $champName, $countMatches, $line);
@@ -248,8 +290,57 @@ class MatchController extends Controller
                 'matches' => $last2,
             );
         }
-        $array = array($firstPlayerArray, $secondPlayerArray, $mergePlayersArray);
+        $commonRivals = $this->getEqualPlayers($firstPlayerArray, $secondPlayerArray, $champName, $countMatches, $line);
+        $array = array($firstPlayerArray, $secondPlayerArray, $mergePlayersArray, $commonRivals);
         return $array;
+    }
+
+    private function getEqualPlayers($arrayFirst, $arraySecond, $champName, $countMatches, $line) {
+        $objectRivalsMatch = [
+            $arrayFirst['name'] => [],
+            $arraySecond['name'] => [],
+        ];
+        $rivals = $this->comparingArraysValues($arrayFirst, $arraySecond);
+        foreach($rivals as $rival) {
+            $firstPlayerRivals = $this->getCooperativeMatches($arrayFirst['name'], $rival,$champName, $countMatches, $line);
+            $secondPlayerRivals = $this->getCooperativeMatches($arraySecond['name'], $rival,$champName, $countMatches, $line);
+            array_push($objectRivalsMatch[ $arrayFirst['name']], $firstPlayerRivals);
+            array_push($objectRivalsMatch[ $arraySecond['name']], $secondPlayerRivals);
+        }
+        return $objectRivalsMatch;
+    }
+    private function comparingArraysValues($arrayFirst, $arraySecond) {
+        $firstPlayer = $arrayFirst['name'];
+        $firstPlayersRivals = [];
+        
+        foreach($arrayFirst['matches'] as $match) {
+            $arrayNameMatch = explode('-', $match->nameGame);
+            $rival = '';
+            if(trim($arrayNameMatch[0]) != $firstPlayer) {
+                $rival = trim($arrayNameMatch[0]);
+            }
+            else if(trim($arrayNameMatch[1]) != $firstPlayer) {
+                $rival = trim($arrayNameMatch[1]);
+            }
+            $existSecondPlayer = $this->searchInArray($arraySecond, $rival);
+            if($existSecondPlayer) array_push($firstPlayersRivals, $rival);
+        }
+        return array_unique($firstPlayersRivals);
+    }
+    
+    private function searchInArray($arrayMatches, $string) {
+        $exist = false;
+        $currentPlayer = $arrayMatches['name'];
+        foreach($arrayMatches['matches'] as $match) {
+            $arrayNameMatch = explode('-', $match->nameGame);
+            if(trim($arrayNameMatch[0]) != $currentPlayer && trim($arrayNameMatch[0]) == $string) {
+                $exist = true;
+            }
+            else if(trim($arrayNameMatch[1]) != $currentPlayer && trim($arrayNameMatch[1]) == $string) {
+                $exist = true;
+            }
+        }
+        return $exist;
     }
     //получение всех чемпионатов
     public function getAllChamps(Request $request)
@@ -262,7 +353,6 @@ class MatchController extends Controller
     //получение последней даты обновления
     public function getLastUpdateDate(Request $request)
     {
-
         $lastDateObject = $this->date->first();
         return $lastDateObject->date;
     }
