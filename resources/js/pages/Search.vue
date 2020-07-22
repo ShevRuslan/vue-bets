@@ -12,6 +12,8 @@
                                     :winFirst="cooperativePlayers.win1"
                                     :winSecond="cooperativePlayers.win2"
                                     :matches="cooperativePlayers.mergeGames"
+                                    :showGetRivalsMatch="true"
+                                    @closeInfoDialogRivals="closeInfoDialogRivals"
                                 ></CooperativeMatch>
                             </div>
                             <div class="wrapper-firstplayer-matches">
@@ -21,13 +23,15 @@
                                 <CardMatches :name="secondPlayer.name" :matches="secondPlayer.matches"></CardMatches>
                             </div>
                         </div>
-                        <div class="wrapper-common-rivals mt-10">
-                            <CommonRivals
-                                :matches="commonRivals"
-                                :firstPlayer="firstPlayer.name"
-                                :secondPlayer="secondPlayer.name"
-                            ></CommonRivals>
-                        </div>
+                        <CommonRivalsMatch
+                            v-if="commonRivals.length != 0"
+                            :dialog="dialogRivals"
+                            :commonRivals="commonRivals"
+                            :firstPlayer="firstPlayer.name"
+                            :secondPlayer="secondPlayer.name"
+                            @closeInfoDialog="closeInfoDialogRivals"
+                        >
+                        </CommonRivalsMatch>
                     </div>
                 </v-col>
             </v-row>
@@ -39,19 +43,23 @@
 import CooperativeMatch from '../components/CooperativeMatch';
 import CardMatches from '../components/CardMatches';
 import CommonRivals from '../components/CommonRivals';
+import CommonRivalsMatch from '../components/CommonRivalsMatch';
 import { mapGetters } from 'vuex';
 export default {
     name: 'Search',
     components: {
         CooperativeMatch,
         CardMatches,
-        CommonRivals
+        CommonRivals,
+        CommonRivalsMatch
     },
     data() {
-        return {};
+        return {
+            dialogRivals: false,
+        };
     },
     computed: {
-        ...mapGetters(['getMatches']),
+        ...mapGetters(['getMatches', 'getRivalsMatch']),
         firstPlayer() {
             return this.getMatches[0];
         },
@@ -62,7 +70,12 @@ export default {
             return this.getMatches[2];
         },
         commonRivals() {
-            return this.getMatches[3];
+            return this.getRivalsMatch;
+        }
+    },
+    methods: {
+        closeInfoDialogRivals(bool) {
+            this.dialogRivals = bool;
         }
     }
 };

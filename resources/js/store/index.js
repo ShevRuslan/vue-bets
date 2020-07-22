@@ -5,10 +5,12 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         response: [],//ответ для страницы ПОИСК
+        rivalsMatch: [],//матчи с общими соперниками для страницы ПОИСК
         history: null,// история поиска
         lineChamps: null,//чемпионаты из линии
         currentLineChamps: null,//текущий чемпионат из линии
-        countLineMatches: 10,//количество матчей для получение в модалке
+        countLineMatches: 10,//количество матчей для получение в модалке,
+        countRivalsMatches: 10
     },
     getters: {
         getMatches(state) {
@@ -25,6 +27,12 @@ const store = new Vuex.Store({
         },
         getCountLineMatches(state) {
             return state.countLineMatches;
+        },
+        getCountRivalsMatch(state) {
+            return state.countRivalsMatches;
+        },
+        getRivalsMatch(state) {
+            return state.rivalsMatch;
         }
     },
     mutations: {
@@ -42,6 +50,12 @@ const store = new Vuex.Store({
         },
         setCountLineMatches(state, payload) {
             state.countLineMatches = payload;
+        },
+        setCountRivalsMatches(state, payload) {
+            state.countRivalsMatches = payload;
+        },
+        setRivalsMatch(state, payload) {
+            state.rivalsMatch = payload;
         }
     },
     actions: {
@@ -50,6 +64,9 @@ const store = new Vuex.Store({
         },
         setLineChamps({ commit }, champs) {
             commit("setLineChamps", champs);
+        },
+        setRivalsMatch({ commit }, response) {
+            commit('setRivalsMatch', response);
         }
     }
 });

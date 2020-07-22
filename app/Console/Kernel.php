@@ -50,24 +50,13 @@ class Kernel extends ConsoleKernel
             $response = null;
             $countRequest = 0;
             while(true) {
-                try {
-                    $url = json_decode(file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context), true);
+                $req = @file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context);
+                if($req !== FALSE) {
+                    $url = json_decode($req, true);
                     $response = $url['results'];
                     break;
                 }
-                catch (Throwable  $e) {
-                    $countRequest++;
-                    if($countRequest == 50) break;
-                    sleep(5);
-                    continue;
-                }
-                catch (Error  $e) {
-                    $countRequest++;
-                    if($countRequest == 50) break;
-                    sleep(5);
-                    continue;
-                }
-                catch (Exception  $e) {
+                else {
                     $countRequest++;
                     if($countRequest == 50) break;
                     sleep(5);

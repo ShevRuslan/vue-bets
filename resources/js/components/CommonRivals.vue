@@ -57,7 +57,7 @@ import CooperativeMatch from '../components/CooperativeMatch';
 export default {
     name: 'CommonRivals',
     props: {
-        matches: Array,
+        matches: Object,
         firstPlayer: String,
         secondPlayer: String
     },

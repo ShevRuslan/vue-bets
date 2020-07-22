@@ -191,6 +191,15 @@
                     <v-list-item-title>Количество</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item  @click="openModalRivalsCount" class="navbar-item">
+                <v-list-item-icon>
+                    <v-icon class="mdi-icon-menu">mdi-account-group</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                    <v-list-item-title>Кол-во матчей с общ. соперниками</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
             <v-dialog v-model="dialog" scrollable max-width="500px" class="modal-number-line">
                 <v-card>
                     <v-card-title>Количество матчей</v-card-title>
@@ -212,6 +221,27 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+            <v-dialog v-model="dialogRivals" scrollable max-width="500px" class="modal-number-line">
+                <v-card>
+                    <v-card-title>Количество матчей</v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-slider
+                            class="pt-10"
+                            v-model="sliderRivals"
+                            thumb-label="always"
+                            label="Количество"
+                            hide-details
+                            min="10"
+                            max="100"
+                            dense
+                        ></v-slider>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="blue darken-1" text @click="changeCountRivalsMatch">Сохранить</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-list-item-group>
     </v-list>
 </template>
@@ -223,10 +253,12 @@ export default {
     name: 'Navbar',
     data: () => ({
         dialog: false,
-        slider: 10
+        dialogRivals: false,
+        slider: 10,
+        sliderRivals: 10,
     }),
     methods: {
-        ...mapMutations(['setHistory', 'setCurrentLineChamps', 'setCountLineMatches']),
+        ...mapMutations(['setHistory', 'setCurrentLineChamps', 'setCountLineMatches', 'setCountRivalsMatches']),
         getMatch(item) {
             const data = {
                 player1: item.player1,
@@ -249,8 +281,15 @@ export default {
             this.setCountLineMatches(this.slider);
             this.dialog = false;
         },
+        changeCountRivalsMatch() {
+            this.setCountRivalsMatches(this.sliderRivals);
+            this.dialogRivals = false;
+        },
         changeLineChamp({ champName }) {
             this.setCurrentLineChamps(champName);
+        },
+        openModalRivalsCount() {
+            this.dialogRivals = true;
         }
     },
     computed: {

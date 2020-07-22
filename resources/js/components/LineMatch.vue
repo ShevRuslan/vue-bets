@@ -100,8 +100,8 @@
                     <div class="content-item__group action-block">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="24px"
+                            height="24px"
                             viewBox="0 0 24 24"
                             fill="none"
                             @click="getInfo(match)"
@@ -112,125 +112,66 @@
                             />
                         </svg>
                     </div>
+                    <div class="content-item__group action-block">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            version="1.1"
+                            id="Capa_1"
+                            x="0px"
+                            y="0px"
+                            viewBox="0 0 438.857 438.857"
+                            style="enable-background:new 0 0 438.857 438.857;"
+                            xml:space="preserve"
+                            width="24px"
+                            height="24px"
+                            @click="getRivalsMatches(match)"
+                        >
+                            <g>
+                                <path
+                                    style="fill:#4D72C0"
+                                    d="M219.429,438.857C98.22,438.857,0,340.637,0,219.429S98.22,0,219.429,0  s219.429,98.22,219.429,219.429S340.637,438.857,219.429,438.857z M219.429,31.347c-103.967,0-188.082,84.114-188.082,188.082  S115.461,407.51,219.429,407.51S407.51,323.396,407.51,219.429S323.396,31.347,219.429,31.347z"
+                                    data-original="#1185E0"
+                                    class="active-path"
+                                    data-old_color="#1185E0"
+                                />
+                                <path
+                                    style="fill:#4D72C0"
+                                    d="M308.245,203.755h-73.143v-73.143c0-8.882-6.792-15.673-15.673-15.673  c-8.882,0-15.673,6.792-15.673,15.673v73.143h-73.143c-8.882,0-15.673,6.792-15.673,15.673c0,8.882,6.792,15.673,15.673,15.673  h73.143v73.143c0,8.882,6.792,15.673,15.673,15.673c8.882,0,15.673-6.792,15.673-15.673v-73.143h73.143  c8.882,0,15.673-6.792,15.673-15.673C323.918,210.547,317.126,203.755,308.245,203.755z"
+                                    data-original="#4DCFE0"
+                                    class=""
+                                    data-old_color="#4DCFE0"
+                                />
+                            </g>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
-        <v-dialog v-model="dialog" transition="dialog-bottom-transition" class="modal-statics">
-            <v-card class="wrapper-dialog">
-                <v-btn class="btn-close" dark icon absolute @click="dialog = false" color="#000">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-                <v-container fluid class="fill-height align-start wrapper-page-search">
-                    <v-row justify="center" align="center">
-                        <v-col class="pa-0">
-                            <div class="wrapper-tables" v-if="currentStatics.length > 1">
-                                <div class="wrapper-coop-matches">
-                                    <CooperativeMatch
-                                        :firstPlayer="currentStatics[2].player1"
-                                        :secondPlayer="currentStatics[2].player2"
-                                        :winFirst="currentStatics[2].win1"
-                                        :winSecond="currentStatics[2].win2"
-                                        :matches="currentStatics[2].mergeGames"
-                                    ></CooperativeMatch>
-                                </div>
-                                <div class="wrapper-firstplayer-matches">
-                                    <CardMatches
-                                        :name="currentStatics[0].name"
-                                        :matches="currentStatics[0].matches"
-                                    ></CardMatches>
-                                </div>
-                                <div class="wrapper-secondplayer-matches">
-                                    <CardMatches
-                                        :name="currentStatics[1].name"
-                                        :matches="currentStatics[1].matches"
-                                    ></CardMatches>
-                                </div>
-                            </div>
-                            <div class="wrapper-bets">
-                                <div class="current-champ pb-10 pa-10 ">
-                                    Таблица ставок
-                                </div>
-                                <div class="tables-bets">
-                                    <div class="wrapper-wins">
-                                        <div class="win">
-                                            <v-chip class="win-text win-item" small label>
-                                                Победа 1
-                                            </v-chip>
-                                            <v-chip class="win-number win-item" small label>
-                                                {{ bets['win1'] }} / {{ bets['countGames'] }}
-                                            </v-chip>
-                                        </div>
-                                        <div class="win">
-                                            <v-chip class="win-text win-item" small label>
-                                                Победа 2
-                                            </v-chip>
-                                            <v-chip class="win-number win-item" small label>
-                                                {{ bets['win2'] }} / {{ bets['countGames'] }}
-                                            </v-chip>
-                                        </div>
-                                    </div>
-                                    <div class="wrapper-tables" v-if="bets.length != 0">
-                                        <BetTable :items="bets.total" :countGames="bets['countGames']">
-                                            <tr>
-                                                <th class="text-center"></th>
-                                                <th class="text-center">
-                                                    ТБ
-                                                </th>
-                                                <th class="text-center">
-                                                    ТМ
-                                                </th>
-                                            </tr>
-                                        </BetTable>
+        <LineInfoMatchDialog
+            :dialog="dialog"
+            :currentStatics="currentStatics"
+            :bets="bets"
+            @closeInfoDialog="closeInfoDialog"
+        ></LineInfoMatchDialog>
+        <CommonRivalsMatch
+            :dialog="dialogRivals"
+            :commonRivals="rivals.matches"
+            :firstPlayer="rivals.firstPlayer"
+            :secondPlayer="rivals.secondPlayer"
+            @closeInfoDialog="closeInfoDialogRivals"
+        >
 
-                                        <BetTable :items="bets.individualTotalFirst" :countGames="bets['countGames']">
-                                            <tr>
-                                                <th class="text-center"></th>
-                                                <th class="text-center">
-                                                    ИТБ1
-                                                </th>
-                                                <th class="text-center">
-                                                    ИТМ1
-                                                </th>
-                                            </tr>
-                                        </BetTable>
-
-                                        <BetTable :items="bets.individualTotalSecond" :countGames="bets['countGames']">
-                                            <tr>
-                                                <th class="text-center"></th>
-                                                <th class="text-center">
-                                                    ИТБ2
-                                                </th>
-                                                <th class="text-center">
-                                                    ИТМ2
-                                                </th>
-                                            </tr>
-                                        </BetTable>
-
-                                        <BetTable
-                                            :items="bets.forFirst"
-                                            isFor
-                                            headerFor="Δ1"
-                                            :countGames="bets['countGames']"
-                                        />
-                                        <BetTable
-                                            :items="bets.forSecond"
-                                            isFor
-                                            headerFor="Δ2"
-                                            :countGames="bets['countGames']"
-                                            reverseArray
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </v-card>
-        </v-dialog>
-        <v-overlay v-model="dialog"></v-overlay>
-        <v-snackbar absolute v-model="snackbar" color="primary" left bottom>
-            Начался запрос на получение статистики!
+        </CommonRivalsMatch>
+        <v-snackbar absolute v-model="snackbar" color="primary" right top>
+            Начался запрос на получение статистики по данному матчу!
             <v-btn text @click="snackbar = false">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-snackbar>
+        <v-snackbar absolute v-model="snackbarRivals" color="primary" right top>
+            Начался запрос на получение обших соперников и матчей с ними!
+            <v-btn text @click="snackbarRivals = false">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-snackbar>
@@ -239,9 +180,8 @@
 
 <script>
 import API from '../service/api';
-import CooperativeMatch from '../components/CooperativeMatch';
-import CardMatches from '../components/CardMatches';
-import BetTable from '../components/BetTable';
+import LineInfoMatchDialog from '../components/LineInfoMatchDialog';
+import CommonRivalsMatch from '../components/CommonRivalsMatch';
 import { mapActions } from 'vuex';
 import { mapMutations } from 'vuex';
 import { mapGetters } from 'vuex';
@@ -251,25 +191,47 @@ export default {
         matches: Array
     },
     components: {
-        CooperativeMatch,
-        CardMatches,
-        BetTable
+        LineInfoMatchDialog,
+        CommonRivalsMatch
     },
     data() {
         return {
             currentStatics: [],
             bets: [],
             dialog: false,
+            dialogRivals: false,
             snackbar: false,
-            check: {}
+            snackbarRivals: false,
+            check: {},
+            rivals: {
+                matches: [],
+                firstPlayer: '',
+                secondPlayer: ''
+            }
         };
     },
     computed: {
-        ...mapGetters(['getCountLineMatches'])
+        ...mapGetters(['getCountLineMatches', 'getCountRivalsMatch'])
     },
     methods: {
         ...mapActions(['setResponse']),
         ...mapMutations(['setHistory']),
+        async getRivalsMatches(item) {
+            this.snackbarRivals = true;
+            //TODO: Отдельный ползунок
+            const data = {
+                player1: item.player1,
+                player2: item.player2,
+                champName: item.champName,
+                countMatches: this.getCountLineMatches,
+                coopChamps: false,
+                line: true
+            }
+            this.rivals.matches = await API.getRivalsMatch({...data, countMatches: this.getCountRivalsMatch});
+            this.rivals.firstPlayer = item.player1,
+            this.rivals.secondPlayer = item.player2;
+            this.dialogRivals = true;
+        },
         async getInfo(item) {
             this.check[item.id] = true;
             const data = {
@@ -363,6 +325,12 @@ export default {
                 case 12:
                     return 'декабря';
             }
+        },
+        closeInfoDialog(bool) {
+            this.dialog = false;
+        },
+        closeInfoDialogRivals(bool) {
+            this.dialogRivals = false;
         }
     }
 };
