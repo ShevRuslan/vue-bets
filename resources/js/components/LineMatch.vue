@@ -161,7 +161,6 @@
             :secondPlayer="rivals.secondPlayer"
             @closeInfoDialog="closeInfoDialogRivals"
         >
-
         </CommonRivalsMatch>
         <v-snackbar absolute v-model="snackbar" color="primary" right top>
             Начался запрос на получение статистики по данному матчу!
@@ -197,7 +196,7 @@ export default {
     data() {
         return {
             currentStatics: [],
-            bets: [],
+            bets: {},
             dialog: false,
             dialogRivals: false,
             snackbar: false,
@@ -226,10 +225,9 @@ export default {
                 countMatches: this.getCountLineMatches,
                 coopChamps: false,
                 line: true
-            }
-            this.rivals.matches = await API.getRivalsMatch({...data, countMatches: this.getCountRivalsMatch});
-            this.rivals.firstPlayer = item.player1,
-            this.rivals.secondPlayer = item.player2;
+            };
+            this.rivals.matches = await API.getRivalsMatch({ ...data, countMatches: this.getCountRivalsMatch });
+            (this.rivals.firstPlayer = item.player1), (this.rivals.secondPlayer = item.player2);
             this.dialogRivals = true;
         },
         async getInfo(item) {

@@ -125,7 +125,7 @@ export default {
                 champName: this.tourney,
                 countMatches: this.count,
                 coopChamps: true,
-                line: false,
+                line: false
             };
             this.$emit('search', data);
         }

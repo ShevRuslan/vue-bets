@@ -191,7 +191,7 @@
                     <v-list-item-title>Количество</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item  @click="openModalRivalsCount" class="navbar-item">
+            <v-list-item @click="openModalRivalsCount" class="navbar-item">
                 <v-list-item-icon>
                     <v-icon class="mdi-icon-menu">mdi-account-group</v-icon>
                 </v-list-item-icon>
@@ -255,7 +255,7 @@ export default {
         dialog: false,
         dialogRivals: false,
         slider: 10,
-        sliderRivals: 10,
+        sliderRivals: 10
     }),
     methods: {
         ...mapMutations(['setHistory', 'setCurrentLineChamps', 'setCountLineMatches', 'setCountRivalsMatches']),
@@ -267,7 +267,6 @@ export default {
                 countMatches: item.countMatches,
                 coopChamps: true
             };
-            console.log(item);
             this.$emit('search', data);
         },
         openModalNumberLine() {

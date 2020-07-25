@@ -1,16 +1,15 @@
-
-import Line from '../pages/Line';
-import Search from '../pages/Search'
+import LinePage from '../pages/LinePage';
+import SearchPage from '../pages/SearchPage'
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Search,
+    component: SearchPage,
   },
   {
     path: '/line',
-    name: 'LineMatch',
-    component: Line,
+    name: 'line',
+    component: LinePage,
   },
 ];
 

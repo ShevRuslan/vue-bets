@@ -55,7 +55,7 @@ export default {
     },
     data() {
         return {
-            dialogRivals: false,
+            dialogRivals: false
         };
     },
     computed: {
@@ -115,28 +115,6 @@ export default {
             color: #474d56;
             .header__title {
                 margin-right: 10px;
-            }
-            .header__score {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                .score__chip {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 3px;
-                    width: 24px;
-                    height: 15px;
-                    font-size: 12px !important;
-                    line-height: 14px !important;
-                    padding: 0px;
-                }
-                .score__chip:first-child {
-                    margin-right: 5px;
-                }
-                .score__chip:last-child {
-                    margin-left: 5px;
-                }
             }
         }
         .content {

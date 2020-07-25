@@ -44,9 +44,9 @@ export default {
     data: () => ({
         historyMatches: null,
         snackbar: false,
-        updateDate: '',
+        updateDate: ''
     }),
-    async created () {
+    async created() {
         this.updateDate = await API.getLastUpdateDate();
     },
     computed: {

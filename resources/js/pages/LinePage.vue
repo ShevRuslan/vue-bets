@@ -10,8 +10,8 @@
                         <LineMatch :matches="currentChampMatches" />
                     </div>
                 </v-col>
-            </v-row> </v-container
-        >>
+            </v-row>
+        </v-container>
     </v-content>
 </template>
 
@@ -21,7 +21,7 @@ import { mapGetters } from 'vuex';
 import API from '../service/api';
 import LineMatch from '../components/LineMatch';
 export default {
-    name: 'Line',
+    name: 'LinePage',
     data() {
         return {
             champs: [],
@@ -66,7 +66,7 @@ export default {
         async getLineTourneys() {
             const response = await API.getLineChamps();
             if (!response.error) this.setLineChamps(response);
-        },
+        }
     }
 };
 </script>

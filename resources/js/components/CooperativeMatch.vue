@@ -1,72 +1,29 @@
 <template>
     <div>
         <div class="header">
-            <template v-if="existName">
-                <div class="header__title" v-if="nameCard == ''">
-                    {{ getNameCard(firstPlayer) }}-{{ getNameCard(secondPlayer) }}
-                </div>
-                <div class="header__title" v-if="nameCard != ''">{{ nameCard }}</div>
-            </template>
-            <div class="header__score">
-                <template v-if="winFirst < winSecond">
-                    <v-chip color="#FF0000" text-color="white" class="score__chip">
-                        {{ winFirst }}
-                    </v-chip>
-                    :
-                    <v-chip color="#33CC33" text-color="white" class="score__chip">
-                        {{ winSecond }}
-                    </v-chip>
+            <div class="wrapper-info-coop">
+                <template v-if="existName">
+                    <div class="header__title" v-if="nameCard == ''">
+                        {{ getNameCard(firstPlayer) }}-{{ getNameCard(secondPlayer) }}
+                    </div>
+                    <div class="header__title" v-if="nameCard != ''">{{ nameCard }}</div>
                 </template>
-                <template v-else-if="winFirst > winSecond">
-                    <v-chip color="#33CC33" text-color="white" class="score__chip">
-                        {{ winFirst }}
-                    </v-chip>
-                    :
-                    <v-chip color="#FF0000" text-color="white" class="score__chip">
-                        {{ winSecond }}
-                    </v-chip>
-                </template>
-                <template v-else>
-                    <v-chip color="#33CC33" text-color="white" class="score__chip">
-                        {{ winFirst }}
-                    </v-chip>
-                    :
-                    <v-chip color="#33CC33" text-color="white" class="score__chip">
-                        {{ winSecond }}
-                    </v-chip>
-                </template>
+                <ScoreMatch v-if="existScore" :winFirst="winFirst" :winSecond="winSecond"> </ScoreMatch>
             </div>
             <div class="wrapper_get-rivals ml-2" v-if="showGetRivalsMatch">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    version="1.1"
-                    id="Capa_1"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 512 512"
-                    style="enable-background:new 0 0 512 512;"
-                    xml:space="preserve"
-                    width="15px"
-                    height="15px"
+                    width="15"
+                    height="15"
+                    viewBox="0 0 15 15"
+                    fill="none"
                     @click="searchRivalsMatches"
                 >
-                    <g transform="matrix(1 0 0 1 0 0)">
-                        <path
-                            style="fill:#F3BB3B"
-                            d="M256,0C114.615,0,0,114.615,0,256s114.615,256,256,256s256-114.615,256-256  C511.835,114.683,397.317,0.165,256,0z"
-                            data-original="#4CAF50"
-                            class=""
-                            data-old_color="#4CAF50"
-                        />
-                        <path
-                            style="fill:#4B5159"
-                            d="M426.091,199.211C424.614,194.898,420.559,192,416,192H305.877l-39.979-99.968  c-2.78-5.473-9.471-7.656-14.943-4.875c-2.101,1.067-3.808,2.775-4.875,4.875L206.123,192H96  c-5.891-0.005-10.671,4.766-10.676,10.657c-0.003,3.299,1.521,6.414,4.127,8.436l90.389,70.4l-30.123,110.379  c-1.544,5.685,1.813,11.546,7.498,13.09c2.974,0.808,6.152,0.29,8.716-1.42L256,343.467l90.091,60.053  c4.901,3.269,11.524,1.947,14.793-2.954c1.71-2.564,2.228-5.742,1.42-8.716L332.16,281.387l90.389-70.4  C426.101,208.205,427.519,203.49,426.091,199.211z"
-                            data-original="#FAFAFA"
-                            class="active-path"
-                            data-old_color="#FAFAFA"
-                        />
-                    </g>
+                    <rect width="15" height="15" rx="3" fill="#F0AC0E" />
+                    <path
+                        d="M7.11958 3.17082C7.23932 2.8023 7.76068 2.8023 7.88042 3.17082L8.64502 5.52401C8.69857 5.68882 8.85215 5.80041 9.02544 5.80041H11.4997C11.8872 5.80041 12.0483 6.29625 11.7349 6.52401L9.73311 7.97837C9.59291 8.08022 9.53425 8.26077 9.5878 8.42558L10.3524 10.7788C10.4721 11.1473 10.0503 11.4537 9.73686 11.226L7.73511 9.77163C7.59492 9.66978 7.40508 9.66978 7.26489 9.77163L5.26314 11.226C4.94965 11.4537 4.52786 11.1473 4.6476 10.7788L5.4122 8.42558C5.46575 8.26077 5.40709 8.08022 5.26689 7.97837L3.26515 6.52401C2.95166 6.29625 3.11277 5.80041 3.50026 5.80041H5.97456C6.14785 5.80041 6.30143 5.68882 6.35498 5.52401L7.11958 3.17082Z"
+                        fill="#474D56"
+                    />
                 </svg>
             </div>
         </div>
@@ -102,15 +59,17 @@ import API from '../service/api';
 import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
 import CoopMatch from './СoopMatch';
+import ScoreMatch from './ScoreMatch';
 export default {
     name: 'CooperativeMatch',
     components: {
-        CoopMatch
+        CoopMatch,
+        ScoreMatch
     },
     props: {
         showGetRivalsMatch: {
             type: Boolean,
-            default: false,
+            default: false
         },
         firstPlayer: String,
         secondPlayer: String,
@@ -118,6 +77,10 @@ export default {
         winSecond: Number,
         matches: Array,
         existName: {
+            type: Boolean,
+            default: true
+        },
+        existScore: {
             type: Boolean,
             default: true
         },
@@ -139,12 +102,12 @@ export default {
             return `${arrayName[1]} ${arrayName[0][0]}.`;
         },
         async searchRivalsMatches() {
-             const data = {
+            const data = {
                 player1: this.firstPlayer,
                 player2: this.secondPlayer,
                 countMatches: this.getCountRivalsMatch,
                 coopChamps: true,
-                line: false,
+                line: false
             };
             const rivalsMatches = await API.getRivalsMatch(data);
             this.setRivalsMatch(rivalsMatches);
@@ -155,6 +118,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.header {
+    display: flex;
+    justify-content: space-between;
+    .wrapper-info-coop {
+        display: flex;
+    }
+}
 .wrapper_get-rivals {
     svg {
         cursor: pointer;

@@ -24,6 +24,7 @@ class MatchController extends Controller
         $this->date = $date;
         $this->champ = $champ;
     }
+    //Получение общих соперников и матчей с ними
     public function getCommonRivals(Request $request)
     {
         $countMatchesRivals = $request->countMatches; //Количество матчей для общих соперников
@@ -31,7 +32,7 @@ class MatchController extends Controller
         $line = $request->line ?? false; // Флаг на матч из линии
         $playersMatches = $this->getMatchesSportsmen($request->player1, $request->player2, $champName, null, null, $line, false);
         $commonRivalsMatches = $this->getEqualPlayers($playersMatches[0], $playersMatches[1], null, $countMatchesRivals, $line);
-        return response()->json($playersMatches, 200);
+        return response()->json($commonRivalsMatches, 200);
     }
     //Поиск спортсмена
     public function getSporstsmen(Request $request)
@@ -246,16 +247,16 @@ class MatchController extends Controller
     }
     private function getEqualPlayers($arrayFirst, $arraySecond, $champName, $countMatchesRivals, $line)
     {
-        $objectRivalsMatch = [
-            $arrayFirst['name'] => [],
-            $arraySecond['name'] => [],
-        ];
+        $objectRivalsMatch = [];
         $rivals = $this->comparingArraysValues($arrayFirst, $arraySecond);
         foreach ($rivals as $rival) {
+            $array = [];
             $firstPlayerRivals = $this->getCooperativeMatches($arrayFirst['name'], $rival, $champName, $countMatchesRivals, $line);
             $secondPlayerRivals = $this->getCooperativeMatches($arraySecond['name'], $rival, $champName, $countMatchesRivals, $line);
-            array_push($objectRivalsMatch[$arrayFirst['name']], $firstPlayerRivals);
-            array_push($objectRivalsMatch[$arraySecond['name']], $secondPlayerRivals);
+            array_push($array, $firstPlayerRivals);
+            array_push($array, $secondPlayerRivals);
+            array_push($objectRivalsMatch, $array);
+
         }
         return $objectRivalsMatch;
     }

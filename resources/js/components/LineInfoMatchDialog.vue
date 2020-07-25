@@ -6,7 +6,7 @@
             </v-btn>
             <v-container fluid class="fill-height align-start wrapper-page-search">
                 <v-row justify="center" align="center">
-                    <v-col class="pa-0">  
+                    <v-col class="pa-0">
                         <div class="wrapper-tables" v-if="currentStatics.length > 1">
                             <div class="wrapper-coop-matches">
                                 <CooperativeMatch
@@ -127,7 +127,7 @@ export default {
     components: {
         CooperativeMatch,
         CardMatches,
-        BetTable,
+        BetTable
     },
     methods: {
         close() {
