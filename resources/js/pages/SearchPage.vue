@@ -17,10 +17,18 @@
                                 ></CooperativeMatch>
                             </div>
                             <div class="wrapper-firstplayer-matches">
-                                <CardMatches :name="firstPlayer.name" :matches="firstPlayer.matches"></CardMatches>
+                                <CardMatches
+                                    :rating="cooperativePlayers.rating1"
+                                    :name="firstPlayer.name"
+                                    :matches="firstPlayer.matches"
+                                ></CardMatches>
                             </div>
                             <div class="wrapper-secondplayer-matches">
-                                <CardMatches :name="secondPlayer.name" :matches="secondPlayer.matches"></CardMatches>
+                                <CardMatches
+                                    :rating="cooperativePlayers.rating2"
+                                    :name="secondPlayer.name"
+                                    :matches="secondPlayer.matches"
+                                ></CardMatches>
                             </div>
                         </div>
                         <CommonRivalsMatch

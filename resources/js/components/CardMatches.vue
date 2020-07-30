@@ -3,6 +3,11 @@
         <div class="header">
             <div class="header__title">
                 {{ getNameCard(name) }}
+                <div class="ml-2">
+                    <v-chip x-small class="ma-1 pa-1" color="#3688FC" text-color="white">
+                        {{ this.rating }}
+                    </v-chip>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -13,6 +18,7 @@
                             <th class="text-left name-match element-header">
                                 Матч
                             </th>
+                            <th class="text-left name-match element-header"></th>
                             <th class="text-left element-header scores-match">
                                 Счёт
                             </th>
@@ -36,7 +42,8 @@ import Match from './Match';
 export default {
     props: {
         name: String,
-        matches: Array
+        matches: Array,
+        rating: String
     },
     components: {
         Match
@@ -70,6 +77,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.header__title {
+    display: flex;
+    align-items: center;
+}
 .element-header {
     padding-left: 0px;
 }

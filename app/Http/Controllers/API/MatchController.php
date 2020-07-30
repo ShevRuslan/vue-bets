@@ -169,7 +169,9 @@ class MatchController extends Controller
         return array(
             'mergeGames' => $mergeArray,
             'player1' => $player1->name,
+            'rating1' => $player1->rating,
             'player2' => $player2->name,
+            'rating2' => $player2->rating,
             'win1' => $win1,
             'win2' => $win2
         );
@@ -243,7 +245,25 @@ class MatchController extends Controller
                 }
             }
         }
+        $matches = $this->getRatingPlayers($matches, $player->name);
         return $matches;
+    }
+    private function getRatingPlayers($matches, $player) {
+        $array = [];
+        foreach($matches as $match) {
+            $nameGameArray = explode('-', $match->nameGame);
+            $currentPlayer = null;
+            if($player != trim($nameGameArray[0])) {
+                $currentPlayer = trim($nameGameArray[0]);
+            }
+            else if($player != trim($nameGameArray[1])) {
+                $currentPlayer = trim($nameGameArray[1]);
+            }
+            $currentRating = $this->player->where('name', $currentPlayer)->pluck('rating');
+            $match->rating = $currentRating[0];
+            array_push($array, $match);
+        }
+        return $array;
     }
     private function getEqualPlayers($arrayFirst, $arraySecond, $champName, $countMatchesRivals, $line)
     {

@@ -12,17 +12,60 @@
             </div>
             <div class="wrapper_get-rivals ml-2" v-if="showGetRivalsMatch">
                 <svg
+                    xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    xmlns:cc="http://creativecommons.org/ns#"
+                    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                    xmlns:svg="http://www.w3.org/2000/svg"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="15"
+                    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+                    width="34"
                     height="15"
                     viewBox="0 0 15 15"
                     fill="none"
+                    version="1.1"
+                    id="svg42"
+                    sodipodi:docname="Group 24.svg"
+                    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
                     @click="searchRivalsMatches"
                 >
-                    <rect width="15" height="15" rx="3" fill="#F0AC0E" />
+                    <metadata id="metadata48">
+                        <rdf:RDF>
+                            <cc:Work rdf:about="">
+                                <dc:format>image/svg+xml</dc:format>
+                                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                                <dc:title />
+                            </cc:Work>
+                        </rdf:RDF>
+                    </metadata>
+                    <defs id="defs46" />
+                    <sodipodi:namedview
+                        pagecolor="#ffffff"
+                        bordercolor="#666666"
+                        borderopacity="1"
+                        objecttolerance="10"
+                        gridtolerance="10"
+                        guidetolerance="10"
+                        inkscape:pageopacity="0"
+                        inkscape:pageshadow="2"
+                        inkscape:window-width="1920"
+                        inkscape:window-height="1027"
+                        id="namedview44"
+                        showgrid="false"
+                        inkscape:zoom="15.733333"
+                        inkscape:cx="7.5"
+                        inkscape:cy="7.5"
+                        inkscape:window-x="-8"
+                        inkscape:window-y="-8"
+                        inkscape:window-maximized="1"
+                        inkscape:current-layer="svg42"
+                    />
+                    <rect width="24" height="15" rx="3" ry="3" id="rect38" x="0" y="0" style="fill:#f0ac0e" />
                     <path
-                        d="M7.11958 3.17082C7.23932 2.8023 7.76068 2.8023 7.88042 3.17082L8.64502 5.52401C8.69857 5.68882 8.85215 5.80041 9.02544 5.80041H11.4997C11.8872 5.80041 12.0483 6.29625 11.7349 6.52401L9.73311 7.97837C9.59291 8.08022 9.53425 8.26077 9.5878 8.42558L10.3524 10.7788C10.4721 11.1473 10.0503 11.4537 9.73686 11.226L7.73511 9.77163C7.59492 9.66978 7.40508 9.66978 7.26489 9.77163L5.26314 11.226C4.94965 11.4537 4.52786 11.1473 4.6476 10.7788L5.4122 8.42558C5.46575 8.26077 5.40709 8.08022 5.26689 7.97837L3.26515 6.52401C2.95166 6.29625 3.11277 5.80041 3.50026 5.80041H5.97456C6.14785 5.80041 6.30143 5.68882 6.35498 5.52401L7.11958 3.17082Z"
-                        fill="#474D56"
+                        d="m 11.848393,3.4250573 c 0.11974,-0.36852 0.6411,-0.36852 0.76084,0 l 0.7646,2.35319 c 0.05355,0.16481 0.20713,0.2764 0.38042,0.2764 h 2.47426 c 0.3875,0 0.5486,0.49584 0.2352,0.7236 l -2.00179,1.45436 c -0.1402,0.10185 -0.19886,0.2824 -0.14531,0.44721 l 0.7646,2.3532207 c 0.1197,0.3685 -0.3021,0.6749 -0.61554,0.4472 l -2.00175,-1.45437 c -0.14019,-0.1018507 -0.33003,-0.1018507 -0.47022,0 l -2.0017496,1.45437 c -0.3134898,0.2277 -0.7352798,-0.0787 -0.6155398,-0.4472 L 10.141013,8.6798173 c 0.05355,-0.16481 -0.0051,-0.34536 -0.1453096,-0.44721 l -2.0017398,-1.45436 c -0.31349,-0.22776 -0.15238,-0.7236 0.23511,-0.7236 h 2.4742994 c 0.17329,0 0.32687,-0.11159 0.38042,-0.2764 z"
+                        id="path40"
+                        inkscape:connector-curvature="0"
+                        style="fill:#474d56"
                     />
                 </svg>
             </div>
@@ -102,15 +145,15 @@ export default {
             return `${arrayName[1]} ${arrayName[0][0]}.`;
         },
         async searchRivalsMatches() {
-            const data = {
-                player1: this.firstPlayer,
-                player2: this.secondPlayer,
-                countMatches: this.getCountRivalsMatch,
-                coopChamps: true,
-                line: false
-            };
-            const rivalsMatches = await API.getRivalsMatch(data);
-            this.setRivalsMatch(rivalsMatches);
+            // const data = {
+            //     player1: this.firstPlayer,
+            //     player2: this.secondPlayer,
+            //     countMatches: this.getCountRivalsMatch,
+            //     coopChamps: true,
+            //     line: false
+            // };
+            // const rivalsMatches = await API.getRivalsMatch(data);
+            // this.setRivalsMatch(rivalsMatches);
             this.$emit('closeInfoDialogRivals', true);
         }
     }
@@ -120,9 +163,12 @@ export default {
 <style scoped lang="scss">
 .header {
     display: flex;
-    justify-content: space-between;
     .wrapper-info-coop {
         display: flex;
+    }
+    .wrapper_get-rivals {
+        display: flex;
+        align-items: center;
     }
 }
 .wrapper_get-rivals {

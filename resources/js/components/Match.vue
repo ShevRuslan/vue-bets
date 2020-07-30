@@ -9,9 +9,14 @@
                     <span class="champ-name">{{ match.champName }}</span>
                 </div>
                 <div class="match-player">
-                    {{ this.nameMatch }}
+                    <div class="name-match">{{ this.nameMatch }}</div>
                 </div>
             </div>
+        </td>
+        <td class="text-left number-info">
+            <v-chip  x-small class="ma-1 pa-1 " color="#3688FC" text-color="white">
+                {{ this.match.rating }}
+            </v-chip>
         </td>
         <td class="text-left number-info">
             <template v-if="scoreFirst > scoreSecond">
@@ -192,6 +197,7 @@ export default {
 
 .match-player {
     font-weight: bold;
+    display: flex;
 }
 @media screen and (max-width: 600px) {
     .v-list .v-list-item__action .title {

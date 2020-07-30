@@ -1,23 +1,24 @@
-import Vuex from "vuex";
-import Vue from "vue";
+import Vuex from 'vuex';
+import Vue from 'vue';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        response: [],//ответ для страницы ПОИСК
-        rivalsMatch: [],//матчи с общими соперниками для страницы ПОИСК
-        history: null,// история поиска
-        lineChamps: null,//чемпионаты из линии
-        currentLineChamps: null,//текущий чемпионат из линии
-        countLineMatches: 10,//количество матчей для получение в модалке,
-        countRivalsMatches: 10
+        response: [], //ответ для страницы ПОИСК
+        rivalsMatch: [], //матчи с общими соперниками для страницы ПОИСК
+        history: null, // история поиска
+        lineChamps: null, //чемпионаты из линии
+        currentLineChamps: null, //текущий чемпионат из линии
+        countLineMatches: 10, //количество матчей для получение в модалке,
+        countRivalsMatches: 10,
+        loadingLine: false
     },
     getters: {
         getMatches(state) {
             return state.response;
         },
         getHistory(state) {
-            return state.history
+            return state.history;
         },
         getLineChamps(state) {
             return state.lineChamps;
@@ -33,6 +34,9 @@ const store = new Vuex.Store({
         },
         getRivalsMatch(state) {
             return state.rivalsMatch;
+        },
+        getLoading(state) {
+            return state.loadingLine;
         }
     },
     mutations: {
@@ -56,14 +60,17 @@ const store = new Vuex.Store({
         },
         setRivalsMatch(state, payload) {
             state.rivalsMatch = payload;
-        }
+        },
+        setLoading(state, payload) {
+            state.loadingLine = payload;
+        },
     },
     actions: {
         setResponse({ commit }, response) {
-            commit("setResponse", response);
+            commit('setResponse', response);
         },
         setLineChamps({ commit }, champs) {
-            commit("setLineChamps", champs);
+            commit('setLineChamps', champs);
         },
         setRivalsMatch({ commit }, response) {
             commit('setRivalsMatch', response);

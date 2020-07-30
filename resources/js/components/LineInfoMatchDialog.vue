@@ -21,12 +21,14 @@
                                 <CardMatches
                                     :name="currentStatics[0].name"
                                     :matches="currentStatics[0].matches"
+                                    :rating="currentStatics[2].rating1"
                                 ></CardMatches>
                             </div>
                             <div class="wrapper-secondplayer-matches">
                                 <CardMatches
                                     :name="currentStatics[1].name"
                                     :matches="currentStatics[1].matches"
+                                     :rating="currentStatics[2].rating2"
                                 ></CardMatches>
                             </div>
                         </div>

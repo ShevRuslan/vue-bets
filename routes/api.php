@@ -30,3 +30,7 @@ Route::get('/getLineChamps', 'API\LineMatchController@getLineChamps');
 Route::get('/getBetsMatch', 'API\LineMatchController@getBetsMatch');
 //Получение общих соперников и матчей с ними
 Route::get('/getCommonRivals', 'API\MatchController@getCommonRivals');
+
+Route::get('/getUKPlayers', 'API\PlayerController@getUKPlayers');
+Route::get('/readFile', 'API\PlayerController@readFile');
+Route::get('/parseSite', 'API\PlayerController@parseSite');

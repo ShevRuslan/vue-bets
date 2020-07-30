@@ -214,10 +214,10 @@ export default {
     },
     methods: {
         ...mapActions(['setResponse']),
-        ...mapMutations(['setHistory']),
+        ...mapMutations(['setHistory', 'setLoading']),
         async getRivalsMatches(item) {
+            this.setLoading(true);
             this.snackbarRivals = true;
-            //TODO: Отдельный ползунок
             const data = {
                 player1: item.player1,
                 player2: item.player2,
@@ -229,6 +229,7 @@ export default {
             this.rivals.matches = await API.getRivalsMatch({ ...data, countMatches: this.getCountRivalsMatch });
             (this.rivals.firstPlayer = item.player1), (this.rivals.secondPlayer = item.player2);
             this.dialogRivals = true;
+            this.setLoading(false);
         },
         async getInfo(item) {
             this.check[item.id] = true;

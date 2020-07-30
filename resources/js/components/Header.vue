@@ -25,6 +25,9 @@
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-snackbar>
+        <LineLoading
+            :loading="getLoading"
+        ></LineLoading>
     </div>
 </template>
 
@@ -35,11 +38,13 @@ import { mapMutations } from 'vuex';
 import { mapGetters } from 'vuex';
 import HeaderForm from './HeaderForm';
 import Navbar from './Navbar';
+import LineLoading from './LineLoading';
 export default {
     name: 'Header',
     components: {
         HeaderForm,
-        Navbar
+        Navbar,
+        LineLoading
     },
     data: () => ({
         historyMatches: null,
@@ -50,11 +55,11 @@ export default {
         this.updateDate = await API.getLastUpdateDate();
     },
     computed: {
-        ...mapGetters(['getHistory'])
+        ...mapGetters(['getHistory', 'getCountRivalsMatch', 'getLoading'])
     },
     methods: {
-        ...mapActions(['setResponse']),
-        ...mapMutations(['setHistory']),
+        ...mapActions(['setResponse', 'setRivalsMatch']),
+        ...mapMutations(['setHistory', 'setLoading']),
         async getLastUpdateDate() {
             this.updateDate = await API.getLastUpdateDate();
         },
@@ -62,8 +67,13 @@ export default {
             this.searchByData(data);
         },
         searchByData: async function(data) {
+            this.setLoading(true);
+            this.setRivalsMatch([]);
             const matches = await API.searchBySportsmen(data);
             this.setResponse(matches);
+            const rivalsMatches = await API.getRivalsMatch({...data, countMatches: this.getCountRivalsMatch});
+            this.setRivalsMatch(rivalsMatches);
+            this.setLoading(false);
             let date = new Date();
             let month = date.getMonth() + 1;
             let nameMonth = this.getNameMonth(month);

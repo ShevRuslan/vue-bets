@@ -7,14 +7,24 @@
         </div>
         <div class="wrapper-content">
             <div class="wrapper-players">
-                <div class="first-player text-center">
-                    <div class="title mt-10 mb-10">
+                <div class="first-player text-center mt-10 mb-5 ">
+                    <div class="title">
                         <h5>{{ firstPlayer }}</h5>
                     </div>
+                    <div>
+                        <v-chip small class="ma-2" label color="#3688FC" text-color="white">
+                            {{ this.matches[0][0].rating1 }}
+                        </v-chip>
+                    </div>
                 </div>
-                <div class="second-player text-center">
-                    <div class="title mt-10 mb-10">
+                <div class="second-player text-center mt-10 mb-5">
+                    <div class="title">
                         <h5>{{ secondPlayer }}</h5>
+                    </div>
+                    <div>
+                        <v-chip small class="ma-2" label color="#3688FC" text-color="white">
+                            {{ this.matches[0][0].rating2 }}
+                        </v-chip>
                     </div>
                 </div>
             </div>
@@ -26,7 +36,14 @@
                                 <ScoreMatch :winFirst="match[0].win1" :winSecond="match[0].win2"> </ScoreMatch>
                             </div>
                             <div class="rivals-name">
-                                {{ match[0].player2 }}
+                                <div>
+                                    {{ match[0].player2 }}
+                                </div>
+                                <div>
+                                    <v-chip x-small class="ma-2" label color="#3688FC" text-color="white">
+                                        {{ match[0].rating2 }}
+                                    </v-chip>
+                                </div>
                             </div>
                             <div class="score-match">
                                 <ScoreMatch :winFirst="match[1].win1" :winSecond="match[1].win2"> </ScoreMatch>
@@ -94,6 +111,9 @@ export default {
     .first-player,
     .second-player {
         width: 49%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .expansion {
         background-color: transparent !important;

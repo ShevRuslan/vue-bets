@@ -30,7 +30,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function() {
-
             $lastDateUpdate = Date::first();
             $tennis = array();
             $dateMatch = Carbon::now()->format('Y-m-d');
@@ -48,7 +47,7 @@ class Kernel extends ConsoleKernel
             );
             $context = stream_context_create($opts);
             $response = null;
-            $countRequest = 0;
+            $countRequest = 1;
             while(true) {
                 $req = @file_get_contents("https://1xstavka.ru/results/getMain?showAll=true&date={$dateMatch}", false, $context);
                 if($req !== FALSE) {
@@ -58,8 +57,13 @@ class Kernel extends ConsoleKernel
                 }
                 else {
                     $countRequest++;
-                    if($countRequest == 50) break;
-                    sleep(5);
+                    if($countRequest == 20) {
+                         $errorDate = new Date();
+                         $errorDate->date = 'ERROR';
+                         $errordDate->save();
+                         break;
+                    };
+                    sleep(1);
                     continue;
                 }
             }
