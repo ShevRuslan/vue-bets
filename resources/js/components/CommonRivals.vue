@@ -11,20 +11,16 @@
                     <div class="title">
                         <h5>{{ firstPlayer }}</h5>
                     </div>
-                    <div>
-                        <v-chip small class="ma-2" label color="#3688FC" text-color="white">
-                            {{ this.matches[0][0].rating1 }}
-                        </v-chip>
+                    <div class="rating">
+                       <RatingStar v-if="this.matches[0][0].rating2" :rating="this.matches[0][0].rating1"></RatingStar>
                     </div>
                 </div>
                 <div class="second-player text-center mt-10 mb-5">
                     <div class="title">
                         <h5>{{ secondPlayer }}</h5>
                     </div>
-                    <div>
-                        <v-chip small class="ma-2" label color="#3688FC" text-color="white">
-                            {{ this.matches[0][0].rating2 }}
-                        </v-chip>
+                    <div class="rating">
+                        <RatingStar v-if="this.matches[0][0].rating2" :rating="this.matches[0][0].rating2"></RatingStar>
                     </div>
                 </div>
             </div>
@@ -39,10 +35,8 @@
                                 <div>
                                     {{ match[0].player2 }}
                                 </div>
-                                <div>
-                                    <v-chip x-small class="ma-2" label color="#3688FC" text-color="white">
-                                        {{ match[0].rating2 }}
-                                    </v-chip>
+                                <div class="rating">
+                                    <RatingStar v-if="match[0].rating2" :rating="match[0].rating2"></RatingStar>
                                 </div>
                             </div>
                             <div class="score-match">
@@ -81,6 +75,7 @@
 <script>
 import CooperativeMatch from '../components/CooperativeMatch';
 import ScoreMatch from '../components/ScoreMatch';
+import RatingStar from './RatingStar'; 
 export default {
     name: 'CommonRivals',
     props: {
@@ -90,12 +85,21 @@ export default {
     },
     components: {
         CooperativeMatch,
-        ScoreMatch
+        ScoreMatch,
+        RatingStar
     }
 };
 </script>
 
 <style lang="scss">
+.rating {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    margin-left: 6px;
+}
 .header {
     .title {
         width: 100%;
@@ -136,6 +140,9 @@ export default {
             }
             .rivals-name {
                 width: 60%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
         .expansion-content {

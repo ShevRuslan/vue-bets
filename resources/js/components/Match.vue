@@ -14,9 +14,7 @@
             </div>
         </td>
         <td class="text-left number-info">
-            <v-chip  x-small class="ma-1 pa-1 " color="#3688FC" text-color="white">
-                {{ this.match.rating }}
-            </v-chip>
+            <RatingSquare v-if="match.rating" :rating=" this.match.rating"></RatingSquare>
         </td>
         <td class="text-left number-info">
             <template v-if="scoreFirst > scoreSecond">
@@ -38,11 +36,15 @@
 </template>
 
 <script>
+import RatingSquare from './RatingSquare';
 export default {
     props: {
         name: String,
         match: Object,
         player: String
+    },
+    components: {
+        RatingSquare
     },
     name: 'Match',
     data() {

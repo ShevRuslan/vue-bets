@@ -5,6 +5,13 @@
                 <div class="table-line__header-item date-match">
                     Время
                 </div>
+            </div>
+            <div class="table-lite_header-group mr-2">
+                <div class="table-line__header-item name-match">
+                    Рейтинг
+                </div>
+            </div>
+            <div class="table-lite_header-group">
                 <div class="table-line__header-item name-match">
                     Название матча
                 </div>
@@ -43,6 +50,7 @@
                 </div>
             </div>
             <div class="table-lite_header-group"></div>
+            <div class="table-lite_header-group"></div>
         </div>
         <div class="table-line__content">
             <div class="table-line__content-item" v-for="(match, index) in matches" :key="match.id">
@@ -54,6 +62,18 @@
                         <div class="content-item__group-item">
                             {{ getTime(match.date) }}
                         </div>
+                    </div>
+                    <div class="content-item__group group-rating">
+                        <div class="content-item__group-item item-rating">
+                            <div class="rating text-center">
+                               <RatingStar v-if="match.rating1" :rating="match.rating1"></RatingStar>
+                            </div>
+                            <div class="rating text-center">
+                                <RatingStar v-if="match.rating2" :rating="match.rating2"></RatingStar>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-item__group ml-2">
                         <div
                             class="content-item__group-item name-match"
                             :class="{ check: check[match.id] ? true : false }"
@@ -181,6 +201,7 @@
 import API from '../service/api';
 import LineInfoMatchDialog from '../components/LineInfoMatchDialog';
 import CommonRivalsMatch from '../components/CommonRivalsMatch';
+import RatingStar from '../components/RatingStar';
 import { mapActions } from 'vuex';
 import { mapMutations } from 'vuex';
 import { mapGetters } from 'vuex';
@@ -191,7 +212,8 @@ export default {
     },
     components: {
         LineInfoMatchDialog,
-        CommonRivalsMatch
+        CommonRivalsMatch,
+        RatingStar
     },
     data() {
         return {
@@ -336,6 +358,9 @@ export default {
 </script>
 
 <style lang="scss">
+.rating {
+    display: flex;
+}
 .check {
     font-weight: normal !important;
 }
@@ -351,7 +376,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 1030px;
+    max-width: 1100px;
     .table-line__header {
         display: flex;
         justify-content: space-between;
@@ -405,9 +430,24 @@ export default {
                 padding: 0px 24px;
                 display: flex;
                 justify-content: space-between;
+                .group-rating {
+                    background: #e8ecef;
+                    font-family: Roboto;
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 11px;
+                    line-height: 13px;
+
+                    /* identical to box height */
+
+                    color: #474d56;
+                }
                 .content-item__group {
                     display: flex;
                     align-items: center;
+                    .item-rating {
+                        width: 60px;
+                    }
                     .important-number-block,
                     .drow-block,
                     .number-block {
@@ -430,7 +470,6 @@ export default {
                     }
                     .name-match {
                         width: auto;
-                        margin-left: 40px;
                         text-align: left;
                         font-weight: bold;
                         cursor: pointer;
@@ -452,23 +491,37 @@ export default {
     }
     .content-item__group:nth-child(1),
     .table-lite_header-group:nth-child(1) {
-        width: 25%;
+        width: 5%;
     }
     .content-item__group:nth-child(2),
     .table-lite_header-group:nth-child(2) {
-        width: 20%;
+        width: 7%;
     }
     .content-item__group:nth-child(3),
     .table-lite_header-group:nth-child(3) {
-        width: 20%;
+        width: 22%;
     }
     .content-item__group:nth-child(4),
     .table-lite_header-group:nth-child(4) {
-        width: 20%;
+        width: 25%;
     }
     .content-item__group:nth-child(5),
     .table-lite_header-group:nth-child(5) {
-        width: 10%;
+        width: 25%;
+    }
+    .content-item__group:nth-child(5),
+    .table-lite_header-group:nth-child(5) {
+        width: 25%;
+    }
+    .content-item__group:nth-child(6),
+    .table-lite_header-group:nth-child(6) {
+        width: 25%;
+    }
+    .content-item__group:nth-child(7),
+    .table-lite_header-group:nth-child(7),
+    .content-item__group:nth-child(8),
+    .table-lite_header-group:nth-child(8) {
+        width: 5%;
     }
 }
 .wrapper-bets {

@@ -5,13 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Player;
 use App\Http\Controllers\API\MatchController;
 
 class LineMatchController extends Controller
 {
-    public function __construct(MatchController $match)
+    public function __construct(MatchController $match, Player $player)
     {
         $this->match = $match;
+        $this->player = $player;
     }
     //получение матчей с линии и формирование данных в нормальный вид из непонятонго жсона
     public function line(Request $request)
@@ -45,7 +47,9 @@ class LineMatchController extends Controller
             $normallyMatch['id'] = $match['I'];
             $normallyMatch['date'] =  $date ?? '—';
             $normallyMatch['player1'] = $player1;
+            $normallyMatch['rating1'] = $this->player->where('name', $player1)->pluck('rating')[0] ?? null;
             $normallyMatch['player2'] = $player2;
+            $normallyMatch['rating2'] = $this->player->where('name', $player2)->pluck('rating')[0] ?? null;
 
             $totalArray = [];
             $forArray = [

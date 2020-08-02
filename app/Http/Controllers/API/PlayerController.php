@@ -74,9 +74,7 @@ class PlayerController extends Controller
             }
 
             fclose($handle);
-        } else {
-            // error opening the file.
-        }
+        } 
         return response()->json($array, 200);
     }
     public function parseSite(Request $request)
@@ -97,7 +95,6 @@ class PlayerController extends Controller
             $arrayNameRU = explode(' ', $player->name);
             $normallyName1 = $arrayNameUK[1] . ' ' . $arrayNameUK[0];
             $normallyName2 = $arrayNameRU[1] . ' ' . $arrayNameRU[0];
-            // array_push($array, [$normallyName1, $normallyName2]);
             $currentSearch = $this->search($json, $normallyName1, $normallyName2);
             if ($currentSearch != null) {
                 $player->rating = $currentSearch;

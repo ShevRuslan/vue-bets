@@ -4,9 +4,7 @@
             <div class="header__title">
                 {{ getNameCard(name) }}
                 <div class="ml-2">
-                    <v-chip x-small class="ma-1 pa-1" color="#3688FC" text-color="white">
-                        {{ this.rating }}
-                    </v-chip>
+                    <RatingSquare v-if="this.rating" :rating="this.rating"></RatingSquare>
                 </div>
             </div>
         </div>
@@ -39,6 +37,7 @@
 
 <script>
 import Match from './Match';
+import RatingSquare from './RatingSquare'
 export default {
     props: {
         name: String,
@@ -46,7 +45,8 @@ export default {
         rating: String
     },
     components: {
-        Match
+        Match,
+        RatingSquare
     },
     data() {
         return {

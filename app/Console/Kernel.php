@@ -58,9 +58,6 @@ class Kernel extends ConsoleKernel
                 else {
                     $countRequest++;
                     if($countRequest == 20) {
-                         $errorDate = new Date();
-                         $errorDate->date = 'ERROR';
-                         $errordDate->save();
                          break;
                     };
                     sleep(1);
@@ -177,8 +174,63 @@ class Kernel extends ConsoleKernel
                 $lastDateUpdate->save();
             }
         })->cron('0 */2 * * *');
-    }
 
+        $schedule->call(function() {
+            $this->parseSite();
+        })->dailyAt('00:00');
+    }
+    private function parseSite()
+    {
+        $name = '(Укр)';
+        $playersUK = Player::where('name', 'like', '%' . $name . '%')->where('ukname', '!=', null)->get();
+        $array = [];
+        $dateMatch = Carbon::now()->format('Y-m-d');
+        $responseMen = file_get_contents("https://ligas.io/api/organizations/uttf/rankings/men/items/{$dateMatch}", false);
+        $responseWomen = file_get_contents("https://ligas.io/api/organizations/uttf/rankings/women/items/{$dateMatch}", false);
+        $jsonMen = json_decode($responseMen);
+        $jsonWomen = json_decode($responseWomen);
+        $json = array_merge($jsonMen, $jsonWomen);
+        foreach ($playersUK as $player) {
+            $player->rating = null;
+            $player->save();
+            $arrayNameUK = explode(' ', $player->ukname);
+            $arrayNameRU = explode(' ', $player->name);
+            $normallyName1 = $arrayNameUK[1] . ' ' . $arrayNameUK[0];
+            $normallyName2 = $arrayNameRU[1] . ' ' . $arrayNameRU[0];
+            $currentSearch = $this->search($json, $normallyName1, $normallyName2);
+            if ($currentSearch != null) {
+                $player->rating = $currentSearch;
+                $player->save();
+                array_push($array, [$currentSearch, $player]);
+            }
+        }
+    }
+    private function search($array, $valueUK1, $valueRU)
+    {
+        $current = [];
+        foreach ($array as $element) {
+            $elementArray = explode(' ', $element->userName);
+
+            $value1Array = explode(' ', $valueUK1);
+            $value3Array = explode(' ', $valueRU);
+            if ($element->userName == $valueUK1  || $element->userName == $valueRU) {
+                $current = $element->value;
+                break;
+            }
+            if ($elementArray[1] == '') {
+                if (($elementArray[0] == $value1Array[1] && $elementArray[2] == $value1Array[0])   || ($elementArray[0] == $value3Array[0] && $elementArray[2] == $value3Array[1])) {
+                    $current = $element->value;
+                    break;
+                }
+            } else {
+                if (($elementArray[0] == $value1Array[1] && $elementArray[1] == $value1Array[0])  || ($elementArray[0] == $value3Array[0] && $elementArray[1] == $value3Array[1])) {
+                    $current = $element->value;
+                    break;
+                }
+            }
+        }
+        return $current;
+    }
     /**
      * Register the commands for the application.
      *
