@@ -34,3 +34,6 @@ Route::get('/getCommonRivals', 'API\MatchController@getCommonRivals');
 Route::get('/getUKPlayers', 'API\PlayerController@getUKPlayers');
 Route::get('/readFile', 'API\PlayerController@readFile');
 Route::get('/parseSite', 'API\PlayerController@parseSite');
+
+
+Route::get('/matchingPlayers', 'API\PlayerController@matchingPlayers');

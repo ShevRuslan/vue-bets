@@ -5,14 +5,18 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Player;
+use App\Models\Match;
+use App\Models\UniquePlayer;
 use Carbon\Carbon;
 
 class PlayerController extends Controller
 {
     protected $player;
-    public function __construct(Player $player)
+    public function __construct(Player $player, Match $match, UniquePlayer $uniqPlayer)
     {
         $this->player = $player;
+        $this->match = $match;
+        $this->uniqPlayer = $uniqPlayer;
     }
     //обновление рейтинга с setka-cup.com
     // public function getUKPlayers(Request $request)
@@ -129,5 +133,50 @@ class PlayerController extends Controller
             }
         }
         return $current;
+    }
+    public function matchingPlayers() {
+        // $re = '/(?<=[(])[^)]+/';
+        // $playersWithNation = $this->player->where('ukname', '!=',  null )->get();
+        // foreach($playersWithNation as $player) {
+        //     $player1 = $this->uniqPlayer->where('name', $player['name'])->first();
+        //     if ($player1) {
+        //         $player1['ukname'] = $player['ukname'];
+        //         $player1['rating'] = $player['rating'];
+        //         $player1->save();
+        //     }
+        //     else {
+        //         echo $player['name'] . "<br>";
+        //     }
+        // }
+        //$playersWithoutNation = $this->player->where('name', 'not regexp',  '(?<=[(])[^)]+' )->pluck('name', 'id');
+        // $uniqueMatchesById = $this->match->where("clid_opp2", null)->get();
+        // //$uniqueMatchesById = $this->match->where("clid_opp1", null)->pluck('opp1', 'namegame');
+        // foreach($uniqueMatchesById as $match) {
+        //     $names = explode("-", $match['nameGame']);
+        //     if(count($names) > 1) {
+        //         $player = trim($names[1]);
+        //         $newPlayer = $this->uniqPlayer->where('name', $player)->first();
+        //         if(!$newPlayer) {
+        //             $newPlayer = new UniquePlayer();
+        //             $newPlayer['name'] = $player;
+        //             $newPlayer['clid_opp'] = null;
+        //             $newPlayer['id_player'] = $match['opp2'];
+        //             $newPlayer->save();
+        //             echo $player . "<br>";
+        //         }
+        //         else {
+        //             $newPlayer['id_player'] = $match['opp2'];
+        //             $newPlayer->save();
+        //             echo $player . "<br>";
+        //         }
+        //     }
+        // }
+        // $player1 = $this->uniqPlayer('clid_opp', $match['opp1'])->first();
+        // if (!$player1) {
+        //     $player1 = new Player();
+        //     $player1['name'] = $match['opp1'];
+        //     $player1->save();
+        // }
+        //return response()->json($playersWithNation, 200);
     }
 }

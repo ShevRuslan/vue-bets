@@ -14,7 +14,7 @@
             </div>
         </td>
         <td class="text-left number-info">
-            <RatingSquare v-if="match.rating" :rating=" this.match.rating"></RatingSquare>
+            <RatingSquare v-if="match.rating" :rating="this.match.rating"></RatingSquare>
         </td>
         <td class="text-left number-info">
             <template v-if="scoreFirst > scoreSecond">
@@ -87,18 +87,20 @@ export default {
                 const arrayPlayers = this.match.nameGame.split('-');
                 let first = arrayPlayers[0].trim();
                 let second = arrayPlayers[1].trim();
-                if (first !== this.player.trim()) {
+                let splitNames = this.player.trim().split(' ');
+                let nameMatchArray = first.split(' ');
+                let family = nameMatchArray[1];
+                let name = nameMatchArray[0];
+                console.log(`${family} ${name}`, `${splitNames[0]} ${splitNames[1]}`, splitNames);
+                if (`${name} ${family}` !== `${splitNames[0]} ${splitNames[1]}`) {
                     this.reverse = true;
-                    let nameMatchArray = first.split(' ');
-                    let family = nameMatchArray[1];
-                    let name = nameMatchArray[0];
-                    let country = nameMatchArray[2];
+                    let country = nameMatchArray[2] ?? '';
                     this.nameMatch = `${family} ${name} ${country}`;
                 } else {
                     let nameMatchArray = second.split(' ');
                     let family = nameMatchArray[1];
                     let name = nameMatchArray[0];
-                    let country = nameMatchArray[2];
+                    let country = nameMatchArray[2] ?? '';
                     this.nameMatch = `${family} ${name} ${country}`;
                 }
             }
