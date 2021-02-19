@@ -32,7 +32,6 @@ class LineMatchController extends Controller
         $context = stream_context_create($opts);
         $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&getEmpty=true", false, $context), true);
         $matches = $url['Value'];
-        //return $matches;
         $normallyArrayMatches = ['champs' => []];
 
         foreach ($matches as $match) {
