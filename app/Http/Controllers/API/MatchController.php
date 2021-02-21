@@ -282,11 +282,12 @@ class MatchController extends Controller
         $firstPlayersRivals = [];
         foreach ($arrayFirst['matches'] as $match) {
             $arrayNameMatch = explode('-', $match->nameGame);
+            $oppName = $this->getName(trim($arrayNameMatch[0]));
             $rival = '';
-            if (trim($arrayNameMatch[0]) != $firstPlayer) {
-                $rival = trim($arrayNameMatch[0]);
+            if ($oppName != $firstPlayer) {
+                $rival = $oppName;
             } else {
-                $rival = trim($arrayNameMatch[1]);
+                $rival = $this->getName(trim($arrayNameMatch[1]));
             }
             $existSecondPlayer = $this->searchInArray($arraySecond, $rival);
             if ($existSecondPlayer) array_push($firstPlayersRivals, $rival);
