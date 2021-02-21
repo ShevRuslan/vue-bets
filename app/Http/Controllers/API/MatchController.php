@@ -218,14 +218,16 @@ class MatchController extends Controller
         $secondPlayerArray = [];
         if (isset($player1)) {
             $firstPlayerArray = array(
-                'id' => $player1->id,
+                'id' => $player1->id_player,
+                'clid_opp' => $player1->clid_opp,
                 'name' => $player1->name,
                 'matches' => $last1,
             );
         }
         if (isset($player2)) {
             $secondPlayerArray = array(
-                'id' => $player2->id,
+                'id' => $player2->id_player,
+                'clid_opp' => $player2->clid_opp,
                 'name' => $player2->name,
                 'matches' => $last2,
             );
@@ -314,8 +316,9 @@ class MatchController extends Controller
         $rivals = $this->comparingArraysValues($arrayFirst, $arraySecond);
         foreach ($rivals as $rival) {
             $array = [];
-            $firstPlayerRivals = $this->getCooperativeMatches($arrayFirst['name'], $rival, $champName, $countMatchesRivals, $line);
-            $secondPlayerRivals = $this->getCooperativeMatches($arraySecond['name'], $rival, $champName, $countMatchesRivals, $line);
+            $rivalPlayer = $this->uniqPlayer->where('clid_opp', $rival)->orWhere('id_player', $rival)->first();
+            $firstPlayerRivals = $this->getCooperativeMatches($arrayFirst['name'], $rivalPlayer, $champName, $countMatchesRivals, $line);
+            $secondPlayerRivals = $this->getCooperativeMatches($arraySecond['name'], $rivalPlayer, $champName, $countMatchesRivals, $line);
             array_push($array, $firstPlayerRivals);
             array_push($array, $secondPlayerRivals);
             array_push($objectRivalsMatch, $array);
@@ -325,19 +328,27 @@ class MatchController extends Controller
     }
     private function comparingArraysValues($arrayFirst, $arraySecond)
     {
-        $firstPlayer = $arrayFirst['name'];
+        $firstPlayerId = $arrayFirst['id'];
+        $firstPlayerClid = $arrayFirst['clid_opp'];
         $firstPlayersRivals = [];
-
         foreach ($arrayFirst['matches'] as $match) {
             $arrayNameMatch = explode('-', $match->nameGame);
             $rival = '';
-            if (trim($arrayNameMatch[0]) != $firstPlayer) {
-                $rival = trim($arrayNameMatch[0]);
-            } else if (trim($arrayNameMatch[1]) != $firstPlayer) {
-                $rival = trim($arrayNameMatch[1]);
+            if($firstPlayerClid != null) {
+                if ($match['clid_opp1'] != $firstPlayerClid) {
+                    $rival = $match['clid_opp1'];
+                } else {
+                    $rival = $match['clid_opp2'];
+                }
             }
-            $existSecondPlayer = $this->searchInArray($arraySecond, $rival);
-            if ($existSecondPlayer) array_push($firstPlayersRivals, $rival);
+            else if($firstPlayerId != null) {
+                if ($match['opp1'] != $firstPlayerClid) {
+                    $rival = $match['opp1'];
+                } else {
+                    $rival = $match['opp2'];
+                }
+            }
+            array_push($firstPlayersRivals, $rival);
         }
         return array_unique($firstPlayersRivals);
     }
