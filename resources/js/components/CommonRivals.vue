@@ -20,7 +20,7 @@
                         <h5>{{ secondPlayer }}</h5>
                     </div>
                     <div class="rating">
-                        <RatingStar v-if="this.matches[0][0].rating2" :rating="this.matches[0][0].rating2"></RatingStar>
+                        <RatingStar v-if="this.matches[0][1].rating1" :rating="this.matches[0][1].rating1"></RatingStar>
                     </div>
                 </div>
             </div>

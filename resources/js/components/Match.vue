@@ -91,7 +91,6 @@ export default {
                 let nameMatchArray = first.split(' ');
                 let family = nameMatchArray[1];
                 let name = nameMatchArray[0];
-                console.log(`${family} ${name}`, `${splitNames[0]} ${splitNames[1]}`, splitNames);
                 if (`${name} ${family}` !== `${splitNames[0]} ${splitNames[1]}`) {
                     this.reverse = true;
                     let country = nameMatchArray[2] ?? '';
