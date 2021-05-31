@@ -7,23 +7,22 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Player;
 use App\Http\Controllers\API\MatchController;
-use App\Models\UniquePlayer;
+
 class LineMatchController extends Controller
 {
-    public function __construct(MatchController $match, Player $player, UniquePlayer $uniqPlayer)
+    public function __construct(MatchController $match, Player $player)
     {
         $this->match = $match;
         $this->player = $player;
-        $this->uniqPlayer = $uniqPlayer;
     }
-    //получение матчей с линии и формирование данных в нормальный вид из жсона
+    //получение матчей с линии и формирование данных в нормальный вид из непонятонго жсона
     public function line(Request $request)
     {
         // https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&country=1&partner=51&virtualSports=true — получение чемпионатов
         // https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&partner=51&getEmpty=true — получение всех матчей
-        // https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=50&tf=2200000&tz=6&antisports=188&mode=4&subGames=240546650&country=1&partner=51&getEmpty=true — subgames
-        // http://1xbet.com/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&virtualSports=true  - 1xbet champs
-        // https://1xbet.com/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&getEmpty=true - line 1xbet
+        //https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=50&tf=2200000&tz=6&antisports=188&mode=4&subGames=240546650&country=1&partner=51&getEmpty=true — subgames
+        //"http://1xbet.com/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&virtualSports=true " - 1xbet champs
+        //https://1xbet.com/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&getEmpty=true - line 1xbet
         $opts = array(
             'http' => array(
                 'method' => "GET",
@@ -33,6 +32,7 @@ class LineMatchController extends Controller
         $context = stream_context_create($opts);
         $url = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/Get1x2_VZip?sports=10&count=5000&tf=2200000&tz=6&antisports=188&mode=4&country=1&getEmpty=true", false, $context), true);
         $matches = $url['Value'];
+        //return $matches;
         $normallyArrayMatches = ['champs' => []];
 
         foreach ($matches as $match) {
@@ -40,18 +40,19 @@ class LineMatchController extends Controller
             $normallyMatch = [];
             $currentChamp = $match['L'];
 
-            $playerName1 = $match['O1'];
-            $playerName2 = $match['O2'];
-            $playerOpp1 = $match['O1I'];
-            $playerOpp2 = $match['O2I'];
+            $player1 = $match['O1'];
+            $player2 = $match['O2'];
 
             $normallyMatch['champName'] = $currentChamp;
             $normallyMatch['id'] = $match['I'];
             $normallyMatch['date'] =  $date ?? '—';
-            $normallyMatch['player1'] = $playerName1;
-            $normallyMatch['rating1'] = $this->uniqPlayer->where('name', $playerName1)->orWhere('clid_opp', $playerOpp1)->pluck('rating')[0] ?? null;
-            $normallyMatch['player2'] = $playerName2;
-            $normallyMatch['rating2'] = $this->uniqPlayer->where('name', $playerName2)->orWhere('clid_opp', $playerOpp2)->pluck('rating')[0] ?? null;
+            $normallyMatch['player1'] = $player1;
+
+            $arrayNamePlayer1 = explode(' ', $player1);
+            $arrayNamePlayer2 = explode(' ', $player2);
+            $normallyMatch['rating1'] = $this->player->where('name', $arrayNamePlayer1[0] . " " . $arrayNamePlayer1[1])->pluck('rating')[0] ?? null;
+            $normallyMatch['player2'] = $player2;
+            $normallyMatch['rating2'] = $this->player->where('name', $arrayNamePlayer2[0] . " " . $arrayNamePlayer2[1])->pluck('rating')[0] ?? null;
 
             $totalArray = [];
             $forArray = [

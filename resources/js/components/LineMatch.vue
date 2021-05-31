@@ -240,9 +240,11 @@ export default {
         async getRivalsMatches(item) {
             this.setLoading(true);
             this.snackbarRivals = true;
+            const arrayFirstPlayer = item.player1.split(" ");
+            const arraySecondPlayer = item.player2.split(" ");
             const data = {
-                player1: item.player1,
-                player2: item.player2,
+                player1: `${arrayFirstPlayer[0]} ${arrayFirstPlayer[1]}`,
+                player2: `${arraySecondPlayer[0]} ${arraySecondPlayer[1]}`,
                 champName: item.champName,
                 countMatches: this.getCountLineMatches,
                 coopChamps: false,
@@ -255,9 +257,11 @@ export default {
         },
         async getInfo(item) {
             this.check[item.id] = true;
+            const arrayFirstPlayer = item.player1.split(" ");
+            const arraySecondPlayer = item.player2.split(" ");
             const data = {
-                player1: item.player1,
-                player2: item.player2,
+                player1: `${arrayFirstPlayer[0]} ${arrayFirstPlayer[1]}`,
+                player2: `${arraySecondPlayer[0]} ${arraySecondPlayer[1]}`,
                 champName: item.champName,
                 countMatches: this.getCountLineMatches,
                 coopChamps: false,
