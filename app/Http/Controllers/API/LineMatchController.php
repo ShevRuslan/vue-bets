@@ -267,7 +267,7 @@ class LineMatchController extends Controller
             )
         );
         $context = stream_context_create($opts);
-        $response = json_decode(file_get_contents("http://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&virtualSports=true  ", false, $context), true);
+        $response = json_decode(file_get_contents("https://1xstavka.ru/LineFeed/GetChampsZip?sport=10&tf=2200000&tz=6&virtualSports=true  ", false, $context), true);
         $champs = $response['Value'];
         $lineChamps = [];
         foreach ($champs as $champ) {

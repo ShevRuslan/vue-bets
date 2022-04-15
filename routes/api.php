@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Получение спортсмена по мере ввода в селект
-Route::get('/sportsmen','API\MatchController@getSporstsmen');
+Route::get('/sportsmen', 'API\MatchController@getSporstsmen');
 //Получение совместных матчей между двумя игроками
-Route::get('/commonMatch','API\MatchController@commonMatch');
+Route::get('/commonMatch', 'API\MatchController@commonMatch');
 //Получение всех чемпионатов
-Route::get('/getAllChamps','API\MatchController@getAllChamps');
+Route::get('/getAllChamps', 'API\MatchController@getAllChamps');
 //Получение даты последнего обновления результатов (через крон обновление)
-Route::get('/getLastUpdateDate','API\MatchController@getLastUpdateDate');
+Route::get('/getLastUpdateDate', 'API\MatchController@getLastUpdateDate');
 //Получение линии
 Route::get('/line', 'API\LineMatchController@line');
 //Получение всех чемпионатов с линии
@@ -37,3 +37,5 @@ Route::get('/parseSite', 'API\PlayerController@parseSite');
 
 
 Route::get('/matchingPlayers', 'API\PlayerController@matchingPlayers');
+
+Route::get("/update", 'API\MatchController@update');

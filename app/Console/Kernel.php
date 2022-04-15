@@ -181,8 +181,7 @@ class Kernel extends ConsoleKernel
     }
     private function parseSite()
     {
-        $name = '(Укр)';
-        $playersUK = Player::where('name', 'like', '%' . $name . '%')->where('ukname', '!=', null)->get();
+        $playersUK = Player::where('ukname', '!=', null)->get();
         $array = [];
         $dateMatch = Carbon::now()->format('Y-m-d');
         $responseMen = file_get_contents("https://ligas.io/api/organizations/uttf/rankings/men/items/{$dateMatch}", false);

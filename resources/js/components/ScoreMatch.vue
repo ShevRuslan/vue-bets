@@ -1,11 +1,11 @@
 <template>
     <div class="header__score">
         <template v-if="winFirst < winSecond">
-            <v-chip color="#FF0000" text-color="white" class="score__chip">
+            <v-chip color="#33CC33" text-color="white" class="score__chip">
                 {{ winFirst }}
             </v-chip>
             :
-            <v-chip color="#33CC33" text-color="white" class="score__chip">
+            <v-chip color="#FF0000" text-color="white" class="score__chip">
                 {{ winSecond }}
             </v-chip>
         </template>
